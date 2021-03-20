@@ -11,11 +11,11 @@ describe('AppController (e2e)', () => {
       imports: [AppModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    app = moduleFixture.createNestApplication()
+    await app.init()
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/hello').expect(200).expect('Hello World!');
+    return request(app.getHttpServer()).get('/hello').expect(200).expect('Hello World!')
   });
 });
