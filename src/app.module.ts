@@ -1,28 +1,27 @@
-import { Module } from '@nestjs/common'
-import { RouterModule } from 'nest-router'
-import { routes, appModules } from './routes'
+import { Module } from '@nestjs/common';
+import { RouterModule } from 'nest-router';
+import { routes, appModules } from './routes';
 
 @Module({
   imports: [
     RouterModule.forRoutes(routes),
-  //   TypeOrmModule.forRoot(rdbmsParams(true, false, 'Common API')),
-  //   RollbarLoggerModule.register(rollbarParams('Common API')),
-  //   TypeOrmModule.forFeature([SuperUser, User]),
-  //   AuditModule,
-  //   JwtModule,
-  //   ModelsModule,
-  //   PermissionsModule,
-  //   SessionsModule,
-  //   TokenModule,
-  //   UserPermissionsServiceModule,
-  //   WSNotificationsModule,
-  //   HttpModule,
+    //   TypeOrmModule.forRoot(rdbmsParams(true, false, 'Common API')),
+    //   RollbarLoggerModule.register(rollbarParams('Common API')),
+    //   TypeOrmModule.forFeature([SuperUser, User]),
+    //   AuditModule,
+    //   JwtModule,
+    //   ModelsModule,
+    //   PermissionsModule,
+    //   SessionsModule,
+    //   TokenModule,
+    //   UserPermissionsServiceModule,
+    //   WSNotificationsModule,
+    //   HttpModule,
     ...appModules,
-  //   ...testOnlyModules,
+    //   ...testOnlyModules,
   ],
   // providers: [LoggingInterceptor, AllExceptionsFilter, ValidationPipe, ResponseInterceptor, TokenGuard],
 })
-
 export class AppModule {}
 
 /*
