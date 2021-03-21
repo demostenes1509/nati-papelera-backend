@@ -5,10 +5,10 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { APPPATH } from '../src/helpers/constants';
 
-describe('AppController (e2e)', () => {
+mocha.describe('AppController (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  mocha.beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -17,7 +17,7 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  mocha.it('/ (GET)', () => {
     return request(app.getHttpServer()).get(`${APPPATH}/hello`).expect(200).expect('Hello World!');
   });
 });
