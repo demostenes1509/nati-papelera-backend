@@ -1,23 +1,34 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as mocha from 'mocha';
-import * as request from 'supertest';
+import { describe, before, it } from 'mocha';
+// import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
-import { APPPATH } from '../src/helpers/constants';
+import { TestModule } from './src/test.module';
+import { REGISTRY } from './helpers/decorators';
 
-mocha.describe('AppController (e2e)', () => {
+describe('AppController (e2e)', () => {
   let app: INestApplication;
 
-  mocha.beforeEach(async () => {
+  before(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, TestModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  mocha.it('/ (GET)', () => {
-    return request(app.getHttpServer()).get(`${APPPATH}/hello`).expect(200).expect('Hello World!');
-  });
+  const applicationTestSuites = Object.keys(REGISTRY);
+  for (const applicationTestSuite of applicationTestSuites) {
+    const testSuite = REGISTRY[applicationTestSuite];
+    const testSuiteTitle = testSuite.title;
+    describe(testSuiteTitle, () => {
+      const tests = testSuite.tests;
+      for (const test of tests) {
+        it(test.description, async () => {
+          await test.method.apply(app.get(testSuite.target));
+        });
+      }
+    });
+  }
 });
