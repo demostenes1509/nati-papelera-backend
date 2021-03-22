@@ -1,26 +1,23 @@
 {
-        "all": true,
 	"include": [
-      		"src/**/*.ts"
-    	],
-        "exclude":[
+		"src/**/*.ts"
+	],
+	"exclude": [
 		"**/main.ts",
-          	"tests/**/*"
-        ],
+		"tests/**/*"
+	],
 	"extension": [
-      		".ts",
-      		".tsx"
-    	],
-    	"require": [
-      		"ts-node/register"
-    	],
-    	"reporter": [
-      		"text-summary",
-      		"html"
-    	],
-    	"sourceMap": true,
-    	"instrument": true,
-    	"all": true
+		".ts",
+		".tsx"
+	],
+	"require": [
+		"ts-node/register"
+	],
+	"reporter": [
+		"text-summary",
+		"html"
+	],
+	"sourceMap": true,
+	"instrument": true,
+	"all": true
 }
-
-
