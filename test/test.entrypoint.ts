@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { describe, before, it } from 'mocha';
-// import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 import { TestModule } from './src/test.module';
 import { REGISTRY } from './helpers/decorators';
+import { AbstractTestSuite } from './src/abstract-test-suite';
 
-describe('AppController (e2e)', () => {
+describe('Nati Backend Test Suite', () => {
   let app: INestApplication;
 
   before(async () => {
@@ -26,7 +26,9 @@ describe('AppController (e2e)', () => {
       const tests = testSuite.tests;
       for (const test of tests) {
         it(test.description, async () => {
-          await test.method.apply(app.get(testSuite.target));
+          const c: AbstractTestSuite = app.get(testSuite.target);
+          c.setApp(app);
+          await test.method.apply(c);
         });
       }
     });

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { Inyec } from './inyec';
+import * as providers from './tests';
 
 @Module({
   imports: [],
   controllers: [],
-  providers: [Inyec],
+  providers: [...Object.values(providers)],
 })
 export class TestModule {}

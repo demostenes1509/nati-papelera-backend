@@ -14,8 +14,8 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "TZ=utc NODE_ENV=test NODE_PATH=. mocha --transpile-only --exit --require ts-node/register test/app.e2e-spec.ts",
-    "test:cov": "TZ=utc NODE_ENV=test NODE_PATH=. nyc --reporter=lcov mocha --transpile-only --exit -R spec test/app.e2e-spec.ts"
+    "test": "TZ=utc NODE_ENV=test NODE_PATH=. mocha --transpile-only --exit --require ts-node/register test/test.entrypoint.ts",
+    "test:cov": "TZ=utc NODE_ENV=test NODE_PATH=. nyc --reporter=lcov mocha --transpile-only --exit -R spec test/test.entrypoint.ts"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.13",
