@@ -4,6 +4,7 @@
 	],
 	"exclude": [
 		"**/main.ts",
+		"**/helpers/swagger.ts",
 		"tests/**/*"
 	],
 	"extension": [
