@@ -7,7 +7,7 @@ import { setupPipes } from './helpers/pipes';
 import { configureTypeORMTransactions } from './helpers/transactions';
 
 const bootstrap = async () => {
-  configureTypeORMTransactions()  // Before everything always !
+  configureTypeORMTransactions(); // Before everything always !
   const app = await NestFactory.create(AppModule);
   setupSwagger(app);
   setupPipes(app);

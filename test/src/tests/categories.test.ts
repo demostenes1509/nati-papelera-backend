@@ -15,7 +15,7 @@ export class CategoriesTest extends AbstractTestSuite {
   public async create() {
     const dto = {
       name: faker.random.word(),
-      url: faker.internet.url()
+      url: faker.internet.url(),
     };
 
     await this.httpPost('/categories/create').send(dto).expect(HttpStatus.CREATED);

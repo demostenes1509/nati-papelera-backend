@@ -14,7 +14,7 @@ describe('Nati Backend Test Suite', function () {
   let app: INestApplication;
 
   before(async () => {
-    configureTypeORMTransactions()  // Before everything always !
+    configureTypeORMTransactions(); // Before everything always !
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule, TestModule],
     }).compile();
