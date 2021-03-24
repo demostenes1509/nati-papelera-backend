@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as getEnv from 'getenv';
+import * as modelentities from '../models';
 
 const POSTGRES_LOGGING = getEnv.bool('POSTGRES_LOGGING');
 const POSTGRES_HOST = getEnv('POSTGRES_HOST');
@@ -8,8 +9,9 @@ const POSTGRES_USERNAME = getEnv('POSTGRES_USERNAME');
 const POSTGRES_PASSWORD = getEnv('POSTGRES_PASSWORD');
 const POSTGRES_DATABASE = getEnv('POSTGRES_DATABASE');
 
+export const entities = Object.values(modelentities);
+
 export const rdbmsParams = (): TypeOrmModuleOptions => {
-  const entities = ['libs-be/src/models/**/*.entity.ts'];
   const options: TypeOrmModuleOptions = {
     type: 'postgres',
     host: POSTGRES_HOST,
