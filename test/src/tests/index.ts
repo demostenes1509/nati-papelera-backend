@@ -1,2 +1,2 @@
-export { HelloWorldTest } from './hello-world-test';
-export { HealthcheckTest } from './healthcheck-test';
+export { CategoriesTest } from './categories.test';
+export { HealthcheckTest } from './healthcheck.test';

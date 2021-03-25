@@ -1,4 +1,5 @@
 import { INestApplication } from '@nestjs/common';
+import { NATI_BACKEND_PATH } from '../../src/helpers/constants';
 import * as request from 'supertest';
 
 export abstract class AbstractTestSuite {
@@ -8,7 +9,11 @@ export abstract class AbstractTestSuite {
     this.app = app;
   }
 
-  public httpGet() {
-    return request(this.app.getHttpServer());
+  public httpGet(path: string) {
+    return request(this.app.getHttpServer()).get(`${NATI_BACKEND_PATH}${path}`);
+  }
+
+  public httpPost(path: string) {
+    return request(this.app.getHttpServer()).post(`${NATI_BACKEND_PATH}${path}`);
   }
 }
