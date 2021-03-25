@@ -7,6 +7,7 @@ Backend Nati Papelera
 4) Swagger documentation already configured
 5) Migrations
 6) Transactions at request level !
+7) Winston as logger ( beautiful )
 
 instalation guide
 

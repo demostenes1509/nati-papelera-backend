@@ -9,6 +9,7 @@ import { REGISTRY } from './helpers/decorators';
 import { AbstractTestSuite } from './src/abstract-test-suite';
 import { setupPipes } from '../src/helpers/pipes';
 import { configureTypeORMTransactions } from '../src/helpers/transactions';
+import { Logger } from '../src/helpers/logger';
 
 describe('Nati Backend Test Suite', function () {
   let app: INestApplication;
@@ -20,7 +21,9 @@ describe('Nati Backend Test Suite', function () {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useLogger(new Logger());
     setupPipes(app);
+
     await app.init();
   });
 
