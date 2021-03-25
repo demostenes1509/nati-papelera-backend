@@ -7,9 +7,7 @@ import { AppModule } from '../src/app.module';
 import { TestModule } from './src/test.module';
 import { REGISTRY } from './helpers/decorators';
 import { AbstractTestSuite } from './src/abstract-test-suite';
-import { setupPipes } from '../src/helpers/pipes';
-import { configureTypeORMTransactions } from '../src/helpers/transactions';
-import { Logger } from '../src/helpers/logger';
+import { setupPipes, Logger, configureTypeORMTransactions } from '../src/helpers';
 
 describe('Nati Backend Test Suite', function () {
   let app: INestApplication;

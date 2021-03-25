@@ -2,10 +2,7 @@ import * as dotenv from 'dotenv-flow';
 dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { setupSwagger } from './helpers/swagger';
-import { setupPipes } from './helpers/pipes';
-import { configureTypeORMTransactions } from './helpers/transactions';
-import { Logger } from './helpers/logger';
+import { configureTypeORMTransactions, Logger, setupPipes, setupSwagger } from './helpers';
 
 const bootstrap = async () => {
   configureTypeORMTransactions(); // Before everything always !
