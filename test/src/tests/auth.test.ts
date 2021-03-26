@@ -7,8 +7,13 @@ export class AuthTest extends AbstractTestSuite {
   @Test('Login Successful')
   public async loginOK() {
     const dto = { emailAddress: 'test@test.com', password: 'test' };
-    const { body } = await this.httpPost('/auth/login').send(dto).expect(HttpStatus.OK);
-    expect(body.access_token).toBeDefined();
+    const {
+      body: { access_token },
+    } = await this.httpPost('/auth/login').send(dto).expect(HttpStatus.OK);
+    const {
+      body: { emailAddress },
+    } = await this.httpGet('/auth/profile').set('Authorization', `Bearer ${access_token}`).expect(HttpStatus.OK);
+    expect(emailAddress).toBe(dto.emailAddress);
   }
   @Test('Login Missing field')
   public async loginMissingFields() {
