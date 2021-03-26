@@ -19,10 +19,5 @@ export class CategoriesTest extends AbstractTestSuite {
     };
 
     await this.httpPost('/categories/create').send(dto).expect(HttpStatus.CREATED);
-
-    /*
-    const { body: categories } = await this.httpGet().get(`${NATI_BACKEND_PATH}/categories/get-all`).expect(200);
-    expect(categories.length).toBeGreaterThan(0);
-    */
   }
 }

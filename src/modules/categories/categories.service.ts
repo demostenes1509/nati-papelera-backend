@@ -14,15 +14,12 @@ export class CategoriesService {
   private readonly categoryRepository: Repository<Category>;
 
   getAll(): Promise<Array<Category>> {
-    this.logger.error('ERROR LEVEL');
-    this.logger.warn('WARN LEVEL');
-    this.logger.log('LOG LEVEL');
-    this.logger.debug('DEBUG LEVEL');
-    this.logger.verbose('VERBOSE LEVEL');
+    this.logger.log('Getting Categories');
     return this.categoryRepository.find({ order: { name: 'ASC' } });
   }
 
   create(dto: CategoryCreateDto): Promise<Category> {
+    this.logger.log('Creating Categories');
     return this.categoryRepository.save({ id: uuidv4(), ...dto });
   }
 }

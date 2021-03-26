@@ -8,6 +8,7 @@ Backend Nati Papelera
 5) Migrations
 6) Transactions at request level !
 7) Winston as logger ( beautiful )
+8) Authentication using passport ( local user/password and facebook auth0 )
 
 instalation guide
 
