@@ -4,3 +4,4 @@ export * from './pipes';
 export * from './rdbms';
 export * from './swagger';
 export * from './transactions';
+export * from './types';
