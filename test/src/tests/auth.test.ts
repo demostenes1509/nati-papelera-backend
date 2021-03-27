@@ -16,16 +16,19 @@ export class AuthTest extends AbstractTestSuite {
     } = await this.httpGet('/auth/profile').set('Authorization', `Bearer ${access_token}`).expect(HttpStatus.OK);
     expect(emailAddress).toBe(dto.emailAddress);
   }
+
   @Test('Login Missing field')
   public async loginMissingFields() {
     const dto = { emailAddress: 'test@test.com' };
     await this.httpPost('/auth/login').send(dto).expect(HttpStatus.UNAUTHORIZED);
   }
+
   @Test('Login Invalid username or password')
   public async invalidUsernameOrPassword() {
     const dto = { emailAddress: 'test@test.com', password: 'test1' };
     await this.httpPost('/auth/login').send(dto).expect(HttpStatus.UNAUTHORIZED);
   }
+
   @Test('Create with Admin User')
   public async createAdmin() {
     const dto = {
