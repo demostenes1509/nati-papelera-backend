@@ -16,7 +16,7 @@ CREATE TABLE users (
     first_name varchar(256),
     last_name varchar(256),
 	full_name varchar(256),
-    role varchar(256),
+    role varchar(256) NOT NULL,
     address varchar(255),
     city varchar(255),
     telephone varchar(255),
@@ -28,3 +28,4 @@ CREATE TABLE users (
 );
 
 ALTER TABLE users ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+ALTER TABLE users ADD CONSTRAINT users_roles_constraint CHECK (role IN ('admin','user'));

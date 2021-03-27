@@ -1,6 +1,8 @@
 import { Controller, Request, Post, UseGuards, HttpCode, HttpStatus, Inject, Get } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { AccessTokenType, Logger } from '../../helpers';
+import { Logger } from '../../helpers';
+import { NatiRequest } from '../../helpers/interfaces';
+import { AccessTokenType } from '../../helpers/types';
 import { AuthService } from '../auth/auth.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
@@ -16,9 +18,9 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  login(@Request() req): Promise<AccessTokenType> {
-    this.logger.log(`Logged in user: ${req.user.emailAddress}`);
-    return this.authService.login(req.user);
+  login(@Request() { user }: NatiRequest): Promise<AccessTokenType> {
+    this.logger.log(`Logged in user: ${user.emailAddress}`);
+    return this.authService.login(user);
   }
 
   @ApiResponse({ status: HttpStatus.OK })

@@ -6,7 +6,8 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('users').insert([
-        {id: uuidv4(), email_address: 'test@test.com',password: 'test', provider: 'local'},
+        {id: uuidv4(), email_address: 'admin@natipapelera.com',password: 'test', provider: 'local',role:'admin'},
+        {id: uuidv4(), email_address: 'user@natipapelera.com',password: 'test', provider: 'local',role:'user'},
       ]);
     });
 };

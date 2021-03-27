@@ -25,6 +25,8 @@ describe('Nati Backend Test Suite', function () {
     await app.init();
   });
 
+  // Register all decorated tests and uses mocha on 'describe' them
+  // We need to register nest.js component, thats why we use app.get
   const applicationTestSuites = Object.keys(REGISTRY);
   for (const applicationTestSuite of applicationTestSuites) {
     const testSuite = REGISTRY[applicationTestSuite];

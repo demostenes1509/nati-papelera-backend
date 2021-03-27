@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AccessTokenType } from '../../helpers';
+import { NatiToken } from '../../helpers/interfaces';
+import { AccessTokenType } from '../../helpers/types';
 import { User } from '../../models';
 import { UsersService } from '../users/users.service';
 
@@ -20,7 +21,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User): Promise<AccessTokenType> {
+  async login(user: NatiToken): Promise<AccessTokenType> {
     const payload = { emailAddress: user.emailAddress, id: user.id };
     return {
       access_token: this.jwtService.sign(payload),

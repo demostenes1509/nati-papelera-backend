@@ -1,7 +1,8 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, UseGuards } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
+import { ApiResponse } from '@nestjs/swagger';
 import { Category } from '../../models';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CategoriesService } from './categories.service';
 import { CategoryCreateDto } from './dto/category-create.dto';
 
@@ -10,6 +11,7 @@ export class CategoriesController {
   @Inject()
   private readonly categoryService: CategoriesService;
 
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({ status: HttpStatus.CREATED })
   @HttpCode(HttpStatus.CREATED)
   @Post('/create')

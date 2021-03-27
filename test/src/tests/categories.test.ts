@@ -18,6 +18,6 @@ export class CategoriesTest extends AbstractTestSuite {
       url: faker.internet.url(),
     };
 
-    await this.httpPost('/categories/create').send(dto).expect(HttpStatus.CREATED);
+    await this.httpAdminPost('/categories/create').send(dto).expect(HttpStatus.CREATED);
   }
 }

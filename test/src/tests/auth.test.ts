@@ -6,7 +6,7 @@ import * as expect from 'expect';
 export class AuthTest extends AbstractTestSuite {
   @Test('Login Successful')
   public async loginOK() {
-    const dto = { emailAddress: 'test@test.com', password: 'test' };
+    const dto = { emailAddress: 'admin@natipapelera.com', password: 'test' };
     const {
       body: { access_token },
     } = await this.httpPost('/auth/login').send(dto).expect(HttpStatus.OK);
