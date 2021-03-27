@@ -11,13 +11,30 @@ export class CategoriesTest extends AbstractTestSuite {
     expect(categories.length).toBeGreaterThan(0);
   }
 
-  @Test('Create')
-  public async create() {
+  @Test('Create with Admin User')
+  public async createAdmin() {
     const dto = {
-      name: faker.random.word(),
+      name: faker.random.words(),
       url: faker.internet.url(),
     };
-
     await this.httpAdminPost('/categories/create').send(dto).expect(HttpStatus.CREATED);
+  }
+
+  @Test('Create with User User')
+  public async createUser() {
+    const dto = {
+      name: faker.random.words(),
+      url: faker.internet.url(),
+    };
+    await this.httpUserPost('/categories/create').send(dto).expect(HttpStatus.FORBIDDEN);
+  }
+
+  @Test('Create with Not Logged in User')
+  public async createNotLoggedIn() {
+    const dto = {
+      name: faker.random.words(),
+      url: faker.internet.url(),
+    };
+    await this.httpPost('/categories/create').send(dto).expect(HttpStatus.UNAUTHORIZED);
   }
 }

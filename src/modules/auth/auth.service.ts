@@ -22,7 +22,7 @@ export class AuthService {
   }
 
   async login(user: NatiToken): Promise<AccessTokenType> {
-    const payload = { emailAddress: user.emailAddress, id: user.id };
+    const payload = { emailAddress: user.emailAddress, id: user.id, role: user.role };
     return {
       access_token: this.jwtService.sign(payload),
     };

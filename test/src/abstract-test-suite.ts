@@ -25,4 +25,8 @@ export abstract class AbstractTestSuite {
   public httpAdminPost(path: string) {
     return this.httpPost(path).set('Authorization', `Bearer ${this.testTokens.adminToken}`);
   }
+
+  public httpUserPost(path: string) {
+    return this.httpPost(path).set('Authorization', `Bearer ${this.testTokens.userToken}`);
+  }
 }

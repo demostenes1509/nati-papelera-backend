@@ -18,7 +18,7 @@ export class TestTokens implements OnModuleInit {
     const admin = await this.connection.manager.findOne(User, { where: { emailAddress: 'admin@natipapelera.com' } });
     const user = await this.connection.manager.findOne(User, { where: { emailAddress: 'user@natipapelera.com' } });
 
-    this.adminToken = this.jwtService.sign({ id: admin.id, emailAddress: admin.emailAddress });
-    this.userToken = this.jwtService.sign({ id: user.id, emailAddress: user.emailAddress });
+    this.adminToken = this.jwtService.sign({ id: admin.id, emailAddress: admin.emailAddress, role: admin.role });
+    this.userToken = this.jwtService.sign({ id: user.id, emailAddress: user.emailAddress, role: user.role });
   }
 }
