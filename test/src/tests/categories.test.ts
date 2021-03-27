@@ -37,4 +37,16 @@ export class CategoriesTest extends AbstractTestSuite {
     };
     await this.httpPost('/categories/create').send(dto).expect(HttpStatus.UNAUTHORIZED);
   }
+
+  @Test('Create with Invalid JWT Token')
+  public async createInvalidToken() {
+    const dto = {
+      name: faker.random.words(),
+      url: faker.internet.url(),
+    };
+    return this.httpPost('/categories/create')
+      .set('Authorization', `Bearer INVALID`)
+      .send(dto)
+      .expect(HttpStatus.UNAUTHORIZED);
+  }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, UseGuards } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { ApiResponse } from '@nestjs/swagger';
 import { Category } from '../../models';
@@ -7,7 +7,6 @@ import { CategoriesService } from './categories.service';
 import { CategoryCreateDto } from './dto/category-create.dto';
 import { Roles } from '../../helpers/decorators';
 import { Role } from '../../helpers/enums';
-import { NatiRequest } from '../../helpers/interfaces';
 
 @Controller()
 export class CategoriesController {
@@ -20,7 +19,7 @@ export class CategoriesController {
   @HttpCode(HttpStatus.CREATED)
   @Post('/create')
   @Transactional()
-  create(@Request() { user }: NatiRequest, @Body() dto: CategoryCreateDto): Promise<Category> {
+  create(@Body() dto: CategoryCreateDto): Promise<Category> {
     return this.categoryService.create(dto);
   }
 

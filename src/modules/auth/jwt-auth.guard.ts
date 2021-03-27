@@ -11,10 +11,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   private reflector: Reflector;
 
   async canActivate(context: ExecutionContext) {
-    const validJWTToken = await super.canActivate(context);
-    if (!validJWTToken) {
-      return false;
-    }
+    await super.canActivate(context);
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
