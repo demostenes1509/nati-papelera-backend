@@ -1,10 +1,10 @@
 import { Request } from 'express';
 
-export interface NatiToken {
+export interface UserTokenInfo {
   id: number;
   emailAddress: string;
   role: string;
 }
-export interface NatiRequest extends Request {
-  user: NatiToken;
+export interface TokenInfo extends Request {
+  user: UserTokenInfo;
 }

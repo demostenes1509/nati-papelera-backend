@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { NatiToken } from '../../helpers/interfaces';
+import { UserTokenInfo } from '../../helpers/interfaces';
 import { AccessTokenType } from '../../helpers/types';
 import { User } from '../../models';
 import { SessionService } from '../session/session.service';
@@ -17,9 +17,6 @@ export class AuthService {
   @Inject()
   private sessionService: SessionService;
 
-  // @Inject(CACHE_MANAGER)
-  // private cacheManager: Cache;
-
   async validateUser(emailAddress: string, password: string): Promise<User> {
     const user = await this.usersService.get(emailAddress);
     if (user && user.password === password) {
@@ -28,12 +25,11 @@ export class AuthService {
     return null;
   }
 
-  async login(natiToken: NatiToken): Promise<AccessTokenType> {
-    const payload = { emailAddress: natiToken.emailAddress, id: natiToken.id };
+  async login(userTokenInfo: UserTokenInfo): Promise<AccessTokenType> {
+    // const user = await this.usersService.get(token.emailAddress);
+    const payload = { emailAddress: userTokenInfo.emailAddress, id: userTokenInfo.id };
     const access_token = this.jwtService.sign(payload);
-    const user = await this.usersService.get(natiToken.emailAddress);
-    // await this.cacheManager.set(access_token, payload);
-    await this.sessionService.createSession(access_token, user);
+    await this.sessionService.createSession(access_token);
 
     return {
       access_token,

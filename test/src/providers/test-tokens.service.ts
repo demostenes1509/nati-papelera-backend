@@ -7,6 +7,7 @@ import { SessionService } from '../../../src/modules/session/session.service';
 @Injectable()
 export class TestTokens implements OnModuleInit {
   public adminToken: string;
+  public adminExpiredToken: string;
   public userToken: string;
 
   @Inject()
@@ -25,7 +26,11 @@ export class TestTokens implements OnModuleInit {
     this.adminToken = this.jwtService.sign({ id: admin.id, emailAddress: admin.emailAddress, role: admin.role });
     this.userToken = this.jwtService.sign({ id: user.id, emailAddress: user.emailAddress, role: user.role });
 
-    await this.sessionService.createSession(this.adminToken, admin);
-    await this.sessionService.createSession(this.userToken, user);
+    // Token to test session expiration
+    this.adminExpiredToken = this.jwtService.sign({ id: admin.id, emailAddress: admin.emailAddress, role: 'fake' });
+
+    await this.sessionService.createSession(this.adminToken);
+    await this.sessionService.createSession(this.adminExpiredToken, 1); // ttl = 1 second
+    await this.sessionService.createSession(this.userToken);
   }
 }

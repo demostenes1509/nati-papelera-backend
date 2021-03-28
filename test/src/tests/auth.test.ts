@@ -32,10 +32,6 @@ export class AuthTest extends AbstractTestSuite {
 
   @Test('Create with Admin User')
   public async createAdmin() {
-    console.log('BEFORE SLEEP');
-    await sleep(5);
-    console.log('AFTER SLEEP');
-
     const dto = {
       name: faker.random.words(),
       url: faker.internet.url(),
@@ -71,5 +67,20 @@ export class AuthTest extends AbstractTestSuite {
       .set('Authorization', `Bearer INVALID`)
       .send(dto)
       .expect(HttpStatus.UNAUTHORIZED);
+  }
+
+  @Test('Create with Expired JWT Token')
+  public async createExpiredToken() {
+    // Force token to expire
+    await sleep(1);
+
+    const dto = {
+      name: faker.random.words(),
+      url: faker.internet.url(),
+    };
+    return this.httpPost('/categories/create')
+      .set('Authorization', `Bearer ${this.testTokens.adminExpiredToken}`)
+      .send(dto)
+      .expect(419);
   }
 }

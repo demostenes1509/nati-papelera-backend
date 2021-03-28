@@ -8,7 +8,7 @@ export abstract class AbstractTestSuite {
   private app: INestApplication;
 
   @Inject()
-  private readonly testTokens: TestTokens;
+  protected readonly testTokens: TestTokens;
 
   public setApp(app: INestApplication) {
     this.app = app;
