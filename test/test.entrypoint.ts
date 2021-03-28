@@ -11,6 +11,7 @@ import { setupPipes, Logger, configureTypeORMTransactions } from '../src/helpers
 
 describe('Nati Backend Test Suite', function () {
   let app: INestApplication;
+  this.timeout(0);
 
   before(async () => {
     configureTypeORMTransactions(); // Before everything always !

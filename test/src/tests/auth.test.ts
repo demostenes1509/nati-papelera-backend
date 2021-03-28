@@ -1,8 +1,9 @@
-import { TestSuite, Test } from '../../helpers/decorators';
-import { AbstractTestSuite } from '../abstract-test-suite';
 import { HttpStatus } from '@nestjs/common';
 import * as expect from 'expect';
 import * as faker from 'faker';
+import { TestSuite, Test } from '../../helpers/decorators';
+import { AbstractTestSuite } from '../abstract-test-suite';
+import { sleep } from '../../../src/helpers';
 @TestSuite('Auth Suite')
 export class AuthTest extends AbstractTestSuite {
   @Test('Login Successful')
@@ -31,6 +32,10 @@ export class AuthTest extends AbstractTestSuite {
 
   @Test('Create with Admin User')
   public async createAdmin() {
+    console.log('BEFORE SLEEP');
+    await sleep(5);
+    console.log('AFTER SLEEP');
+
     const dto = {
       name: faker.random.words(),
       url: faker.internet.url(),

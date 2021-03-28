@@ -4,6 +4,6 @@ import { JWT_CONSTANT } from '.';
 export const jwtParams = (): JwtModuleOptions => {
   return {
     secret: JWT_CONSTANT.secret,
-    signOptions: { expiresIn: '60s' },
+    signOptions: {},
   };
 };
