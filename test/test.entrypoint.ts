@@ -11,6 +11,7 @@ import { setupPipes, Logger, configureTypeORMTransactions } from '../src/helpers
 
 describe('Nati Backend Test Suite', function () {
   let app: INestApplication;
+  this.timeout(0);
 
   before(async () => {
     configureTypeORMTransactions(); // Before everything always !
@@ -25,17 +26,16 @@ describe('Nati Backend Test Suite', function () {
     await app.init();
   });
 
-  const applicationTestSuites = Object.keys(REGISTRY);
-  for (const applicationTestSuite of applicationTestSuites) {
-    const testSuite = REGISTRY[applicationTestSuite];
-    const testSuiteTitle = testSuite.title;
-    describe(testSuiteTitle, () => {
-      const tests = testSuite.tests;
-      for (const test of tests) {
-        it(test.description, async () => {
+  // Register all decorated tests and uses mocha on 'describe' them
+  // We need to register nest.js component, thats why we use app.get
+  for (const appTestClass of Object.keys(REGISTRY)) {
+    const testSuite = REGISTRY[appTestClass];
+    describe(testSuite.title, () => {
+      for (const testMethod of testSuite.tests) {
+        it(testMethod.description, async () => {
           const c: AbstractTestSuite = app.get(testSuite.target);
           c.setApp(app);
-          await test.method.apply(c);
+          await testMethod.method.apply(c);
         });
       }
     });
