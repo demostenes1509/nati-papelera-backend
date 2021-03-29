@@ -51,14 +51,14 @@ export class Logger implements LoggerService {
     });
   }
 
-  log(message: string, context?: string) {
-    this.logger.log('notice', this.getMessage(message, context));
-  }
   error(message: string, trace?: string, context?: string) {
     this.logger.log('error', this.getMessage(message, context, trace));
   }
   warn(message: string, context?: string) {
     this.logger.log('warning', this.getMessage(message, context));
+  }
+  log(message: string, context?: string) {
+    this.logger.log('notice', this.getMessage(message, context));
   }
   debug?(message: string, context?: string) {
     this.logger.log('info', this.getMessage(message, context));
