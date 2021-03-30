@@ -107,3 +107,5 @@ To manage session expiration, set `SESSION_TIMEOUT` parameter as 1800 in **dev**
 ## TODO
 
 - Pick Suite and Test to run
+- Localstack integration in test to manage AWS resources locally on tests
+
