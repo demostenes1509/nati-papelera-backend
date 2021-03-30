@@ -6,6 +6,8 @@ This project requires two .env files.
 - Development mode .env file ( .env.dev )
 - Test mode .env file ( .env.test )
 
+**getenv** is the library used to read environment variables instead of accesing them using `process.env`. That garantees an exception is a variable is missing instead of an unknown error code.
+
 ### Compilation
 It is strongly recommended that, to check project is following typescript rules defined on _.eslint.rc_, you run this command:
 `npm run lint`
@@ -41,6 +43,8 @@ export class CategoriesTest extends AbstractTestSuite {
   }
 }
 ```
+
+To run a specific Test Suite, you can run: `SUITETORUN='Suite Name' npm t`, and to run a specific Test, you can run: `TESTTORUN='Suite Name' npm t`
 
 ## Swagger
 Swagger is a nice tool to generate API's documentation. There are several decorators you need to add on every DTO and API. Examples:
@@ -108,4 +112,3 @@ To manage session expiration, set `SESSION_TIMEOUT` parameter as 1800 in **dev**
 
 - Pick Suite and Test to run
 - Localstack integration in test to manage AWS resources locally on tests
-
