@@ -24,14 +24,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   private sessionService: SessionService;
 
   async canActivate(context: ExecutionContext) {
-    this.logger.log('Checking if token is valid');
+    this.logger.verbose('Checking if token is valid');
     await super.canActivate(context);
 
-    this.logger.log('Checking if token has expired');
+    this.logger.verbose('Checking if token has expired');
     const { authorization } = context.switchToHttp().getRequest().headers;
     const isSessionExpired = await this.sessionService.isSessionExpired(authorization);
     if (isSessionExpired) {
-      this.logger.log('Token has expired');
+      this.logger.verbose('Token has expired');
       throw new SessionExpiredException('Session has expired');
     }
 
@@ -43,7 +43,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       return true;
     }
 
-    this.logger.log('Checking if method is restricted to some role');
+    this.logger.verbose('Checking if method is restricted to some role');
     const user: UserTokenInfo = context.switchToHttp().getRequest().user;
     return requiredRoles.some((role) => user.role?.includes(role));
   }

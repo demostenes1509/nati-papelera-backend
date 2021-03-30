@@ -10,8 +10,8 @@ import { REGISTRY } from './helpers/decorators';
 import { AbstractTestSuite } from './src/abstract-test-suite';
 import { setupPipes, Logger, configureTypeORMTransactions } from '../src/helpers';
 
-const TESTTORUN=getEnv('TESTTORUN',null)
-const SUITETORUN=getEnv('SUITETORUN',null)
+const TESTTORUN = getEnv('TESTTORUN', null);
+const SUITETORUN = getEnv('SUITETORUN', null);
 
 describe('Nati Backend Test Suite', function () {
   let app: INestApplication;
@@ -31,18 +31,17 @@ describe('Nati Backend Test Suite', function () {
   });
 
   const isSelectedToRun = (actualName, selectedName) => {
-    return selectedName==='null' || selectedName === actualName
-  }
+    return selectedName === 'null' || selectedName === actualName;
+  };
 
   // Register all decorated tests and uses mocha on 'describe' them
   // We need to register nest.js component, thats why we use app.get
   for (const appTestClass of Object.keys(REGISTRY)) {
     const testSuite = REGISTRY[appTestClass];
-    if(isSelectedToRun(testSuite.title, SUITETORUN)) {
+    if (isSelectedToRun(testSuite.title, SUITETORUN)) {
       describe(testSuite.title, () => {
         for (const testMethod of testSuite.tests) {
-
-          if(isSelectedToRun(testMethod.description, TESTTORUN)) {
+          if (isSelectedToRun(testMethod.description, TESTTORUN)) {
             it(testMethod.description, async () => {
               const c: AbstractTestSuite = app.get(testSuite.target);
               c.setApp(app);

@@ -19,7 +19,7 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   login(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
-    this.logger.log(`Logged in user: ${user.emailAddress}`);
+    this.logger.debug(`Logged in user: ${user.emailAddress}`);
     return this.authService.login(user);
   }
 
@@ -28,7 +28,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
   getProfile(@Request() req) {
-    this.logger.log(`Getting profile user: ${req.user.emailAddress}`);
+    this.logger.debug(`Getting profile user: ${req.user.emailAddress}`);
     return req.user;
   }
 }
