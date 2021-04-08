@@ -3,6 +3,9 @@ dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { configureTypeORMTransactions, Logger, setupPipes, setupSwagger } from './helpers';
+import * as getEnv from 'getenv';
+
+const APP_PORT = getEnv.int('APP_PORT')
 
 const bootstrap = async () => {
   configureTypeORMTransactions(); // Before everything always !
@@ -11,6 +14,7 @@ const bootstrap = async () => {
   });
   setupSwagger(app);
   setupPipes(app);
-  await app.listen(3000);
+  app.enableCors();
+  await app.listen(APP_PORT);
 };
 bootstrap();
