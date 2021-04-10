@@ -58,6 +58,6 @@ export class SideBarGetAllDto {
   categories: Array<CategoryDto>;
 
   constructor(categories: Array<Category>) {
-    this.categories = categories.map((category) => new CategoryDto(category));
+    this.categories = categories.filter((c) => c.products.length > 0).map((category) => new CategoryDto(category));
   }
 }
