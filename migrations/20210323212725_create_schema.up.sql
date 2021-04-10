@@ -41,9 +41,9 @@ ALTER TABLE packaging ADD CONSTRAINT packaging_name_key UNIQUE (name);
 CREATE TABLE products (
     id uuid NOT NULL,
     category_id uuid NOT NULL,
-    packaging_id uuid NOT NULL,
+    packaging_id uuid NULL,
     name varchar(255) NOT NULL,
-    description varchar(4096) NOT NULL,
+    description varchar(4096) NULL,
     url varchar(255) NOT NULL,
     show_format boolean DEFAULT false NOT NULL,
     is_visible boolean DEFAULT false NOT NULL,
