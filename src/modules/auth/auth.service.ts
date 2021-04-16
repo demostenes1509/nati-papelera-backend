@@ -18,7 +18,7 @@ export class AuthService {
   private sessionService: SessionService;
 
   async validateUser(emailAddress: string, password: string): Promise<User> {
-    const user = await this.usersService.get(emailAddress);
+    const user = await this.usersService.get(emailAddress, 'local');
     if (user && user.password === password) {
       return user;
     }
@@ -26,7 +26,6 @@ export class AuthService {
   }
 
   async login(userTokenInfo: UserTokenInfo): Promise<AccessTokenType> {
-    // const user = await this.usersService.get(token.emailAddress);
     const payload = { emailAddress: userTokenInfo.emailAddress, id: userTokenInfo.id };
     const access_token = this.jwtService.sign(payload);
     await this.sessionService.createSession(access_token);
@@ -34,5 +33,9 @@ export class AuthService {
     return {
       access_token,
     };
+  }
+
+  async createOrReplaceUser(emailAddress: string, fullName: string, provider: string): Promise<User> {
+    return await this.usersService.getOrCreate(emailAddress, fullName, provider);
   }
 }

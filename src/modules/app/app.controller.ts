@@ -4,8 +4,9 @@ import { Logger } from '../../helpers';
 import { TokenInfo } from '../../helpers/interfaces';
 import { AccessTokenType } from '../../helpers/types';
 import { AuthService } from '../auth/auth.service';
+import { LocalAuthGuard } from '../auth/facebook-auth.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { FacebookAuthGuard } from '../auth/local-auth.guard';
 
 @Controller()
 export class AppController {
@@ -19,7 +20,7 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   login(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
-    this.logger.debug(`Logged in user: ${user.emailAddress}`);
+    this.logger.log(`Local log in with user: ${user.emailAddress}`);
     return this.authService.login(user);
   }
 
@@ -28,7 +29,16 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
   getProfile(@Request() req) {
-    this.logger.debug(`Getting profile user: ${req.user.emailAddress}`);
+    this.logger.log(`Getting profile user: ${req.user.emailAddress}`);
     return req.user;
+  }
+
+  @Get('/facebook')
+  @ApiResponse({ status: HttpStatus.OK })
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(FacebookAuthGuard)
+  async facebookLoginRedirect(@Request() { user }: TokenInfo): Promise<any> {
+    this.logger.log(`Facebook log in with user: ${user.emailAddress}`);
+    return await this.authService.login(user);
   }
 }

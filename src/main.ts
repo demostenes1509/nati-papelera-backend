@@ -8,6 +8,7 @@ import * as getEnv from 'getenv';
 const APP_PORT = getEnv.int('APP_PORT');
 
 const bootstrap = async () => {
+  const logger = new Logger('bootstrap');
   configureTypeORMTransactions(); // Before everything always !
   const app = await NestFactory.create(AppModule, {
     logger: new Logger(),
@@ -16,5 +17,7 @@ const bootstrap = async () => {
   setupPipes(app);
   app.enableCors();
   await app.listen(APP_PORT);
+
+  logger.log(`Application is running on: ${await app.getUrl()}`);
 };
 bootstrap();
