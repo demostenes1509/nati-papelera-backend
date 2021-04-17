@@ -4,6 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Logger } from '../../helpers';
 import { facebookParams } from '../../helpers/facebook';
 import { AuthService } from './auth.service';
+import { User } from '../../models';
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy) {
@@ -20,8 +21,9 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-    done: (err: any, user: any, info?: any) => void,
-  ): Promise<any> {
+    done: (err: string, user: User) => void,
+  ): Promise<void> {
+    this.logger.debug(`Access Token: ${accessToken} refreshToken: ${refreshToken}`);
     const {
       emails,
       name: { familyName: lastName, givenName: firstName },

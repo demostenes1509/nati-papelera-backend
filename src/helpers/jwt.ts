@@ -1,9 +1,10 @@
 import { JwtModuleOptions } from '@nestjs/jwt';
-import { JWT_CONSTANT } from '.';
+import * as getEnv from 'getenv';
 
+const JWT_SECRET_KEY = getEnv('JWT_SECRET_KEY');
 export const jwtParams = (): JwtModuleOptions => {
   return {
-    secret: JWT_CONSTANT.secret,
+    secret: JWT_SECRET_KEY,
     signOptions: {},
   };
 };

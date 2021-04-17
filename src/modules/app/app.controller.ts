@@ -33,11 +33,11 @@ export class AppController {
     return req.user;
   }
 
-  @Get('/facebook')
+  @Post('/facebook')
   @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
   @UseGuards(FacebookAuthGuard)
-  async facebookLoginRedirect(@Request() { user }: TokenInfo): Promise<any> {
+  async facebookLoginRedirect(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
     this.logger.log(`Facebook log in with user: ${user.emailAddress}`);
     return await this.authService.login(user);
   }

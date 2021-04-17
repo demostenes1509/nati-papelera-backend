@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserTokenInfo } from '../../helpers/interfaces';
+import { Role } from 'src/helpers/enums';
+import { TokenInfo, UserTokenInfo } from '../../helpers/interfaces';
 import { AccessTokenType } from '../../helpers/types';
 import { User } from '../../models';
 import { SessionService } from '../session/session.service';
@@ -25,9 +26,14 @@ export class AuthService {
     return null;
   }
 
-  async login(userTokenInfo: UserTokenInfo): Promise<AccessTokenType> {
-    const payload = { emailAddress: userTokenInfo.emailAddress, id: userTokenInfo.id };
-    const access_token = this.jwtService.sign(payload);
+  async login(user: UserTokenInfo): Promise<AccessTokenType> {
+    const info: UserTokenInfo = {
+      emailAddress: user.emailAddress,
+      fullName: user.fullName,
+      role: user.role,
+      isAdmin: user.role === Role.Admin,
+    };
+    const access_token = this.jwtService.sign(info);
     await this.sessionService.createSession(access_token);
 
     return {
