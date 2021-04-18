@@ -13,4 +13,7 @@ export class User extends AbstractEntity {
 
   @Column('character varying', { nullable: false, length: 255, name: 'role' })
   role: string;
+
+  @Column('character varying', { nullable: false, length: 255, name: 'provider' })
+  provider: string;
 }

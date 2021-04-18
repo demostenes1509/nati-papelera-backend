@@ -23,12 +23,12 @@ CREATE TABLE users (
     zipcode numeric(4,0),
     state numeric(2,0),
 	provider varchar(255) NOT NULL,
-	provider_id varchar(255),
     deleted_at timestamptz
 );
 
 ALTER TABLE users ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 ALTER TABLE users ADD CONSTRAINT users_roles_constraint CHECK (role IN ('admin','user'));
+CREATE UNIQUE INDEX users_email_index ON users(email_address,provider) WHERE deleted_at IS NULL;
 
 CREATE TABLE packaging (
     id uuid NOT NULL,
@@ -41,9 +41,9 @@ ALTER TABLE packaging ADD CONSTRAINT packaging_name_key UNIQUE (name);
 CREATE TABLE products (
     id uuid NOT NULL,
     category_id uuid NOT NULL,
-    packaging_id uuid NOT NULL,
+    packaging_id uuid NULL,
     name varchar(255) NOT NULL,
-    description varchar(4096) NOT NULL,
+    description varchar(4096) NULL,
     url varchar(255) NOT NULL,
     show_format boolean DEFAULT false NOT NULL,
     is_visible boolean DEFAULT false NOT NULL,
