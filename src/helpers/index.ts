@@ -1,3 +1,4 @@
+export * from './aws';
 export * from './constants';
 export * from './logger';
 export * from './jwt';
