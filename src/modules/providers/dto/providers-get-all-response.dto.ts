@@ -12,9 +12,14 @@ export class ProviderDto {
   @IsString()
   name: string;
 
+  @ApiProperty()
+  @IsString()
+  url: string;
+
   constructor(provider: Provider) {
     this.id = provider.id;
     this.name = provider.name;
+    this.url = provider.url;
   }
 }
 
@@ -26,6 +31,6 @@ export class ProvidersGetAllDto {
   providers: Array<ProviderDto>;
 
   constructor(providers: Array<Provider>) {
-    this.providers = providers.map((category) => new ProviderDto(category));
+    this.providers = providers.map((provider) => new ProviderDto(provider));
   }
 }
