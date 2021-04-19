@@ -4,11 +4,11 @@ import { AbstractTestSuite } from '../abstract-test-suite';
 
 @TestSuite('Providers Suite')
 export class ProvidersTest extends AbstractTestSuite {
-  @Test('Upload and process Mapsa file')
-  public async uploadMapsaFile() {
+  @Test('Upload and process Manapel file')
+  public async uploadManapelFile() {
     await this.httpAdminPost('/providers/upload-new-file')
-      .query({ provider: 'mapsa' })
-      .attach('file', './test/src/tests/mapsa.xls')
+      .query({ provider: 'manapel' })
+      .attach('file', './test/src/tests/manapel.xls')
       .expect(HttpStatus.CREATED);
   }
 }

@@ -1,11 +1,13 @@
 CREATE TABLE providers (
     id uuid NOT NULL,
     name varchar(255) NOT NULL,
+    url varchar(255) NOT NULL,
     deleted_at timestamptz
 );
 
 ALTER TABLE providers ADD CONSTRAINT providers_pkey PRIMARY KEY (id);
 CREATE UNIQUE INDEX providers_name_index ON providers(name) WHERE deleted_at IS NULL;
+CREATE UNIQUE INDEX providers_url_index ON providers(url) WHERE deleted_at IS NULL;
 
 CREATE TABLE categories (
     id uuid NOT NULL,

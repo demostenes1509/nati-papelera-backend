@@ -8,6 +8,7 @@ import { UploadedFileProps } from '../../helpers/interfaces';
 import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
 import { ProviderParser } from './parsers/abstract-provider-parser';
 import { AbstractParserProvider } from './parsers/parser-abstract-factory';
+import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
 
 @Injectable()
 export class ProvidersService {
@@ -21,12 +22,18 @@ export class ProvidersService {
 
   async uploadNewFile(dto: UploadNewFileRequestDto, file: UploadedFileProps): Promise<void> {
     this.logger.log('Importing file of provider ' + dto.provider);
-    const provider = await this.providerRepository.findOne({ name: dto.provider });
+    const provider = await this.providerRepository.findOne({ url: dto.provider });
     if (!provider) throw new NotFoundException();
 
     await uploadFile(file);
 
     const providerParser: ProviderParser = this.abstractParserProvider.getParser(dto.provider);
     await providerParser.parseFile(provider, file);
+  }
+
+  async getAll(): Promise<ProvidersGetAllDto> {
+    this.logger.debug('Getting Providers');
+    const providers = await this.providerRepository.find({ order: { name: 'ASC' } });
+    return new ProvidersGetAllDto(providers);
   }
 }

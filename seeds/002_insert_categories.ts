@@ -2,13 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 exports.seed = function (knex) {
   // Deletes ALL existing entries
-  return knex('providers')
+  return knex('categories')
     .del()
     .then(function () {
       // Inserts seed entries
-      return knex('providers').insert([
-        { id: uuidv4(), name: 'local' },
-        { id: uuidv4(), name: 'mapsa' },
+      return knex('categories').insert([
+        { id: uuidv4(), name: 'Bolsas', url: 'bolsas' },
+        { id: uuidv4(), name: 'Vasos', url: 'vasos' },
       ]);
     });
 };

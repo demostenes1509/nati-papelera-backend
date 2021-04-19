@@ -20,8 +20,8 @@ interface MapsaRecord {
 }
 
 @Injectable()
-export class MapsaParser extends ProviderParser {
-  private readonly logger = new Logger(MapsaParser.name);
+export class MapapelProvider extends ProviderParser {
+  private readonly logger = new Logger(MapapelProvider.name);
 
   @InjectRepository(Product)
   private readonly productRepository: Repository<Product>;

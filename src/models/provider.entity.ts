@@ -7,6 +7,9 @@ export class Provider extends AbstractEntity {
   @Column('character varying', { nullable: false, length: 255, name: 'name' })
   name: string;
 
+  @Column('character varying', { nullable: false, length: 255, name: 'url' })
+  url: string;
+
   @OneToMany(() => Product, (product: Product) => product.provider, { cascade: false })
   products: Product[];
 }

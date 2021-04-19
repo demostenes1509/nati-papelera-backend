@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Inject,
@@ -18,11 +19,12 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ProvidersService } from './providers.service';
 import { UploadedFileProps } from '../../helpers/interfaces';
 import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
+import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
 
 @Controller()
 export class ProvidersController {
   @Inject()
-  private readonly homeService: ProvidersService;
+  private readonly providersService: ProvidersService;
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.Admin)
@@ -33,6 +35,15 @@ export class ProvidersController {
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor('file'))
   async uploadNewFile(@Query() dto: UploadNewFileRequestDto, @UploadedFile() file: UploadedFileProps): Promise<void> {
-    return this.homeService.uploadNewFile(dto, file);
+    return this.providersService.uploadNewFile(dto, file);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
+  @ApiResponse({ status: HttpStatus.OK })
+  @Get('/get-all')
+  @HttpCode(HttpStatus.OK)
+  getAll(): Promise<ProvidersGetAllDto> {
+    return this.providersService.getAll();
   }
 }
