@@ -21,7 +21,9 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
     accessToken: string,
     refreshToken: string,
     profile: Profile,
+    /* eslint-disable no-unused-vars */
     done: (err: string, user: User) => void,
+    /* eslint-enable no-unused-vars */
   ): Promise<void> {
     this.logger.debug(`Access Token: ${accessToken} refreshToken: ${refreshToken}`);
     const {
