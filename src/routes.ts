@@ -4,6 +4,7 @@ import { NATI_BACKEND_PATH } from './helpers/constants';
 import { HealthcheckModule } from './modules/healthcheck/healthcheck.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { AppModule } from './modules/app/app.module';
+import { HomeModule } from './modules/home/home.module';
 import { SideBarModule } from './modules/sidebar/sidebar.module';
 
 export const routes: Routes = [
@@ -14,6 +15,7 @@ export const routes: Routes = [
       { module: CategoriesModule, path: '/categories' },
       { module: SideBarModule, path: '/sidebar' },
       { module: AppModule, path: '/auth' },
+      { module: HomeModule, path: '/home' },
     ],
   },
 ];

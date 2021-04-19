@@ -7,6 +7,9 @@ export class Product extends AbstractEntity {
   @Column('character varying', { nullable: false, length: 255, name: 'name' })
   name: string;
 
+  @Column('character varying', { nullable: false, length: 255, name: 'description' })
+  description: string;
+
   @Column('character varying', { nullable: false, length: 255, name: 'url' })
   url: string;
 
