@@ -14,6 +14,9 @@ export class Product extends AbstractEntity {
   @Column('character varying', { nullable: false, length: 255, name: 'url' })
   url: string;
 
+  @Column('character varying', { nullable: false, length: 255, name: 'provider_product_id' })
+  providerProductId: string;
+
   @ManyToOne(() => Category, (category: Category) => category.products, {
     nullable: false,
   })

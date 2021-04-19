@@ -8,8 +8,7 @@ export class ProvidersTest extends AbstractTestSuite {
   public async uploadMapsaFile() {
     await this.httpAdminPost('/providers/upload-new-file')
       .query({ provider: 'mapsa' })
-      .attach('file', '/Users/maximilianocarrizo/nati-papelera/nati-papelera-backend/test/src/tests/mapsa.xls')
-      // .attach('file', '/test/src/tests/mapsa.xls')
+      .attach('file', './test/src/tests/mapsa.xls')
       .expect(HttpStatus.CREATED);
   }
 }

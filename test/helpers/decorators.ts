@@ -24,7 +24,9 @@ export const TestSuite = (title: string) => {
 };
 
 export function Test(description: string): MethodDecorator {
+  /* eslint-disable @typescript-eslint/no-unused-vars-experimental */
   return (target: ConstructorType, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+    /* eslint-enable @typescript-eslint/no-unused-vars-experimental */
     const className = target.constructor.name;
     if (!REGISTRY.hasOwnProperty(className)) REGISTRY[className] = { tests: [], target: null, title: null };
     REGISTRY[className].tests.push({ description, method: descriptor.value });

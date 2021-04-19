@@ -58,7 +58,8 @@ CREATE TABLE products (
     url varchar(255) NOT NULL,
     show_format boolean DEFAULT false NOT NULL,
     is_visible boolean DEFAULT false NOT NULL,
-    is_offer boolean DEFAULT false NOT NULL
+    is_offer boolean DEFAULT false NOT NULL,
+    deleted_at timestamptz
 );
 
 ALTER TABLE products ADD CONSTRAINT products_pkey PRIMARY KEY (id);
