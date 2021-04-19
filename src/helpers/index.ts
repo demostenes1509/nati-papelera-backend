@@ -5,5 +5,6 @@ export * from './jwt';
 export * from './pipes';
 export * from './rdbms';
 export * from './sleep';
+export * from './string';
 export * from './swagger';
 export * from './transactions';

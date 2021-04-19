@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as xslx from 'xlsx';
 import { v4 as uuidv4 } from 'uuid';
-import slugify from 'slugify';
 import { UploadedFileProps } from '../../../helpers/interfaces';
 import { ProviderParser } from './abstract-provider-parser';
-import { Logger } from '../../../helpers';
+import { capitalizeLine, Logger } from '../../../helpers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category, Product, Provider } from '../../../models';
+import { slugifyLine } from '../../../helpers';
 
 interface MapsaRecord {
   ARTICULO: string;
@@ -47,7 +47,11 @@ export class MapapelProvider extends ProviderParser {
       if (!product) {
         this.logger.log(`Article ${row.ARTICULO} does not exists`);
         const bloqueFirstWord = row.BLOQUE.split(' ')[0];
-        const categoryToSearch = bloqueFirstWord.charAt(0).toUpperCase() + bloqueFirstWord.slice(1).toLowerCase();
+        const categoryToSearch = capitalizeLine(bloqueFirstWord);
+
+        console.log('===============');
+        console.log(categoryToSearch);
+        console.log('===============');
 
         let category: Category = await this.categoryRepository.findOne({
           where: { name: categoryToSearch },
@@ -58,7 +62,7 @@ export class MapapelProvider extends ProviderParser {
           category = await this.categoryRepository.save({
             id: uuidv4(),
             name: categoryToSearch,
-            url: slugify(categoryToSearch, { lower: true, strict: true }),
+            url: slugifyLine(categoryToSearch),
           });
         }
 
@@ -68,8 +72,8 @@ export class MapapelProvider extends ProviderParser {
           provider,
           providerProductId: row.ARTICULO,
           category,
-          name: row.NOMBRE,
-          url: slugify(row.NOMBRE, { lower: true, strict: true }),
+          name: capitalizeLine(row.NOMBRE),
+          url: slugifyLine(row.NOMBRE),
         });
       }
 
