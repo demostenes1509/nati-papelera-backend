@@ -1,11 +1,11 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ProviderParser } from './abstract-provider-parser';
-import { MapapelProvider } from './manapel-parser';
+import { MapapelProviderParser } from './manapel/manapel-provider-parser';
 
 @Injectable()
 export class AbstractParserProvider {
   @Inject()
-  private manapelProviderParser: MapapelProvider;
+  private manapelProviderParser: MapapelProviderParser;
 
   getParser = (providerName: string): ProviderParser => {
     if (providerName === 'manapel') return this.manapelProviderParser;

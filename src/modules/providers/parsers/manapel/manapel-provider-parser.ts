@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as xslx from 'xlsx';
 import { v4 as uuidv4 } from 'uuid';
-import { UploadedFileProps } from '../../../helpers/interfaces';
-import { ProviderParser } from './abstract-provider-parser';
-import { capitalizeLine, Logger } from '../../../helpers';
+import { UploadedFileProps } from '../../../../helpers/interfaces';
+import { ProviderParser } from '../abstract-provider-parser';
+import { capitalizeLine, Logger } from '../../../../helpers';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Category, Product, Provider } from '../../../models';
-import { slugifyLine } from '../../../helpers';
+import { Category, Product, Provider } from '../../../../models';
+import { slugifyLine } from '../../../../helpers';
+import { ManapelParser } from './manapel-parser';
 
 interface MapsaRecord {
   ARTICULO: string;
@@ -20,8 +21,8 @@ interface MapsaRecord {
 }
 
 @Injectable()
-export class MapapelProvider extends ProviderParser {
-  private readonly logger = new Logger(MapapelProvider.name);
+export class MapapelProviderParser extends ProviderParser {
+  private readonly logger = new Logger(MapapelProviderParser.name);
 
   @InjectRepository(Product)
   private readonly productRepository: Repository<Product>;
@@ -31,6 +32,7 @@ export class MapapelProvider extends ProviderParser {
 
   async parseFile(provider: Provider, file: UploadedFileProps) {
     this.logger.log('Reading xls');
+    const parser = new ManapelParser();
     const workbook = xslx.read(file.buffer, { type: 'buffer' });
     const sheetNamesList = workbook.SheetNames;
     if (sheetNamesList.length !== 1) {
@@ -49,10 +51,6 @@ export class MapapelProvider extends ProviderParser {
         const bloqueFirstWord = row.BLOQUE.split(' ')[0];
         const categoryToSearch = capitalizeLine(bloqueFirstWord);
 
-        console.log('===============');
-        console.log(categoryToSearch);
-        console.log('===============');
-
         let category: Category = await this.categoryRepository.findOne({
           where: { name: categoryToSearch },
         });
@@ -66,6 +64,9 @@ export class MapapelProvider extends ProviderParser {
           });
         }
 
+        console.log(capitalizeLine(row.NOMBRE));
+        console.log(parser.parseProduct(capitalizeLine(row.NOMBRE)));
+
         this.logger.log(`Creating product ${row.NOMBRE}`);
         await this.productRepository.save({
           id: uuidv4(),
@@ -77,7 +78,7 @@ export class MapapelProvider extends ProviderParser {
         });
       }
 
-      console.log(row);
+      // console.log(row);
     }
   }
 }
