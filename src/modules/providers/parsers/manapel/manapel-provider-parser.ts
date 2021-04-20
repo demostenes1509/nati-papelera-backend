@@ -40,14 +40,14 @@ export class MapapelProviderParser extends ProviderParser {
     }
     const excelData: Array<MapsaRecord> = xslx.utils.sheet_to_json<MapsaRecord>(workbook.Sheets[sheetNamesList[0]]);
     for (const row of excelData) {
-      this.logger.log(`Processing article ${row.ARTICULO}`);
+      this.logger.debug(`Processing article ${row.ARTICULO}`);
 
       const product: Product = await this.productRepository.findOne({
         where: { provider, providerProductId: row.ARTICULO },
       });
 
       if (!product) {
-        this.logger.log(`Article ${row.ARTICULO} does not exists`);
+        this.logger.debug(`Article ${row.ARTICULO} does not exists`);
         const bloqueFirstWord = row.BLOQUE.split(' ')[0];
         const categoryToSearch = capitalizeLine(bloqueFirstWord);
 
@@ -56,7 +56,7 @@ export class MapapelProviderParser extends ProviderParser {
         });
 
         if (!category) {
-          this.logger.log(`Category ${categoryToSearch} does not exists`);
+          this.logger.debug(`Category ${categoryToSearch} does not exists`);
           category = await this.categoryRepository.save({
             id: uuidv4(),
             name: categoryToSearch,
@@ -64,21 +64,38 @@ export class MapapelProviderParser extends ProviderParser {
           });
         }
 
-        console.log(capitalizeLine(row.NOMBRE));
-        console.log(parser.parseProduct(capitalizeLine(row.NOMBRE)));
+        const capitalizedOriginalProductName = capitalizeLine(row.NOMBRE);
 
-        this.logger.log(`Creating product ${row.NOMBRE}`);
+        // try {
+        const [productName, packaging] = parser.parseProduct(capitalizedOriginalProductName);
+        // } catch (error) {
+        //   console.log(capitalizedOriginalProductName);
+        // }
+
+        if (!packaging || packaging.length === 0) {
+          console.log('==============');
+          console.log(capitalizedOriginalProductName);
+          console.log('==============');
+        } else {
+          console.log(`[${productName}] [${packaging}]`);
+        }
+
+        this.logger.debug(`Creating product ${row.NOMBRE}`);
         await this.productRepository.save({
           id: uuidv4(),
           provider,
           providerProductId: row.ARTICULO,
           category,
-          name: capitalizeLine(row.NOMBRE),
-          url: slugifyLine(row.NOMBRE),
+          name: capitalizedOriginalProductName,
+          url: slugifyLine(capitalizedOriginalProductName),
         });
       }
 
       // console.log(row);
     }
+
+    // if (errorvar) {
+    throw new BadRequestException();
+    // }
   }
 }
