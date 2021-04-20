@@ -18,10 +18,12 @@ export class ProvidersTest extends AbstractTestSuite {
   public async parser() {
     const parser = new ManapelParser();
 
-    const res1 = parser.parseProduct('Cristal 10X20/20');
-    expect(res1.length).toBe(2);
-    expect(res1[0]).toBe('Cristal');
-    expect(res1[1]).toBe('10X20/20');
+    const res1 = parser.parseProduct('Cristal Mesa 10X20/20');
+    console.log(res1);
+    // const res1 = parser.parseProduct('Cristal Mesa 10X20/20');
+    // expect(res1.length).toBe(2);
+    // expect(res1[0]).toBe('Cristal');
+    // expect(res1[1]).toBe('10X20/20');
 
     const res2 = parser.parseProduct('Cristal 45x70/100 P/escombros');
   }

@@ -8,8 +8,8 @@ export class ManapelParser {
       lex: {
         rules: [
           ['\\s+', '/* skip whitespace */'],
-          ['[a-zA-Z]+', "return 'WORD';"],
-          ['[0-9][0-9a-zA-Z/]+', "return 'NUMBER';"],
+          ['[a-zA-Z]+', "return 'word';"],
+          ['[0-9][0-9a-zA-Z/]+', "return 'number';"],
           ['$', "return 'EOF'"],
         ],
       },
@@ -20,12 +20,13 @@ export class ManapelParser {
           ['product packaging EOF', 'return [$1,$2]'],
         ],
         product: [
-          ['product WORD', '$$ = `${$1} ${$2}`'],
-          ['WORD', '$$ = $1'],
+          ['product word', '$$ = `${$1} ${$2}`'],
+          ['word', '$$ = $1'],
         ],
         packaging: [
-          ['packaging NUMBER', '$$ = `${$1} ${$2}`'],
-          ['NUMBER', '$$ = $1'],
+          ['packaging number', '$$ = `${$1} ${$2}`'],
+          //   ['packaging number word', '$$ = `${$1} ${$2} ${$3}`'],
+          ['number', '$$ = $1'],
         ],
       },
     };
