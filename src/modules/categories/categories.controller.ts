@@ -4,7 +4,7 @@ import { ApiResponse } from '@nestjs/swagger';
 import { Category } from '../../models';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CategoriesService } from './categories.service';
-import { CategoryCreateDto } from './dto/category-create.dto';
+import { CategoryCreateDto } from './dto/category-create-request.dto';
 import { Roles } from '../../helpers/decorators';
 import { Role } from '../../helpers/enums';
 

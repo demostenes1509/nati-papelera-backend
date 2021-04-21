@@ -1,20 +1,21 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import * as xslx from 'xlsx';
 import { v4 as uuidv4 } from 'uuid';
 import { UploadedFileProps } from '../../../../helpers/interfaces';
 import { ProviderParser } from '../abstract-provider-parser';
 import { capitalizeLine, Logger } from '../../../../helpers';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Category, Product, Provider } from '../../../../models';
+import { Category, Packaging, Product, Provider } from '../../../../models';
 import { slugifyLine } from '../../../../helpers';
 import { ManapelParser } from './manapel-parser';
+import { CategoriesService } from '../../../../modules/categories/categories.service';
+import { ProductsService } from '../../../../modules/products/products.service';
+import { PackagingService } from '../../../../modules/packaging/packaging.service';
 
 interface MapsaRecord {
   ARTICULO: string;
   NOMBRE: string;
-  ' PRECIO ': string;
-  anterior: string;
+  ' PRECIO ': number;
+  anterior: number;
   '% aumento': number;
   CANTIDAD: number;
   BLOQUE: string;
@@ -24,11 +25,14 @@ interface MapsaRecord {
 export class MapapelProviderParser extends ProviderParser {
   private readonly logger = new Logger(MapapelProviderParser.name);
 
-  @InjectRepository(Product)
-  private readonly productRepository: Repository<Product>;
+  @Inject()
+  private readonly productService: ProductsService;
 
-  @InjectRepository(Category)
-  private readonly categoryRepository: Repository<Category>;
+  @Inject()
+  private readonly packagingService: PackagingService;
+
+  @Inject()
+  private readonly categoryService: CategoriesService;
 
   async parseFile(provider: Provider, file: UploadedFileProps) {
     this.logger.log('Reading xls');
@@ -42,52 +46,36 @@ export class MapapelProviderParser extends ProviderParser {
     for (const row of excelData) {
       this.logger.debug(`Processing article ${row.ARTICULO}`);
 
-      const product: Product = await this.productRepository.findOne({
-        where: { provider, providerProductId: row.ARTICULO },
+      const packaging: Packaging = await this.packagingService.findByProvider({
+        providerId: provider.id,
+        providerProductId: row.ARTICULO,
       });
 
-      if (!product) {
+      if (!packaging) {
         this.logger.debug(`Article ${row.ARTICULO} does not exists`);
         const bloqueFirstWord = row.BLOQUE.split(' ')[0];
         const categoryToSearch = capitalizeLine(bloqueFirstWord);
+        const category: Category = await this.categoryService.findOrCreate({ name: categoryToSearch });
 
-        let category: Category = await this.categoryRepository.findOne({
-          where: { name: categoryToSearch },
-        });
-
-        if (!category) {
-          this.logger.debug(`Category ${categoryToSearch} does not exists`);
-          category = await this.categoryRepository.save({
-            id: uuidv4(),
-            name: categoryToSearch,
-            url: slugifyLine(categoryToSearch),
-          });
-        }
-
-        const capitalizedOriginalProductName = capitalizeLine(row.NOMBRE);
-
-        // try {
-        const [productName, packaging] = parser.parseProduct(capitalizedOriginalProductName);
-        // } catch (error) {
-        //   console.log(capitalizedOriginalProductName);
-        // }
+        const capitalizedArticle = capitalizeLine(row.NOMBRE);
+        let [productName, packaging] = parser.parseProduct(capitalizedArticle);
 
         if (!packaging || packaging.length === 0) {
-          console.log('==============');
-          console.log(capitalizedOriginalProductName);
-          console.log('==============');
-        } else {
-          console.log(`[${productName}] [${packaging}]`);
+          packaging = ' x unidad';
         }
+        console.log(`[${productName}] [${packaging}]`);
 
-        this.logger.debug(`Creating product ${row.NOMBRE}`);
-        await this.productRepository.save({
-          id: uuidv4(),
-          provider,
+        const product: Product = await this.productService.findOrCreate({
+          name: productName,
+          categoryId: category.id,
+        });
+
+        await this.packagingService.create({
+          name: packaging,
+          productId: product.id,
+          providerId: provider.id,
           providerProductId: row.ARTICULO,
-          category,
-          name: capitalizedOriginalProductName,
-          url: slugifyLine(capitalizedOriginalProductName),
+          price: row[' PRECIO '],
         });
       }
 
@@ -95,7 +83,7 @@ export class MapapelProviderParser extends ProviderParser {
     }
 
     // if (errorvar) {
-    throw new BadRequestException();
+    // throw new BadRequestException();
     // }
   }
 }

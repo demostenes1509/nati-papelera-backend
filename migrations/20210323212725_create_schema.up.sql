@@ -41,22 +41,14 @@ ALTER TABLE users ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 ALTER TABLE users ADD CONSTRAINT users_roles_constraint CHECK (role IN ('admin','user'));
 CREATE UNIQUE INDEX users_email_index ON users(email_address,provider) WHERE deleted_at IS NULL;
 
-CREATE TABLE packaging (
-    id uuid NOT NULL,
-    name varchar(255) NOT NULL
-);
-
-ALTER TABLE packaging ADD CONSTRAINT packaging_pkey PRIMARY KEY (id);
-ALTER TABLE packaging ADD CONSTRAINT packaging_name_key UNIQUE (name);
-
 CREATE TABLE products (
     id uuid NOT NULL,
     category_id uuid NOT NULL,
-    provider_id uuid NOT NULL,
-    packaging_id uuid NULL,
+    -- provider_id uuid NOT NULL,
+    -- packaging_id uuid NULL,
     name varchar(255) NOT NULL,
     description varchar(4096) NULL,
-    provider_product_id varchar(255) NULL,
+    -- provider_product_id varchar(255) NULL,
     url varchar(255) NOT NULL,
     show_format boolean DEFAULT false NOT NULL,
     is_visible boolean DEFAULT false NOT NULL,
@@ -68,7 +60,23 @@ ALTER TABLE products ADD CONSTRAINT products_pkey PRIMARY KEY (id);
 ALTER TABLE products ADD CONSTRAINT products_name_key UNIQUE (name);
 ALTER TABLE products ADD CONSTRAINT products_url_key UNIQUE (url);
 ALTER TABLE products ADD CONSTRAINT product_category_id_fkey FOREIGN KEY (category_id) REFERENCES categories(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
-ALTER TABLE products ADD CONSTRAINT product_provider_id_fkey FOREIGN KEY (provider_id) REFERENCES providers(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+CREATE TABLE packaging (
+    id uuid NOT NULL,
+    product_id uuid NOT NULL,
+    provider_id uuid NOT NULL,
+    provider_product_id varchar(255) NULL,
+    name varchar(255) NOT NULL,
+    price double precision NOT NULL,
+    -- price double precision NOT NULL,
+    deleted_at timestamptz
+);
+
+ALTER TABLE packaging ADD CONSTRAINT packaging_pkey PRIMARY KEY (id);
+ALTER TABLE packaging ADD CONSTRAINT packaging_product_id_fkey FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE packaging ADD CONSTRAINT packaging_provider_id_fkey FOREIGN KEY (provider_id) REFERENCES providers(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE packaging ADD CONSTRAINT packaging_name_key UNIQUE (name, product_id, provider_id);
+ALTER TABLE packaging ADD CONSTRAINT packaging_provider_key UNIQUE (provider_id, provider_product_id);
 
 CREATE TABLE posters (
     id uuid NOT NULL,

@@ -5,8 +5,4 @@ export class CategoryCreateDto {
   @ApiProperty()
   @IsString()
   name: string;
-
-  @ApiProperty()
-  @IsString()
-  url: string;
 }
