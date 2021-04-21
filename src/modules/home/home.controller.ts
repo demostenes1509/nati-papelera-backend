@@ -1,6 +1,5 @@
-import { Controller, Get, HttpCode, HttpStatus, Inject, Query } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Inject, Param, Query } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { GetCategoryProductsRequest } from './dto/get-category-products-request.dto';
 import { GetCategoryProductsResponse } from './dto/get-category-products-response.dto';
 import { HomeService } from './home.service';
 
@@ -10,9 +9,9 @@ export class HomeController {
   private readonly homeService: HomeService;
 
   @ApiResponse({ status: HttpStatus.OK })
-  @Get('/get-category-products')
+  @Get('/get-category-products/:categoryUrl')
   @HttpCode(HttpStatus.OK)
-  async getCategory(@Query() dto: GetCategoryProductsRequest): Promise<GetCategoryProductsResponse> {
-    return this.homeService.getCategoryProducts(dto);
+  async getCategory(@Param('categoryUrl') categoryUrl: string): Promise<GetCategoryProductsResponse> {
+    return this.homeService.getCategoryProducts(categoryUrl);
   }
 }

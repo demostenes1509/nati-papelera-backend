@@ -8,7 +8,6 @@ import { Logger } from '../../helpers/logger';
 import { ProductFindOrCreateRequest } from './dto/product-find-by-name-request.dto';
 import { slugifyLine } from '../../helpers';
 import * as faker from 'faker';
-import { fake } from 'faker';
 
 @Injectable()
 export class ProductsService {
