@@ -1,11 +1,9 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import * as xslx from 'xlsx';
-import { v4 as uuidv4 } from 'uuid';
 import { UploadedFileProps } from '../../../../helpers/interfaces';
 import { ProviderParser } from '../abstract-provider-parser';
 import { capitalizeLine, Logger } from '../../../../helpers';
 import { Category, Packaging, Product, Provider } from '../../../../models';
-import { slugifyLine } from '../../../../helpers';
 import { ManapelParser } from './manapel-parser';
 import { CategoriesService } from '../../../../modules/categories/categories.service';
 import { ProductsService } from '../../../../modules/products/products.service';
@@ -61,7 +59,7 @@ export class MapapelProviderParser extends ProviderParser {
         let [productName, packaging] = parser.parseProduct(capitalizedArticle);
 
         if (!packaging || packaging.length === 0) {
-          packaging = ' x unidad';
+          packaging = ' x Unidad';
         }
 
         const product: Product = await this.productService.findOrCreate({

@@ -32,7 +32,7 @@ export class ProductsService {
       where: { name: dto.name },
     });
     if (!product) {
-      let productWithSameUrl: Product = await this.productRepository.findOne({
+      const productWithSameUrl: Product = await this.productRepository.findOne({
         where: { url },
       });
 

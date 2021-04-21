@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Inject, Param, Query } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Inject, Param } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { GetCategoryProductsResponse } from './dto/get-category-products-response.dto';
 import { HomeService } from './home.service';

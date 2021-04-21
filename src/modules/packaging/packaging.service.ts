@@ -15,14 +15,17 @@ export class PackagingService {
   private readonly packagingRepository: Repository<Packaging>;
 
   async create(dto: PackagingCreateRequest) {
+    this.logger.debug('Creating packaging');
     return await this.packagingRepository.save({ id: uuidv4(), ...dto });
   }
 
   async update(dto: PackagingUpdateRequest) {
+    this.logger.debug('Updating packaging');
     return await this.packagingRepository.update(dto.id, { ...dto });
   }
 
   async findByProvider(dto: PackagingFindByProviderRequest): Promise<Packaging> {
+    this.logger.debug('Finding packaging');
     const packaging: Packaging = await this.packagingRepository.findOne({
       where: { providerId: dto.providerId, providerProductId: dto.providerProductId },
     });
