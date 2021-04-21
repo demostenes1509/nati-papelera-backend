@@ -21,7 +21,7 @@ export class ProvidersService {
   private readonly providerRepository: Repository<Provider>;
 
   async uploadNewFile(dto: UploadNewFileRequestDto, file: UploadedFileProps): Promise<void> {
-    this.logger.log('Importing file of provider ' + dto.provider);
+    this.logger.debug('Importing file of provider ' + dto.provider);
     const provider = await this.providerRepository.findOne({ url: dto.provider });
     if (!provider) throw new NotFoundException();
 

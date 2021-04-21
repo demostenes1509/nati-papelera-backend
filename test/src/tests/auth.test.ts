@@ -32,37 +32,25 @@ export class AuthTest extends AbstractTestSuite {
 
   @Test('Create with Admin User')
   public async createAdmin() {
-    const dto = {
-      name: faker.random.words(),
-      url: faker.internet.url(),
-    };
+    const dto = { name: faker.random.words() };
     await this.httpAdminPost('/categories/create').send(dto).expect(HttpStatus.CREATED);
   }
 
   @Test('Create with User User')
   public async createUser() {
-    const dto = {
-      name: faker.random.words(),
-      url: faker.internet.url(),
-    };
+    const dto = { name: faker.random.words() };
     await this.httpUserPost('/categories/create').send(dto).expect(HttpStatus.FORBIDDEN);
   }
 
   @Test('Create with Not Logged in User')
   public async createNotLoggedIn() {
-    const dto = {
-      name: faker.random.words(),
-      url: faker.internet.url(),
-    };
+    const dto = { name: faker.random.words() };
     await this.httpPost('/categories/create').send(dto).expect(HttpStatus.UNAUTHORIZED);
   }
 
   @Test('Create with Invalid JWT Token')
   public async createInvalidToken() {
-    const dto = {
-      name: faker.random.words(),
-      url: faker.internet.url(),
-    };
+    const dto = { name: faker.random.words() };
     return this.httpPost('/categories/create')
       .set('Authorization', `Bearer INVALID`)
       .send(dto)
@@ -74,10 +62,7 @@ export class AuthTest extends AbstractTestSuite {
     // Force token to expire
     await sleep(1);
 
-    const dto = {
-      name: faker.random.words(),
-      url: faker.internet.url(),
-    };
+    const dto = { name: faker.random.words() };
     return this.httpPost('/categories/create')
       .set('Authorization', `Bearer ${this.testTokens.adminExpiredToken}`)
       .send(dto)

@@ -5,7 +5,7 @@ import { Packaging } from '../../models';
 import { Repository } from 'typeorm';
 import { Logger } from '../../helpers/logger';
 import { PackagingFindByProviderRequest } from './dto/packaging-find-by-provider-request.dto';
-import { PackagingCreateRequest } from './dto/packaging-create-request.dto';
+import { PackagingCreateRequest, PackagingUpdateRequest } from './dto/packaging-create-request.dto';
 
 @Injectable()
 export class PackagingService {
@@ -16,6 +16,10 @@ export class PackagingService {
 
   async create(dto: PackagingCreateRequest) {
     return await this.packagingRepository.save({ id: uuidv4(), ...dto });
+  }
+
+  async update(dto: PackagingUpdateRequest) {
+    return await this.packagingRepository.update(dto.id, { ...dto });
   }
 
   async findByProvider(dto: PackagingFindByProviderRequest): Promise<Packaging> {

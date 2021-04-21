@@ -22,3 +22,13 @@ export class PackagingCreateRequest {
   @IsNumber()
   price: number;
 }
+
+export class PackagingUpdateRequest {
+  @ApiProperty()
+  @IsString()
+  id: string;
+
+  @ApiProperty()
+  @IsNumber()
+  price: number;
+}

@@ -21,7 +21,8 @@ export class CategoriesService {
 
   create(dto: CategoryCreateDto): Promise<Category> {
     this.logger.debug('Creating Categories');
-    return this.categoryRepository.save({ id: uuidv4(), ...dto });
+    const url = slugifyLine(dto.name);
+    return this.categoryRepository.save({ id: uuidv4(), ...dto, url });
   }
 
   async findOrCreate(dto: CategoryCreateDto): Promise<Category> {

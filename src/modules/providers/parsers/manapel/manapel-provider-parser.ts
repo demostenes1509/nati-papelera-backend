@@ -35,7 +35,7 @@ export class MapapelProviderParser extends ProviderParser {
   private readonly categoryService: CategoriesService;
 
   async parseFile(provider: Provider, file: UploadedFileProps) {
-    this.logger.log('Reading xls');
+    this.logger.debug('Reading xls');
     const parser = new ManapelParser();
     const workbook = xslx.read(file.buffer, { type: 'buffer' });
     const sheetNamesList = workbook.SheetNames;
@@ -63,13 +63,13 @@ export class MapapelProviderParser extends ProviderParser {
         if (!packaging || packaging.length === 0) {
           packaging = ' x unidad';
         }
-        console.log(`[${productName}] [${packaging}]`);
 
         const product: Product = await this.productService.findOrCreate({
           name: productName,
           categoryId: category.id,
         });
 
+        this.logger.debug(`Creating packaging ${row.ARTICULO}`);
         await this.packagingService.create({
           name: packaging,
           productId: product.id,
@@ -77,13 +77,13 @@ export class MapapelProviderParser extends ProviderParser {
           providerProductId: row.ARTICULO,
           price: row[' PRECIO '],
         });
+      } else {
+        this.logger.debug(`Updating packaging ${row.ARTICULO} price`);
+        await this.packagingService.update({
+          id: packaging.id,
+          price: row[' PRECIO '],
+        });
       }
-
-      // console.log(row);
     }
-
-    // if (errorvar) {
-    // throw new BadRequestException();
-    // }
   }
 }
