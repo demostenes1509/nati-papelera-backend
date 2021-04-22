@@ -22,7 +22,7 @@ class PackagingDto {
   }
 }
 
-class ProductDto {
+export class GetProductResponse {
   @ApiProperty()
   @IsString()
   id: string;
@@ -48,24 +48,5 @@ class ProductDto {
     this.description = product.description;
     this.url = product.url;
     this.packaging = product.packaging.map((p) => new PackagingDto(p));
-  }
-}
-
-export class GetCategoryProductsResponse {
-  @ApiProperty()
-  @IsString()
-  categoryName: string;
-
-  @ApiProperty()
-  @IsString()
-  categoryUrl: string;
-
-  @ApiProperty()
-  products: Array<ProductDto>;
-
-  constructor(category: Category) {
-    this.categoryName = category.name;
-    this.categoryUrl = category.url;
-    this.products = category.products.map((p) => new ProductDto(p));
   }
 }

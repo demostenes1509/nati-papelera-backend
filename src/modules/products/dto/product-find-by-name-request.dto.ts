@@ -8,5 +8,9 @@ export class ProductFindOrCreateRequest {
 
   @ApiProperty()
   @IsString()
+  description: string;
+
+  @ApiProperty()
+  @IsString()
   categoryId: string;
 }

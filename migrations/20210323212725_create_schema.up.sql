@@ -44,11 +44,8 @@ CREATE UNIQUE INDEX users_email_index ON users(email_address,provider) WHERE del
 CREATE TABLE products (
     id uuid NOT NULL,
     category_id uuid NOT NULL,
-    -- provider_id uuid NOT NULL,
-    -- packaging_id uuid NULL,
     name varchar(255) NOT NULL,
     description varchar(4096) NULL,
-    -- provider_product_id varchar(255) NULL,
     url varchar(255) NOT NULL,
     show_format boolean DEFAULT false NOT NULL,
     is_visible boolean DEFAULT false NOT NULL,
@@ -57,8 +54,8 @@ CREATE TABLE products (
 );
 
 ALTER TABLE products ADD CONSTRAINT products_pkey PRIMARY KEY (id);
-ALTER TABLE products ADD CONSTRAINT products_name_key UNIQUE (name);
-ALTER TABLE products ADD CONSTRAINT products_url_key UNIQUE (url);
+ALTER TABLE products ADD CONSTRAINT products_name_key UNIQUE (name, category_id);
+ALTER TABLE products ADD CONSTRAINT products_url_key UNIQUE (url, category_id);
 ALTER TABLE products ADD CONSTRAINT product_category_id_fkey FOREIGN KEY (category_id) REFERENCES categories(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 CREATE TABLE packaging (

@@ -43,6 +43,7 @@ export class ProductsService {
       product = await this.productRepository.save({
         id: uuidv4(),
         name: dto.name,
+        description: dto.description,
         categoryId: dto.categoryId,
         url,
       });

@@ -64,6 +64,7 @@ export class MapapelProviderParser extends ProviderParser {
 
         const product: Product = await this.productService.findOrCreate({
           name: productName,
+          description: `Descripción de ${productName}`,
           categoryId: category.id,
         });
 
