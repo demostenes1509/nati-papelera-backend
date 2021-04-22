@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
-export class CategoryCreateDto {
+export class PackagingFindByProviderRequest {
   @ApiProperty()
   @IsString()
-  name: string;
+  providerId: string;
 
   @ApiProperty()
   @IsString()
-  url: string;
+  providerProductId: string;
 }

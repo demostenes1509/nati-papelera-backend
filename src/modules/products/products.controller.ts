@@ -1,17 +1,17 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, UseGuards } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { ApiResponse } from '@nestjs/swagger';
-import { Category } from '../../models';
+import { Product } from '../../models';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CategoriesService } from './categories.service';
-import { CategoryCreateDto } from './dto/category-create-request.dto';
+import { ProductsService } from './products.service';
+import { ProductCreateRequestDto } from './dto/product-create-request.dto';
 import { Roles } from '../../helpers/decorators';
 import { Role } from '../../helpers/enums';
 
 @Controller()
-export class CategoriesController {
+export class ProductsController {
   @Inject()
-  private readonly categoryService: CategoriesService;
+  private readonly productService: ProductsService;
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.Admin)
@@ -19,14 +19,14 @@ export class CategoriesController {
   @HttpCode(HttpStatus.CREATED)
   @Post('/create')
   @Transactional()
-  create(@Body() dto: CategoryCreateDto): Promise<Category> {
-    return this.categoryService.create(dto);
+  create(@Body() dto: ProductCreateRequestDto): Promise<Product> {
+    return this.productService.create(dto);
   }
 
   @ApiResponse({ status: HttpStatus.OK })
   @Get('/get-all')
   @HttpCode(HttpStatus.OK)
-  getAll(): Promise<Array<Category>> {
-    return this.categoryService.getAll();
+  getAll(): Promise<Array<Product>> {
+    return this.productService.getAll();
   }
 }

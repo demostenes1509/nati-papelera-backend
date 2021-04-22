@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Role } from 'src/helpers/enums';
-import { TokenInfo, UserTokenInfo } from '../../helpers/interfaces';
+import { Role } from '../../helpers/enums';
+import { UserTokenInfo } from '../../helpers/interfaces';
 import { AccessTokenType } from '../../helpers/types';
 import { User } from '../../models';
 import { SessionService } from '../session/session.service';

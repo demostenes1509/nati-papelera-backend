@@ -1,19 +1,23 @@
 import { Routes, Route } from 'nest-router';
 import { Type } from '@nestjs/common';
 import { NATI_BACKEND_PATH } from './helpers/constants';
-import { HealthcheckModule } from './modules/healthcheck/healthcheck.module';
-import { CategoriesModule } from './modules/categories/categories.module';
 import { AppModule } from './modules/app/app.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { HealthcheckModule } from './modules/healthcheck/healthcheck.module';
+import { HomeModule } from './modules/home/home.module';
 import { SideBarModule } from './modules/sidebar/sidebar.module';
+import { ProvidersModule } from './modules/providers/providers.module';
 
 export const routes: Routes = [
   {
     path: NATI_BACKEND_PATH,
     children: [
-      { module: HealthcheckModule, path: '/healthcheck' },
-      { module: CategoriesModule, path: '/categories' },
-      { module: SideBarModule, path: '/sidebar' },
       { module: AppModule, path: '/auth' },
+      { module: CategoriesModule, path: '/categories' },
+      { module: HealthcheckModule, path: '/healthcheck' },
+      { module: HomeModule, path: '/home' },
+      { module: SideBarModule, path: '/sidebar' },
+      { module: ProvidersModule, path: '/providers' },
     ],
   },
 ];

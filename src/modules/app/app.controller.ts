@@ -20,7 +20,7 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   login(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
-    this.logger.log(`Local log in with user: ${user.emailAddress}`);
+    this.logger.debug(`Local log in with user: ${user.emailAddress}`);
     return this.authService.login(user);
   }
 
@@ -29,7 +29,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
   getProfile(@Request() req) {
-    this.logger.log(`Getting profile user: ${req.user.emailAddress}`);
+    this.logger.debug(`Getting profile user: ${req.user.emailAddress}`);
     return req.user;
   }
 
@@ -38,7 +38,7 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(FacebookAuthGuard)
   async facebookLoginRedirect(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
-    this.logger.log(`Facebook log in with user: ${user.emailAddress}`);
+    this.logger.debug(`Facebook log in with user: ${user.emailAddress}`);
     return await this.authService.login(user);
   }
 }
