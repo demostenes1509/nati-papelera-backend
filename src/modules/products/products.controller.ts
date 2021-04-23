@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { Roles } from '../../helpers/decorators';
@@ -47,7 +47,7 @@ export class ProductsController {
   @Roles(Role.Admin)
   @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
-  @Post('/update')
+  @Put('/')
   @Transactional()
   update(@Body() dto: ProductUpdateRequest): Promise<ProductUpdateResponse> {
     return this.productService.update(dto);
