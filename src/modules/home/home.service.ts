@@ -18,6 +18,7 @@ export class HomeService {
 
   async getCategoryProducts(categoryUrl: string): Promise<GetCategoryProductsResponse> {
     this.logger.debug('Getting Products from Category');
+
     const category = await this.categoryRepository
       .createQueryBuilder('c')
       .innerJoinAndSelect('c.products', 'pr')
@@ -26,6 +27,7 @@ export class HomeService {
       .orderBy('pr.name')
       .addOrderBy('pck.importOrder')
       .getOne();
+    if (!category) throw new NotFoundException();
 
     return new GetCategoryProductsResponse(category);
   }
@@ -41,6 +43,7 @@ export class HomeService {
       .andWhere('c.url = :categoryUrl', { categoryUrl })
       .addOrderBy('pck.importOrder')
       .getOne();
+    if (!product) throw new NotFoundException();
 
     return new GetProductResponse(product);
   }

@@ -57,11 +57,7 @@ export class MapapelProviderParser extends ProviderParser {
         const category: Category = await this.categoryService.findOrCreate({ name: categoryToSearch });
 
         const capitalizedArticle = capitalizeLine(row.NOMBRE);
-        let [productName, packaging] = parser.parseProduct(capitalizedArticle);
-
-        if (!packaging || packaging.length === 0) {
-          packaging = ' x Unidad';
-        }
+        const [productName, packaging] = parser.parseProduct(capitalizedArticle);
 
         const product: Product = await this.productService.findOrCreate({
           name: productName,
@@ -71,7 +67,7 @@ export class MapapelProviderParser extends ProviderParser {
 
         this.logger.debug(`Creating packaging ${row.ARTICULO}`);
         await this.packagingService.create({
-          name: packaging,
+          name: packaging || ' x Unidad',
           productId: product.id,
           providerId: provider.id,
           providerProductId: row.ARTICULO,
