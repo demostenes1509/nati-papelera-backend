@@ -1,12 +1,12 @@
-import { PackagingService } from './packaging.service';
-import { Body, Controller, HttpCode, HttpStatus, Inject, Post, UseGuards } from '@nestjs/common';
-import { Transactional } from 'typeorm-transactional-cls-hooked';
+import { Body, Controller, HttpCode, HttpStatus, Inject, Put, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { Roles } from '../../helpers/decorators';
 import { Role } from '../../helpers/enums';
-import { PackagingUpdateResponse } from './dto/packaging-update-response.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PackagingUpdateRequest } from './dto/packaging-update-request.dto';
+import { PackagingUpdateResponse } from './dto/packaging-update-response.dto';
+import { PackagingService } from './packaging.service';
 
 @Controller()
 export class PackagingController {
@@ -17,7 +17,7 @@ export class PackagingController {
   @Roles(Role.Admin)
   @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
-  @Post('/update')
+  @Put('/')
   @Transactional()
   update(@Body() dto: PackagingUpdateRequest): Promise<PackagingUpdateResponse> {
     return this.packagingService.update(dto);
