@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { Product, Packaging, Category } from '../../../models';
+import { Product, Packaging } from '../../../models';
 
 class PackagingDto {
   @ApiProperty()

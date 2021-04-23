@@ -65,7 +65,7 @@ CREATE TABLE packaging (
     provider_product_id varchar(255) NULL,
     name varchar(255) NOT NULL,
     price double precision NOT NULL,
-    -- price double precision NOT NULL,
+    import_order integer,
     deleted_at timestamptz
 );
 

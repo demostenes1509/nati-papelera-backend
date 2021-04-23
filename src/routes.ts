@@ -6,6 +6,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { HealthcheckModule } from './modules/healthcheck/healthcheck.module';
 import { HomeModule } from './modules/home/home.module';
 import { SideBarModule } from './modules/sidebar/sidebar.module';
+import { PackagingModule } from './modules/packaging/packaging.module';
 import { ProvidersModule } from './modules/providers/providers.module';
 
 export const routes: Routes = [
@@ -17,6 +18,7 @@ export const routes: Routes = [
       { module: HealthcheckModule, path: '/healthcheck' },
       { module: HomeModule, path: '/home' },
       { module: SideBarModule, path: '/sidebar' },
+      { module: PackagingModule, path: '/packaging' },
       { module: ProvidersModule, path: '/providers' },
     ],
   },

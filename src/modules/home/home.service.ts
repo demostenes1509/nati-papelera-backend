@@ -18,23 +18,30 @@ export class HomeService {
 
   async getCategoryProducts(categoryUrl: string): Promise<GetCategoryProductsResponse> {
     this.logger.debug('Getting Products from Category');
-    const category = await this.categoryRepository.findOne(
-      { url: categoryUrl },
-      { relations: ['products', 'products.packaging'] },
-    );
-    if (!category) throw new NotFoundException();
+    const category = await this.categoryRepository
+      .createQueryBuilder('c')
+      .innerJoinAndSelect('c.products', 'pr')
+      .innerJoinAndSelect('pr.packaging', 'pck')
+      .where('c.url = :categoryUrl', { categoryUrl })
+      .orderBy('pr.name')
+      .addOrderBy('pck.importOrder')
+      .getOne();
 
     return new GetCategoryProductsResponse(category);
   }
 
   async getProduct(categoryUrl: string, productUrl: string): Promise<GetProductResponse> {
     this.logger.debug('Getting Product');
-    const product = await this.productRepository.findOne(
-      {
-        url: productUrl,
-      },
-      { relations: ['packaging'] },
-    );
+
+    const product = await this.productRepository
+      .createQueryBuilder('pr')
+      .innerJoinAndSelect('pr.packaging', 'pck')
+      .innerJoin('pr.category', 'c')
+      .where('pr.url = :productUrl', { productUrl })
+      .andWhere('c.url = :categoryUrl', { categoryUrl })
+      .addOrderBy('pck.importOrder')
+      .getOne();
+
     return new GetProductResponse(product);
   }
 }

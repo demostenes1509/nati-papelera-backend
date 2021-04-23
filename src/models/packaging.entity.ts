@@ -37,4 +37,11 @@ export class Packaging extends AbstractEntity {
     name: 'price',
   })
   price: number;
+
+  @Column('numeric', {
+    nullable: true,
+    default: 0,
+    name: 'import_order',
+  })
+  importOrder: number;
 }

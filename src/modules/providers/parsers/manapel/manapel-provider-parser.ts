@@ -40,6 +40,7 @@ export class MapapelProviderParser extends ProviderParser {
     if (sheetNamesList.length !== 1) {
       throw new BadRequestException('File is not correctly formatted');
     }
+    let importOrder = 1;
     const excelData: Array<MapsaRecord> = xslx.utils.sheet_to_json<MapsaRecord>(workbook.Sheets[sheetNamesList[0]]);
     for (const row of excelData) {
       this.logger.debug(`Processing article ${row.ARTICULO}`);
@@ -75,11 +76,14 @@ export class MapapelProviderParser extends ProviderParser {
           providerId: provider.id,
           providerProductId: row.ARTICULO,
           price: row[' PRECIO '],
+          importOrder,
         });
+        importOrder++;
       } else {
         this.logger.debug(`Updating packaging ${row.ARTICULO} price`);
         await this.packagingService.update({
           id: packaging.id,
+          name: packaging.name,
           price: row[' PRECIO '],
         });
       }
