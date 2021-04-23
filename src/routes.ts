@@ -1,13 +1,14 @@
-import { Routes, Route } from 'nest-router';
 import { Type } from '@nestjs/common';
+import { Route, Routes } from 'nest-router';
 import { NATI_BACKEND_PATH } from './helpers/constants';
 import { AppModule } from './modules/app/app.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { HealthcheckModule } from './modules/healthcheck/healthcheck.module';
 import { HomeModule } from './modules/home/home.module';
-import { SideBarModule } from './modules/sidebar/sidebar.module';
 import { PackagingModule } from './modules/packaging/packaging.module';
+import { ProductsModule } from './modules/products/products.module';
 import { ProvidersModule } from './modules/providers/providers.module';
+import { SideBarModule } from './modules/sidebar/sidebar.module';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,7 @@ export const routes: Routes = [
       { module: HomeModule, path: '/home' },
       { module: SideBarModule, path: '/sidebar' },
       { module: PackagingModule, path: '/packaging' },
+      { module: ProductsModule, path: '/products' },
       { module: ProvidersModule, path: '/providers' },
     ],
   },

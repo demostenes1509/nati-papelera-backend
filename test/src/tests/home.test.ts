@@ -9,11 +9,4 @@ export class HomeTest extends AbstractTestSuite {
   public async getNonExistingCategoryProducts() {
     await this.httpGet('/home/get-category-products/non-existent').expect(HttpStatus.NOT_FOUND);
   }
-
-  @Test('Get Existing Category Products')
-  public async getExistingCategoryProducts() {
-    const { body } = await this.httpGet('/home/get-category-products/bolsas').expect(HttpStatus.OK);
-    expect(body.categoryName).toBe('Bolsas');
-    expect(body.products.length).toBeGreaterThan(0);
-  }
 }

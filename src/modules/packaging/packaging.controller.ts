@@ -19,7 +19,7 @@ export class PackagingController {
   @HttpCode(HttpStatus.OK)
   @Post('/update')
   @Transactional()
-  create(@Body() dto: PackagingUpdateRequest): Promise<PackagingUpdateResponse> {
+  update(@Body() dto: PackagingUpdateRequest): Promise<PackagingUpdateResponse> {
     return this.packagingService.update(dto);
   }
 }

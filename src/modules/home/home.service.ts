@@ -1,10 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category, Product } from '../../models';
 import { Repository } from 'typeorm';
 import { Logger } from '../../helpers/logger';
+import { Category, Product } from '../../models';
 import { GetCategoryProductsResponse } from './dto/get-category-products-response.dto';
-import { GetProductResponse } from './dto/get-product-response.dto';
 
 @Injectable()
 export class HomeService {
@@ -30,21 +29,5 @@ export class HomeService {
     if (!category) throw new NotFoundException();
 
     return new GetCategoryProductsResponse(category);
-  }
-
-  async getProduct(categoryUrl: string, productUrl: string): Promise<GetProductResponse> {
-    this.logger.debug('Getting Product');
-
-    const product = await this.productRepository
-      .createQueryBuilder('pr')
-      .innerJoinAndSelect('pr.packaging', 'pck')
-      .innerJoin('pr.category', 'c')
-      .where('pr.url = :productUrl', { productUrl })
-      .andWhere('c.url = :categoryUrl', { categoryUrl })
-      .addOrderBy('pck.importOrder')
-      .getOne();
-    if (!product) throw new NotFoundException();
-
-    return new GetProductResponse(product);
   }
 }

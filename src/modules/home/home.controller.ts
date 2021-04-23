@@ -1,7 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Inject, Param } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { GetCategoryProductsResponse } from './dto/get-category-products-response.dto';
-import { GetProductResponse } from './dto/get-product-response.dto';
 import { HomeService } from './home.service';
 
 @Controller()
@@ -14,15 +13,5 @@ export class HomeController {
   @HttpCode(HttpStatus.OK)
   async getCategory(@Param('categoryUrl') categoryUrl: string): Promise<GetCategoryProductsResponse> {
     return this.homeService.getCategoryProducts(categoryUrl);
-  }
-
-  @ApiResponse({ status: HttpStatus.OK })
-  @Get('/get-product/:categoryUrl/:productUrl')
-  @HttpCode(HttpStatus.OK)
-  async getProduct(
-    @Param('categoryUrl') categoryUrl: string,
-    @Param('productUrl') productUrl: string,
-  ): Promise<GetProductResponse> {
-    return this.homeService.getProduct(categoryUrl, productUrl);
   }
 }
