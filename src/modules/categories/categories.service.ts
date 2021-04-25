@@ -5,7 +5,7 @@ import { Category } from '../../models';
 import { Repository } from 'typeorm';
 import { CategoryCreateDto } from './dto/category-create-request.dto';
 import { Logger } from '../../helpers/logger';
-import { slugifyLine } from '../../helpers';
+import { slugifyLine } from '../../helpers/string';
 
 @Injectable()
 export class CategoriesService {

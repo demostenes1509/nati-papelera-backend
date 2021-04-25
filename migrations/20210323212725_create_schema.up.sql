@@ -95,7 +95,7 @@ CREATE TABLE products_pictures (
     id uuid NOT NULL,
     product_id uuid NOT NULL,
     content_type varchar(255) NOT NULL,
-    last_update timestamp without time zone NOT NULL
+    deleted_at timestamptz
 );
 
 ALTER TABLE products_pictures ADD CONSTRAINT products_pictures_pkey PRIMARY KEY (id);

@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Logger } from '../../helpers/logger';
-import { Category, Product } from '../../models';
+import { Category } from '../../models';
 import { GetCategoryProductsResponse } from './dto/get-category-products-response.dto';
 
 @Injectable()
@@ -11,9 +11,6 @@ export class HomeService {
 
   @InjectRepository(Category)
   private readonly categoryRepository: Repository<Category>;
-
-  @InjectRepository(Product)
-  private readonly productRepository: Repository<Product>;
 
   async getCategoryProducts(categoryUrl: string): Promise<GetCategoryProductsResponse> {
     this.logger.debug('Getting Products from Category');

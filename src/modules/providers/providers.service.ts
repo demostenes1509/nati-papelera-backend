@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Provider } from '../../models';
 import { Repository } from 'typeorm';
 import { Logger } from '../../helpers/logger';
-import { uploadFile } from '../../helpers';
+import { uploadProviderFile } from '../../helpers/aws';
 import { UploadedFileProps } from '../../helpers/interfaces';
 import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
 import { ProviderParser } from './parsers/abstract-provider-parser';
@@ -25,7 +25,7 @@ export class ProvidersService {
     const provider = await this.providerRepository.findOne({ url: dto.provider });
     if (!provider) throw new NotFoundException();
 
-    await uploadFile(file);
+    await uploadProviderFile(file);
 
     const providerParser: ProviderParser = this.abstractParserProvider.getParser(dto.provider);
     await providerParser.parseFile(provider, file);

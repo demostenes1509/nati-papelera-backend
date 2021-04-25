@@ -1,7 +1,6 @@
-import * as expect from 'expect';
-import { TestSuite, Test } from '../../helpers/decorators';
-import { AbstractTestSuite } from '../abstract-test-suite';
 import { HttpStatus } from '@nestjs/common';
+import { Test, TestSuite } from '../../helpers/decorators';
+import { AbstractTestSuite } from '../abstract-test-suite';
 
 @TestSuite('Home Suite')
 export class HomeTest extends AbstractTestSuite {

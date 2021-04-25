@@ -1,6 +1,6 @@
 import { Controller, Request, Post, UseGuards, HttpCode, HttpStatus, Inject, Get } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { Logger } from '../../helpers';
+import { Logger } from '../../helpers/logger';
 import { TokenInfo } from '../../helpers/interfaces';
 import { AccessTokenType } from '../../helpers/types';
 import { AuthService } from '../auth/auth.service';

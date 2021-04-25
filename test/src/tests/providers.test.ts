@@ -10,7 +10,7 @@ export class ProvidersTest extends AbstractTestSuite {
   public async uploadManapelFile() {
     await this.httpAdminPost('/providers/upload-new-file')
       .query({ provider: 'manapel' })
-      .attach('file', './test/src/tests/manapel.xls')
+      .attach('file', './test/src/tests/resources/manapel.xls')
       .expect(HttpStatus.CREATED);
   }
 

@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from './abstract-entity.entity';
 import { Category } from './category.entity';
 import { Packaging } from './packaging.entity';
+import { ProductPicture } from './product-picture.entity';
 
 @Entity('products')
 export class Product extends AbstractEntity {
@@ -25,4 +26,7 @@ export class Product extends AbstractEntity {
 
   @OneToMany(() => Packaging, (packaging: Packaging) => packaging.product, { cascade: false })
   packaging: Packaging[];
+
+  @OneToMany(() => ProductPicture, (picture: ProductPicture) => picture.product, { cascade: false })
+  pictures: Packaging[];
 }
