@@ -45,7 +45,7 @@ CREATE TABLE products (
     id uuid NOT NULL,
     category_id uuid NOT NULL,
     name varchar(255) NOT NULL,
-    description varchar(4096) NULL,
+    description varchar(4096) NOT NULL,
     url varchar(255) NOT NULL,
     show_format boolean DEFAULT false NOT NULL,
     is_visible boolean DEFAULT false NOT NULL,

@@ -1,19 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as faker from 'faker';
-import { UploadedFileProps } from '../../helpers/interfaces';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { slugifyLine } from '../../helpers/string';
 import { Logger } from '../../helpers/logger';
-import { Product, ProductPicture } from '../../models';
+import { slugifyLine } from '../../helpers/string';
+import { Product } from '../../models';
 import { GetProductResponse } from './dto/get-product-response.dto';
 import { ProductCreateRequestDto } from './dto/product-create-request.dto';
 import { ProductFindOrCreateRequest } from './dto/product-find-by-name-request.dto';
 import { ProductUpdateRequest } from './dto/product-update-request.dto';
 import { ProductUpdateResponse } from './dto/product-update-response.dto';
-import { AddNewImageRequestDto } from './dto/add-new-image-request.dto';
-import { uploadProductPicture } from '../../helpers/aws';
 
 @Injectable()
 export class ProductsService {
@@ -21,9 +18,6 @@ export class ProductsService {
 
   @InjectRepository(Product)
   private readonly productRepository: Repository<Product>;
-
-  @InjectRepository(ProductPicture)
-  private readonly productPictureRepository: Repository<ProductPicture>;
 
   getAll(): Promise<Array<Product>> {
     this.logger.debug('Getting Products');
@@ -84,14 +78,5 @@ export class ProductsService {
     if (!product) throw new NotFoundException();
 
     return new GetProductResponse(product);
-  }
-
-  async addPicture(dto: AddNewImageRequestDto, file: UploadedFileProps): Promise<void> {
-    this.logger.debug('Adding picture to product ' + dto.productId);
-    const product = await this.productRepository.findOne({ id: dto.productId });
-    if (!product) throw new NotFoundException();
-
-    const key = await uploadProductPicture(file);
-    await this.productPictureRepository.save({ id: key, productId: product.id, contentType: 'Hola' });
   }
 }

@@ -1,21 +1,5 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Inject,
-  Param,
-  Post,
-  Put,
-  Query,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { UploadedFileProps } from '../../helpers/interfaces';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { Roles } from '../../helpers/decorators';
 import { Role } from '../../helpers/enums';
@@ -26,7 +10,6 @@ import { ProductCreateRequestDto } from './dto/product-create-request.dto';
 import { ProductUpdateRequest } from './dto/product-update-request.dto';
 import { ProductUpdateResponse } from './dto/product-update-response.dto';
 import { ProductsService } from './products.service';
-import { AddNewImageRequestDto } from './dto/add-new-image-request.dto';
 
 @Controller()
 export class ProductsController {
@@ -37,7 +20,7 @@ export class ProductsController {
   @Roles(Role.Admin)
   @ApiResponse({ status: HttpStatus.CREATED })
   @HttpCode(HttpStatus.CREATED)
-  @Post('/create')
+  @Post('/')
   @Transactional()
   create(@Body() dto: ProductCreateRequestDto): Promise<Product> {
     return this.productService.create(dto);
@@ -68,17 +51,5 @@ export class ProductsController {
   @Transactional()
   update(@Body() dto: ProductUpdateRequest): Promise<ProductUpdateResponse> {
     return this.productService.update(dto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Roles(Role.Admin)
-  @ApiResponse({ status: HttpStatus.CREATED })
-  @HttpCode(HttpStatus.CREATED)
-  @Post('/add-picture')
-  @Transactional()
-  @HttpCode(HttpStatus.OK)
-  @UseInterceptors(FileInterceptor('file'))
-  async addPicture(@Query() dto: AddNewImageRequestDto, @UploadedFile() file: UploadedFileProps): Promise<void> {
-    return this.productService.addPicture(dto, file);
   }
 }
