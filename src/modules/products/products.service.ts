@@ -66,17 +66,16 @@ export class ProductsService {
 
   async getProduct(categoryUrl: string, productUrl: string): Promise<GetProductResponse> {
     this.logger.debug('Getting Product');
-
     const product = await this.productRepository
       .createQueryBuilder('pr')
       .innerJoinAndSelect('pr.packaging', 'pck')
+      .leftJoinAndSelect('pr.pictures', 'pic')
       .innerJoin('pr.category', 'c')
       .where('pr.url = :productUrl', { productUrl })
       .andWhere('c.url = :categoryUrl', { categoryUrl })
       .addOrderBy('pck.importOrder')
       .getOne();
     if (!product) throw new NotFoundException();
-
     return new GetProductResponse(product);
   }
 }

@@ -28,5 +28,5 @@ export class Product extends AbstractEntity {
   packaging: Packaging[];
 
   @OneToMany(() => ProductPicture, (picture: ProductPicture) => picture.product, { cascade: false })
-  pictures: Packaging[];
+  pictures: ProductPicture[];
 }

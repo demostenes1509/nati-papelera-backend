@@ -1,9 +1,11 @@
 import { S3 } from 'aws-sdk';
-import { PutObjectOutput, PutObjectRequest } from 'aws-sdk/clients/s3';
+import { GetObjectOutput, PutObjectOutput, PutObjectRequest } from 'aws-sdk/clients/s3';
 import * as getEnv from 'getenv';
 import * as moment from 'moment';
 import { UploadedFileProps } from './interfaces';
 import { v4 as uuidv4 } from 'uuid';
+import { Readable, Stream } from 'stream';
+import stream from 'stream';
 
 const AWS_ACCESS_KEY_ID = getEnv('AWS_ACCESS_KEY_ID');
 const AWS_SECRET_ACCESS_KEY = getEnv('AWS_SECRET_ACCESS_KEY');
@@ -45,4 +47,13 @@ export const uploadProductPicture = async (file: UploadedFileProps): Promise<str
 
   await s3.putObject(params).promise();
   return key;
+};
+
+export const getProductPicture = async (id: string): Promise<GetObjectOutput> => {
+  const params: S3.Types.PutObjectRequest = {
+    Bucket: AWS_S3_PICTURES_BUCKET,
+    Key: id,
+  };
+
+  return s3.getObject(params).promise();
 };

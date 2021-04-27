@@ -1,10 +1,13 @@
 import {
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Inject,
+  Param,
   Post,
   Query,
+  Response,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -31,12 +34,18 @@ export class ProductsPicturesController {
   @HttpCode(HttpStatus.CREATED)
   @Post('/')
   @Transactional()
-  @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @Query() dto: CreatePictureRequestDto,
     @UploadedFile() file: UploadedFileProps,
   ): Promise<CreatePictureResponseDto> {
     return this.productPictureService.create(dto, file);
+  }
+
+  @ApiResponse({ status: HttpStatus.OK })
+  @HttpCode(HttpStatus.OK)
+  @Get('/:id')
+  async get(@Response() response, @Param('id') id: string): Promise<void> {
+    return this.productPictureService.get(response, id);
   }
 }
