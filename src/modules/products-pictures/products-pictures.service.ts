@@ -5,7 +5,8 @@ import { uploadProductPicture } from '../../helpers/aws';
 import { UploadedFileProps } from '../../helpers/interfaces';
 import { Logger } from '../../helpers/logger';
 import { ProductPicture } from '../../models';
-import { AddNewImageRequestDto } from './dto/add-new-image-request.dto';
+import { CreatePictureRequestDto } from './dto/create-picture-request.dto';
+import { CreatePictureResponseDto } from './dto/create-picture-response.dto';
 
 @Injectable()
 export class ProductsPicturesService {
@@ -14,9 +15,14 @@ export class ProductsPicturesService {
   @InjectRepository(ProductPicture)
   private readonly productPictureRepository: Repository<ProductPicture>;
 
-  async create(dto: AddNewImageRequestDto, file: UploadedFileProps): Promise<void> {
+  async create(dto: CreatePictureRequestDto, file: UploadedFileProps): Promise<CreatePictureResponseDto> {
     this.logger.log('Uploading picture');
     const key = await uploadProductPicture(file);
-    await this.productPictureRepository.save({ id: key, productId: dto.productId, contentType: 'Hola' });
+    const picture = await this.productPictureRepository.save({
+      id: key,
+      productId: dto.productId,
+      mimeType: file.mimetype,
+    });
+    return new CreatePictureResponseDto(picture);
   }
 }

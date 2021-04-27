@@ -4,8 +4,8 @@ import { Product } from './product.entity';
 
 @Entity('products_pictures')
 export class ProductPicture extends AbstractEntity {
-  @Column('character varying', { nullable: false, length: 255, name: 'content_type' })
-  contentType: string;
+  @Column('character varying', { nullable: false, length: 255, name: 'mime_type' })
+  mimeType: string;
 
   @ManyToOne(() => Product, (product: Product) => product.pictures, {
     nullable: false,

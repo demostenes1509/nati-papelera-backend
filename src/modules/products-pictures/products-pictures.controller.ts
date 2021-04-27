@@ -16,7 +16,8 @@ import { Roles } from '../../helpers/decorators';
 import { Role } from '../../helpers/enums';
 import { UploadedFileProps } from '../../helpers/interfaces';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { AddNewImageRequestDto } from './dto/add-new-image-request.dto';
+import { CreatePictureRequestDto } from './dto/create-picture-request.dto';
+import { CreatePictureResponseDto } from './dto/create-picture-response.dto';
 import { ProductsPicturesService } from './products-pictures.service';
 
 @Controller()
@@ -32,7 +33,10 @@ export class ProductsPicturesController {
   @Transactional()
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor('file'))
-  async create(@Query() dto: AddNewImageRequestDto, @UploadedFile() file: UploadedFileProps): Promise<void> {
+  async create(
+    @Query() dto: CreatePictureRequestDto,
+    @UploadedFile() file: UploadedFileProps,
+  ): Promise<CreatePictureResponseDto> {
     return this.productPictureService.create(dto, file);
   }
 }

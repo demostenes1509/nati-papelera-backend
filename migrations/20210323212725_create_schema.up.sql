@@ -94,7 +94,7 @@ ALTER TABLE posters ADD CONSTRAINT posters_product_id_fkey FOREIGN KEY (product_
 CREATE TABLE products_pictures (
     id uuid NOT NULL,
     product_id uuid NOT NULL,
-    content_type varchar(255) NOT NULL,
+    mime_type varchar(255) NOT NULL,
     deleted_at timestamptz
 );
 
