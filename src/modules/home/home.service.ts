@@ -19,6 +19,7 @@ export class HomeService {
       .createQueryBuilder('c')
       .innerJoinAndSelect('c.products', 'pr')
       .innerJoinAndSelect('pr.packaging', 'pck')
+      .leftJoinAndSelect('pr.pictures', 'pic')
       .where('c.url = :categoryUrl', { categoryUrl })
       .orderBy('pr.name')
       .addOrderBy('pck.importOrder')

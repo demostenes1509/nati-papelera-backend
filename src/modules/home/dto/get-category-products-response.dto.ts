@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { Product, Packaging, Category } from '../../../models';
+import { Product, Packaging, Category, ProductPicture } from '../../../models';
 
 class PackagingDto {
   @ApiProperty()
@@ -19,6 +19,21 @@ class PackagingDto {
     this.id = packaging.id;
     this.name = packaging.name;
     this.price = packaging.price;
+  }
+}
+
+class ProductPictureDto {
+  @ApiProperty()
+  @IsString()
+  id: string;
+
+  @ApiProperty()
+  @IsString()
+  mimeType: string;
+
+  constructor(picture: ProductPicture) {
+    this.id = picture.id;
+    this.mimeType = picture.mimeType;
   }
 }
 
@@ -42,12 +57,16 @@ class ProductDto {
   @ApiProperty()
   packaging: Array<PackagingDto>;
 
+  @ApiProperty()
+  pictures: Array<ProductPictureDto>;
+
   constructor(product: Product) {
     this.id = product.id;
     this.name = product.name;
     this.description = product.description;
     this.url = product.url;
     this.packaging = product.packaging.map((p) => new PackagingDto(p));
+    this.pictures = product.pictures.map((p) => new ProductPictureDto(p));
   }
 }
 
