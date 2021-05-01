@@ -20,6 +20,7 @@ import { ProvidersService } from './providers.service';
 import { UploadedFileProps } from '../../helpers/interfaces';
 import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
 import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
+import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
 
 @Controller()
 export class ProvidersController {
@@ -34,7 +35,10 @@ export class ProvidersController {
   @Transactional()
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor('file'))
-  async uploadNewFile(@Query() dto: UploadNewFileRequestDto, @UploadedFile() file: UploadedFileProps): Promise<void> {
+  async uploadNewFile(
+    @Query() dto: UploadNewFileRequestDto,
+    @UploadedFile() file: UploadedFileProps,
+  ): Promise<UploadNewFileResponseDto> {
     return this.providersService.uploadNewFile(dto, file);
   }
 

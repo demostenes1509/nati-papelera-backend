@@ -7,7 +7,7 @@ import { Category, Packaging, Product, Provider } from '../../../../models';
 import { CategoriesService } from '../../../../modules/categories/categories.service';
 import { PackagingService } from '../../../../modules/packaging/packaging.service';
 import { ProductsService } from '../../../../modules/products/products.service';
-import { ProviderParser } from '../abstract-provider-parser';
+import { ProviderParser, ParseResult } from '../abstract-provider-parser';
 import { ManapelParser } from './manapel-parser';
 
 interface MapsaRecord {
@@ -33,7 +33,12 @@ export class MapapelProviderParser extends ProviderParser {
   @Inject()
   private readonly categoryService: CategoriesService;
 
-  async parseFile(provider: Provider, file: UploadedFileProps) {
+  async parseFile(provider: Provider, file: UploadedFileProps): Promise<ParseResult> {
+    const result: ParseResult = {
+      insertedRecords: 0,
+      updatedRecords: 0,
+    };
+
     this.logger.debug('Reading xls');
     const parser = new ManapelParser();
     const workbook = xslx.read(file.buffer, { type: 'buffer' });
@@ -76,6 +81,7 @@ export class MapapelProviderParser extends ProviderParser {
           importOrder,
         });
         importOrder++;
+        result.insertedRecords++;
       } else {
         this.logger.debug(`Updating packaging ${row.ARTICULO} price`);
         await this.packagingService.update({
@@ -83,7 +89,9 @@ export class MapapelProviderParser extends ProviderParser {
           name: packaging.name,
           price: row[' PRECIO '],
         });
+        result.updatedRecords++;
       }
     }
+    return result;
   }
 }
