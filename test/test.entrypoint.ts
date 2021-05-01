@@ -8,7 +8,9 @@ import { AppModule } from '../src/app.module';
 import { TestModule } from './src/test.module';
 import { REGISTRY } from './helpers/decorators';
 import { AbstractTestSuite } from './src/abstract-test-suite';
-import { setupPipes, Logger, configureTypeORMTransactions } from '../src/helpers';
+import { Logger } from '../src/helpers/logger';
+import { setupPipes } from '../src/helpers/pipes';
+import { configureTypeORMTransactions } from '../src/helpers/transactions';
 
 const TESTTORUN = getEnv('TESTTORUN', null);
 const SUITETORUN = getEnv('SUITETORUN', null);

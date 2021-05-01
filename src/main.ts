@@ -2,8 +2,11 @@ import * as dotenv from 'dotenv-flow';
 dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { configureTypeORMTransactions, Logger, setupPipes, setupSwagger } from './helpers';
 import * as getEnv from 'getenv';
+import { Logger } from './helpers/logger';
+import { configureTypeORMTransactions } from './helpers/transactions';
+import { setupSwagger } from './helpers/swagger';
+import { setupPipes } from './helpers/pipes';
 
 const APP_PORT = getEnv.int('APP_PORT');
 

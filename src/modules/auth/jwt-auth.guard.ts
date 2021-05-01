@@ -1,7 +1,7 @@
 import { ExecutionContext, HttpException, Inject, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { Logger } from '../../helpers';
+import { Logger } from '../../helpers/logger';
 import { UserTokenInfo } from '../../helpers/interfaces';
 import { ROLES_KEY } from '../../helpers/decorators';
 import { Role } from '../../helpers/enums';

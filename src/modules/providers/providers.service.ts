@@ -3,12 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Provider } from '../../models';
 import { Repository } from 'typeorm';
 import { Logger } from '../../helpers/logger';
-import { uploadFile } from '../../helpers';
+import { uploadProviderFile } from '../../helpers/aws';
 import { UploadedFileProps } from '../../helpers/interfaces';
 import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
 import { ProviderParser } from './parsers/abstract-provider-parser';
 import { AbstractParserProvider } from './parsers/parser-abstract-factory';
 import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
+import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
 
 @Injectable()
 export class ProvidersService {
@@ -20,15 +21,19 @@ export class ProvidersService {
   @InjectRepository(Provider)
   private readonly providerRepository: Repository<Provider>;
 
-  async uploadNewFile(dto: UploadNewFileRequestDto, file: UploadedFileProps): Promise<void> {
-    this.logger.debug('Importing file of provider ' + dto.provider);
-    const provider = await this.providerRepository.findOne({ url: dto.provider });
+  async uploadNewFile(dto: UploadNewFileRequestDto, file: UploadedFileProps): Promise<UploadNewFileResponseDto> {
+    this.logger.log('Importing file of provider ' + dto.providerUrl);
+    const provider = await this.providerRepository.findOne({ url: dto.providerUrl });
     if (!provider) throw new NotFoundException();
 
-    await uploadFile(file);
+    await uploadProviderFile(file);
 
-    const providerParser: ProviderParser = this.abstractParserProvider.getParser(dto.provider);
-    await providerParser.parseFile(provider, file);
+    const providerParser: ProviderParser = this.abstractParserProvider.getParser(dto.providerUrl);
+    const result = await providerParser.parseFile(provider, file);
+
+    this.logger.log('Provider ' + dto.providerUrl + ' import finished !');
+
+    return new UploadNewFileResponseDto(result.insertedRecords, result.updatedRecords);
   }
 
   async getAll(): Promise<ProvidersGetAllDto> {

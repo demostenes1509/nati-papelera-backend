@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
-export class UploadNewFileRequestDto {
+export class CreatePictureRequestDto {
   @ApiProperty()
   @IsString()
-  providerUrl: string;
+  productId: string;
 }

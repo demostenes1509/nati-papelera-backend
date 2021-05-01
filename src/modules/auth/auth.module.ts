@@ -5,7 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
-import { jwtParams } from '../../helpers';
+import { jwtParams } from '../../helpers/jwt';
 import { SessionModule } from '../session/session.module';
 import { FacebookStrategy } from './facebook.strategy';
 

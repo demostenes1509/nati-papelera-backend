@@ -3,7 +3,7 @@ import * as expect from 'expect';
 import * as faker from 'faker';
 import { TestSuite, Test } from '../../helpers/decorators';
 import { AbstractTestSuite } from '../abstract-test-suite';
-import { sleep } from '../../../src/helpers';
+import { sleep } from '../../../src/helpers/sleep';
 @TestSuite('Auth Suite')
 export class AuthTest extends AbstractTestSuite {
   @Test('Login Successful')

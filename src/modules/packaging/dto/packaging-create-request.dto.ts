@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class PackagingCreateRequest {
   @ApiProperty()
@@ -21,14 +21,9 @@ export class PackagingCreateRequest {
   @ApiProperty()
   @IsNumber()
   price: number;
-}
 
-export class PackagingUpdateRequest {
-  @ApiProperty()
-  @IsString()
-  id: string;
-
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsNumber()
-  price: number;
+  @IsOptional()
+  importOrder: number;
 }

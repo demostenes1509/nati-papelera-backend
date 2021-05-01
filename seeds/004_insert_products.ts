@@ -14,18 +14,21 @@ exports.seed = async function (knex) {
           category_id: bolsaPapelId,
           id: uuidv4(),
           name: 'Bolsas de Papel',
+          description: 'Bolsas de Papel',
           url: 'bolsas-papel',
         },
         {
           category_id: vasosId,
           id: uuidv4(),
           name: 'Vasos de Plástico',
+          description: 'Vasos de Plástico',
           url: 'vasos-plastico',
         },
         {
           category_id: vasosId,
           id: uuidv4(),
           name: 'Vasos de Tergopor',
+          description: 'Vasos de Tergopor',
           url: 'vasos-tergopor',
         },
       ]);
