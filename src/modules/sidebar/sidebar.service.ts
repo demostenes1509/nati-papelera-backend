@@ -14,7 +14,13 @@ export class SideBarService {
 
   async getAll(): Promise<SideBarGetAllDto> {
     this.logger.debug('Getting sidebar info');
-    const categories = await this.categoryRepository.find({ relations: ['products'], order: { name: 'ASC' } });
+    const categories = await this.categoryRepository
+      .createQueryBuilder('c')
+      .innerJoinAndSelect('c.products', 'p')
+      .orderBy('c.name', 'ASC')
+      .addOrderBy('p.name', 'ASC')
+      .getMany();
+
     return new SideBarGetAllDto(categories);
   }
 }
