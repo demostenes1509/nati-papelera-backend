@@ -7,6 +7,7 @@ import { AuthService } from '../auth/auth.service';
 import { FacebookAuthGuard } from '../auth/facebook-auth.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { InstragramAuthGuard } from '../auth/instagram-auth.guard';
 
 @Controller()
 export class AppController {
@@ -39,6 +40,15 @@ export class AppController {
   @UseGuards(FacebookAuthGuard)
   async facebookLoginRedirect(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
     this.logger.debug(`Facebook log in with user: ${user.emailAddress}`);
+    return await this.authService.login(user);
+  }
+
+  @Post('/instagram')
+  @ApiResponse({ status: HttpStatus.OK })
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(InstragramAuthGuard)
+  async instagramLoginRedirect(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
+    this.logger.debug(`Instagram log in with user: ${user.emailAddress}`);
     return await this.authService.login(user);
   }
 }
