@@ -10,15 +10,14 @@ import { ProductsService } from '../../../../modules/products/products.service';
 import { ProviderParser, ParseResult } from '../abstract-provider-parser';
 import { ManapelParser } from './manapel-parser';
 
-interface MapsaRecord {
-  ARTICULO: string;
-  NOMBRE: string;
-  ' PRECIO ': number;
-  anterior: number;
-  '% aumento': number;
-  CANTIDAD: number;
-  BLOQUE: string;
-}
+var ColumnsIndexesEnum = {
+  ARTICULO: 0,
+  NOMBRE: 1,
+  PRECIO: 2,
+  ANTERIOR: 3,
+  CANTIDAD: 4,
+  BLOQUE: 5,
+};
 
 @Injectable()
 export class MapapelProviderParser extends ProviderParser {
@@ -47,22 +46,24 @@ export class MapapelProviderParser extends ProviderParser {
       throw new BadRequestException('File is not correctly formatted');
     }
     let importOrder = 1;
-    const excelData: Array<MapsaRecord> = xslx.utils.sheet_to_json<MapsaRecord>(workbook.Sheets[sheetNamesList[0]]);
-    for (const row of excelData) {
-      this.logger.debug(`Processing article ${row.ARTICULO}`);
+    const excelData = xslx.utils.sheet_to_json(workbook.Sheets[sheetNamesList[0]]);
+    for (const row1 of excelData) {
+      const rowValues = Object.values(row1);
+
+      this.logger.debug(`Processing article ${rowValues[ColumnsIndexesEnum.ARTICULO]}`);
 
       const packaging: Packaging = await this.packagingService.findByProvider({
         providerId: provider.id,
-        providerProductId: row.ARTICULO,
+        providerProductId: rowValues[ColumnsIndexesEnum.ARTICULO],
       });
 
       if (!packaging) {
-        this.logger.debug(`Article ${row.ARTICULO} does not exists`);
-        const bloqueFirstWord = row.BLOQUE.split(' ')[0];
+        this.logger.debug(`Article ${rowValues[ColumnsIndexesEnum.ARTICULO]} does not exists`);
+        const bloqueFirstWord = rowValues[ColumnsIndexesEnum.BLOQUE].split(' ')[0];
         const categoryToSearch = capitalizeLine(bloqueFirstWord);
         const category: Category = await this.categoryService.findOrCreate({ name: categoryToSearch });
 
-        const capitalizedArticle = capitalizeLine(row.NOMBRE);
+        const capitalizedArticle = capitalizeLine(rowValues[ColumnsIndexesEnum.NOMBRE]);
         const [productName, packaging] = parser.parseProduct(capitalizedArticle);
 
         const product: Product = await this.productService.findOrCreate({
@@ -71,23 +72,23 @@ export class MapapelProviderParser extends ProviderParser {
           categoryId: category.id,
         });
 
-        this.logger.debug(`Creating packaging ${row.ARTICULO}`);
+        this.logger.debug(`Creating packaging ${rowValues[ColumnsIndexesEnum.ARTICULO]}`);
         await this.packagingService.create({
           name: packaging || ' x Unidad',
           productId: product.id,
           providerId: provider.id,
-          providerProductId: row.ARTICULO,
-          price: row[' PRECIO '],
+          providerProductId: rowValues[ColumnsIndexesEnum.ARTICULO],
+          price: rowValues[ColumnsIndexesEnum.PRECIO],
           importOrder,
         });
         importOrder++;
         result.insertedRecords++;
       } else {
-        this.logger.debug(`Updating packaging ${row.ARTICULO} price`);
+        this.logger.debug(`Updating packaging ${rowValues[ColumnsIndexesEnum.ARTICULO]} price`);
         await this.packagingService.update({
           id: packaging.id,
           name: packaging.name,
-          price: row[' PRECIO '],
+          price: rowValues[ColumnsIndexesEnum.PRECIO],
         });
         result.updatedRecords++;
       }
