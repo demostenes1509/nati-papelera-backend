@@ -10,7 +10,7 @@ import { ProductsService } from '../../../../modules/products/products.service';
 import { ProviderParser, ParseResult } from '../abstract-provider-parser';
 import { ManapelParser } from './manapel-parser';
 
-var ColumnsIndexesEnum = {
+const ColumnsIndexesEnum = {
   ARTICULO: 0,
   NOMBRE: 1,
   PRECIO: 2,
