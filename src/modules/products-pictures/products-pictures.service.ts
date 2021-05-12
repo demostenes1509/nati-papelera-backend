@@ -8,15 +8,6 @@ import { ProductPicture } from '../../models';
 import { CreatePictureRequestDto } from './dto/create-picture-request.dto';
 import { CreatePictureResponseDto } from './dto/create-picture-response.dto';
 
-function streamToString(stream) {
-  const chunks = [];
-  return new Promise((resolve, reject) => {
-    stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
-    stream.on('error', (err) => reject(err));
-    stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
-  });
-}
-
 export class ProductsPicturesService {
   private readonly logger = new Logger(ProductsPicturesService.name);
 
@@ -43,9 +34,5 @@ export class ProductsPicturesService {
     response.setHeader('Content-Disposition', 'inline; filename=' + id);
     response.setHeader('Content-Length', pictureImage.ContentLength);
     response.status(HttpStatus.OK).send(pictureImage.Body);
-
-    // response.setHeader('Cache-Control', 'must-revalidate,private');
-    // response.setHeader('Expires', '-1');
-    // response.setHeader('Last-Modified', last_update.toUTCString());
   }
 }

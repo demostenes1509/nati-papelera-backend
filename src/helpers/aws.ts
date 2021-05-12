@@ -2,10 +2,8 @@ import { S3 } from 'aws-sdk';
 import { GetObjectOutput, PutObjectOutput, PutObjectRequest } from 'aws-sdk/clients/s3';
 import * as getEnv from 'getenv';
 import * as moment from 'moment';
-import { UploadedFileProps } from './interfaces';
 import { v4 as uuidv4 } from 'uuid';
-import { Readable, Stream } from 'stream';
-import stream from 'stream';
+import { UploadedFileProps } from './interfaces';
 
 const AWS_ACCESS_KEY_ID = getEnv('AWS_ACCESS_KEY_ID');
 const AWS_SECRET_ACCESS_KEY = getEnv('AWS_SECRET_ACCESS_KEY');

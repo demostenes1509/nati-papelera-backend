@@ -55,6 +55,7 @@
     "nest-router": "^1.0.9",
     "passport": "^0.4.1",
     "passport-facebook-token-nest": "^3.3.2",
+    "passport-instagram": "^1.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.5.1",
