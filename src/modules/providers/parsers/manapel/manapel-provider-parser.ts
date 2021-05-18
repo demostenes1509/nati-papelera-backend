@@ -82,13 +82,15 @@ export class MapapelProviderParser extends ProviderParser {
         importOrder++;
         result.insertedRecords++;
       } else {
-        this.logger.debug(`Updating packaging ${articulo} price`);
-        await this.packagingService.update({
-          id: packaging.id,
-          name: packaging.name,
-          price: precio,
-        });
-        result.updatedRecords++;
+        if (precio !== packaging.price) {
+          this.logger.debug(`Updating packaging ${articulo} price`);
+          await this.packagingService.update({
+            id: packaging.id,
+            name: packaging.name,
+            price: precio,
+          });
+          result.updatedRecords++;
+        }
       }
     }
     return result;

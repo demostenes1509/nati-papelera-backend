@@ -44,4 +44,10 @@ export class Packaging extends AbstractEntity {
     name: 'import_order',
   })
   importOrder: number;
+
+  @Column('boolean', { nullable: true, name: 'is_new' })
+  isNew: boolean;
+
+  @Column('boolean', { nullable: true, name: 'was_updated' })
+  wasUpdated: boolean;
 }

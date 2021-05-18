@@ -27,7 +27,7 @@ export class ProductsService {
   create(dto: ProductCreateRequestDto, url?: string): Promise<Product> {
     this.logger.debug('Creating Products');
     if (!url) url = slugifyLine(dto.name);
-    return this.productRepository.save({ id: uuidv4(), ...dto, url });
+    return this.productRepository.save({ id: uuidv4(), ...dto, url, isNew: true });
   }
 
   async update(dto: ProductUpdateRequest): Promise<ProductUpdateResponse> {

@@ -50,7 +50,8 @@ CREATE TABLE products (
     show_format boolean DEFAULT false NOT NULL,
     is_visible boolean DEFAULT false NOT NULL,
     is_offer boolean DEFAULT false NOT NULL,
-    deleted_at timestamptz
+    deleted_at timestamptz,
+    is_new boolean DEFAULT false NOT NULL
 );
 
 ALTER TABLE products ADD CONSTRAINT products_pkey PRIMARY KEY (id);
@@ -66,7 +67,9 @@ CREATE TABLE packaging (
     name varchar(255) NOT NULL,
     price double precision NOT NULL,
     import_order integer,
-    deleted_at timestamptz
+    deleted_at timestamptz,
+    is_new boolean DEFAULT false NOT NULL,
+    was_updated boolean DEFAULT false NOT NULL
 );
 
 ALTER TABLE packaging ADD CONSTRAINT packaging_pkey PRIMARY KEY (id);

@@ -18,12 +18,12 @@ export class PackagingService {
 
   async create(dto: PackagingCreateRequest) {
     this.logger.debug('Creating packaging');
-    return await this.packagingRepository.save({ id: uuidv4(), ...dto });
+    return await this.packagingRepository.save({ id: uuidv4(), ...dto, isNew: true });
   }
 
   async update(dto: PackagingUpdateRequest): Promise<PackagingUpdateResponse> {
     this.logger.debug('Updating packaging');
-    await this.packagingRepository.update(dto.id, { ...dto });
+    await this.packagingRepository.update(dto.id, { ...dto, wasUpdated: true });
     const packaging = await this.packagingRepository.findOneOrFail(dto.id);
     return new PackagingUpdateResponse(packaging);
   }

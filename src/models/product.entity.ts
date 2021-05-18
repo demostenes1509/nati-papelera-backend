@@ -15,6 +15,9 @@ export class Product extends AbstractEntity {
   @Column('character varying', { nullable: false, length: 255, name: 'url' })
   url: string;
 
+  @Column('boolean', { nullable: true, name: 'is_new' })
+  isNew: boolean;
+
   @ManyToOne(() => Category, (category: Category) => category.products, {
     nullable: false,
   })
