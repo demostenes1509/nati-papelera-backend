@@ -2,10 +2,16 @@ CREATE TABLE providers (
     id uuid NOT NULL,
     name varchar(255) NOT NULL,
     url varchar(255) NOT NULL,
+    percentage number(5,2),
     deleted_at timestamptz
 );
 
 ALTER TABLE providers ADD CONSTRAINT providers_pkey PRIMARY KEY (id);
+ALTER TABLE providers ADD CONSTRAINT percentage_range 
+CHECK {
+    percentage >= 0
+    AND percentage <= 200
+};
 CREATE UNIQUE INDEX providers_name_index ON providers(name) WHERE deleted_at IS NULL;
 CREATE UNIQUE INDEX providers_url_index ON providers(url) WHERE deleted_at IS NULL;
 

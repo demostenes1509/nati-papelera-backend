@@ -5,10 +5,12 @@ import {
   HttpStatus,
   Inject,
   Post,
+  Put,
   Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  Body,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
@@ -21,6 +23,8 @@ import { UploadedFileProps } from '../../helpers/interfaces';
 import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
 import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
 import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
+import { ProviderUpdateRequestDto } from './dto/provider-update-request.dto';
+import { ProviderUpdateResponse } from './dto/provider-update-response.dto';
 
 @Controller()
 export class ProvidersController {
@@ -50,4 +54,15 @@ export class ProvidersController {
   getAll(): Promise<ProvidersGetAllDto> {
     return this.providersService.getAll();
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin)
+  @ApiResponse({ status: HttpStatus.OK })
+  @HttpCode(HttpStatus.OK)
+  @Put('/')
+  @Transactional()
+  update(@Body() dto: ProviderUpdateRequestDto): Promise<ProviderUpdateResponse>  {
+    return this.providersService.update(dto);
+  }
+  
 }

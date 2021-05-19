@@ -10,6 +10,8 @@ import { ProviderParser } from './parsers/abstract-provider-parser';
 import { AbstractParserProvider } from './parsers/parser-abstract-factory';
 import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
 import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
+import { ProviderUpdateRequestDto } from './dto/provider-update-request.dto';
+import { ProviderUpdateResponse } from './dto/provider-update-response.dto';
 
 @Injectable()
 export class ProvidersService {
@@ -40,5 +42,11 @@ export class ProvidersService {
     this.logger.debug('Getting Providers');
     const providers = await this.providerRepository.find({ order: { name: 'ASC' } });
     return new ProvidersGetAllDto(providers);
+  }
+
+  async update(dto: ProviderUpdateRequestDto): Promise<ProviderUpdateResponse> {
+    await this.providerRepository.update(dto.id, { ...dto});
+    const provider = await this.providerRepository.findOneOrFail(dto.id);
+    return new ProviderUpdateResponse(provider);
   }
 }
