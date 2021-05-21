@@ -1,13 +1,13 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { capitalizeLine } from '../../../../helpers/string';
+import { BadRequestException, Inject } from '@nestjs/common';
 import * as xslx from 'xlsx';
 import { UploadedFileProps } from '../../../../helpers/interfaces';
 import { Logger } from '../../../../helpers/logger';
+import { capitalizeLine } from '../../../../helpers/string';
 import { Category, Packaging, Product, Provider } from '../../../../models';
 import { CategoriesService } from '../../../../modules/categories/categories.service';
 import { PackagingService } from '../../../../modules/packaging/packaging.service';
 import { ProductsService } from '../../../../modules/products/products.service';
-import { ProviderParser, ParseResult } from '../abstract-provider-parser';
+import { ParseResult, ProviderParser } from '../abstract-provider-parser';
 import { ManapelParser } from './manapel-parser';
 
 export class MapapelProviderParser extends ProviderParser {

@@ -1,13 +1,14 @@
-import { Controller, Request, Post, UseGuards, HttpCode, HttpStatus, Inject, Get } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Inject, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { Logger } from '../../helpers/logger';
 import { TokenInfo } from '../../helpers/interfaces';
+import { Logger } from '../../helpers/logger';
 import { AccessTokenType } from '../../helpers/types';
 import { AuthService } from '../auth/auth.service';
 import { FacebookAuthGuard } from '../auth/facebook-auth.guard';
+import { InstragramAuthGuard } from '../auth/instagram-auth.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { LocalAuthGuard } from '../auth/local-auth.guard';
-import { InstragramAuthGuard } from '../auth/instagram-auth.guard';
+import { MercadoLibreAuthGuard } from '../auth/mercadolibre-auth.guard';
 
 @Controller()
 export class AppController {
@@ -49,6 +50,15 @@ export class AppController {
   @UseGuards(InstragramAuthGuard)
   async instagramLoginRedirect(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
     this.logger.debug(`Instagram log in with user: ${user.emailAddress}`);
+    return await this.authService.login(user);
+  }
+
+  @Post('/mercadolibre')
+  @ApiResponse({ status: HttpStatus.OK })
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(MercadoLibreAuthGuard)
+  async mercadoLibreRedirect(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
+    this.logger.debug(`Mercado Libre log in with user: ${user.emailAddress}`);
     return await this.authService.login(user);
   }
 }
