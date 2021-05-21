@@ -18,6 +18,10 @@ export abstract class AbstractTestSuite {
     return request(this.app.getHttpServer()).get(`${NATI_BACKEND_PATH}${path}`);
   }
 
+  public httpAdminPut(path: string) {
+    return request(this.app.getHttpServer()).put(`${NATI_BACKEND_PATH}${path}`);
+  }
+
   public httpAdminGet(path: string) {
     return this.httpGet(path).set('Authorization', `Bearer ${this.testTokens.adminToken}`);
   }

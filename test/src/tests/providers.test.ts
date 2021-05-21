@@ -87,4 +87,30 @@ export class ProvidersTest extends AbstractTestSuite {
     expect(result[0]).toBe(product);
     expect(result[1]).toBe(packaging);
   }
+
+  @Test('Provider update')
+  public async testProviderUpdate() {
+    //this.httpGet('/providers/provider-update').expect(HttpStatus.OK);
+    await this.httpAdminPut('/providers/provider-update').expect(HttpStatus.OK);
+  }
+  /*
+  public providerUpdateTest() {
+    //this.httpGet('/healthcheck').expect(200).expect('OK');
+    console.log('Provider path');
+    return this.httpGet('/providers/provider-update').expect(200).expect('OK');
+
+    //console.log('Provider update test');
+    //return this.httpGet('/providers').expect(200).expect('OK');
+
+    
+    const {
+       body: { id: providerId },
+    } = await this.httpGet('/providers/provider-update').expect(HttpStatus.OK);
+    
+    const dto = {id: }
+    await (await this.httpAdminPut('/provider-update/')).
+    
+  }
+  */
 }
+

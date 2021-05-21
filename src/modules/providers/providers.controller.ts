@@ -59,9 +59,10 @@ export class ProvidersController {
   @Roles(Role.Admin)
   @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
-  @Put('/')
+  @Put('/provider-update')
   @Transactional()
   update(@Body() dto: ProviderUpdateRequestDto): Promise<ProviderUpdateResponse>  {
+    console.log("Update provider");
     return this.providersService.update(dto);
   }
   
