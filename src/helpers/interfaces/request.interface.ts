@@ -6,6 +6,6 @@ export interface UserTokenInfo {
   role: string;
   isAdmin: boolean;
 }
-export interface TokenInfo extends Request {
+export interface NatiRequest extends Request {
   user: UserTokenInfo;
 }
