@@ -23,6 +23,13 @@ exports.seed = function (knex) {
           role: 'user',
           full_name: 'User',
         },
+        {
+          id: uuidv4(),
+          email_address: 'test_user_40015932@testuser.com',
+          provider: 'mercadolibre',
+          role: 'admin',
+          full_name: 'Meli Test',
+        },
       ]);
     });
 };

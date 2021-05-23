@@ -5,6 +5,8 @@ export interface UserTokenInfo {
   fullName: string;
   role: string;
   isAdmin: boolean;
+  oauthAccessToken: string;
+  oauthRefreshToken: string;
 }
 export interface NatiRequest extends Request {
   user: UserTokenInfo;

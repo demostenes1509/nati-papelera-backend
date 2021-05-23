@@ -1,10 +1,11 @@
-import { Strategy } from 'passport-mercadolibre';
-import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { User } from '../../models';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-mercadolibre';
+import { UserTokenInfo } from 'src/helpers/interfaces';
+import { Role } from '../../helpers/enums';
 import { Logger } from '../../helpers/logger';
 import { mercadoLibreParams, Profile } from '../../helpers/mercadolibre';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class MercadoLibreStrategy extends PassportStrategy(Strategy) {
@@ -21,12 +22,22 @@ export class MercadoLibreStrategy extends PassportStrategy(Strategy) {
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-    done: (err: string, user: User) => void,
+    done: (err: string, user?: UserTokenInfo) => void,
   ): Promise<void> {
     this.logger.log(`Access Token: ${accessToken} refreshToken: ${refreshToken}`);
-    const { email, first_name: firstName, last_name: lastName } = profile;
-    this.logger.log(`Email ${email} has logged in`);
-    const user = await this.authService.createOrReplaceUser(email, firstName + ' ' + lastName, 'mercadolibre');
-    done(null, user);
+    this.logger.log(`Email ${profile.email} has logged in`);
+    const user = await this.authService.getUser(profile.email, 'mercadolibre');
+    if (!user) {
+      return done('Usuario no autorizado');
+    }
+    const userTokenInfo: UserTokenInfo = {
+      emailAddress: user.emailAddress,
+      fullName: user.fullName,
+      role: user.role,
+      isAdmin: user.role === Role.Admin,
+      oauthAccessToken: accessToken,
+      oauthRefreshToken: refreshToken,
+    };
+    done(null, userTokenInfo);
   }
 }

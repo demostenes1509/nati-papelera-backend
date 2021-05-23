@@ -27,13 +27,7 @@ export class AuthService {
   }
 
   async login(user: UserTokenInfo): Promise<AccessTokenType> {
-    const info: UserTokenInfo = {
-      emailAddress: user.emailAddress,
-      fullName: user.fullName,
-      role: user.role,
-      isAdmin: user.role === Role.Admin,
-    };
-    const access_token = this.jwtService.sign(info);
+    const access_token = this.jwtService.sign({ ...user });
     await this.sessionService.createSession(access_token);
 
     return {
@@ -43,5 +37,8 @@ export class AuthService {
 
   async createOrReplaceUser(emailAddress: string, fullName: string, provider: string): Promise<User> {
     return await this.usersService.getOrCreate(emailAddress, fullName, provider);
+  }
+  async getUser(emailAddress: string, provider: string): Promise<User> {
+    return await this.usersService.get(emailAddress, provider);
   }
 }

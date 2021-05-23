@@ -1,10 +1,11 @@
-import { Strategy, Profile } from 'passport-facebook-token-nest';
-import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable } from '@nestjs/common';
-import { Logger } from '../../helpers/logger';
+import { PassportStrategy } from '@nestjs/passport';
+import { Profile, Strategy } from 'passport-facebook-token-nest';
+import { Role } from '../../helpers/enums/role.enum';
 import { facebookParams } from '../../helpers/facebook';
+import { UserTokenInfo } from '../../helpers/interfaces/request.interface';
+import { Logger } from '../../helpers/logger';
 import { AuthService } from './auth.service';
-import { User } from '../../models';
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy) {
@@ -21,7 +22,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-    done: (err: string, user: User) => void,
+    done: (err: string, user: UserTokenInfo) => void,
   ): Promise<void> {
     this.logger.debug(`Access Token: ${accessToken} refreshToken: ${refreshToken}`);
     const {
@@ -31,6 +32,16 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
     const email = emails[0].value;
     this.logger.log(`Email ${email} has logged in`);
     const user = await this.authService.createOrReplaceUser(email, firstName + ' ' + lastName, 'facebook');
-    done(null, user);
+
+    const userTokenInfo: UserTokenInfo = {
+      emailAddress: user.emailAddress,
+      fullName: user.fullName,
+      role: user.role,
+      isAdmin: user.role === Role.Admin,
+      oauthAccessToken: accessToken,
+      oauthRefreshToken: refreshToken,
+    };
+
+    done(null, userTokenInfo);
   }
 }
