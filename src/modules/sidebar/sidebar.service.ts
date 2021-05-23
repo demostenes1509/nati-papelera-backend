@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from '../../models';
 import { Repository } from 'typeorm';
 import { Logger } from '../../helpers/logger';
-import { SideBarGetAllDto } from './dto/sidebar-get-all.dto';
+import { GetAllResponseDto } from './dto/sidebar-get-all-response.dto';
+import { GetAllRequestDto } from './dto/sidebar-get-all-request.dto';
 
 @Injectable()
 export class SideBarService {
@@ -12,7 +13,7 @@ export class SideBarService {
   @InjectRepository(Category)
   private readonly categoryRepository: Repository<Category>;
 
-  async getAll(): Promise<SideBarGetAllDto> {
+  async getAll(dto: GetAllRequestDto): Promise<GetAllResponseDto> {
     this.logger.debug('Getting sidebar info');
     const categories = await this.categoryRepository
       .createQueryBuilder('c')
@@ -21,6 +22,6 @@ export class SideBarService {
       .addOrderBy('p.name', 'ASC')
       .getMany();
 
-    return new SideBarGetAllDto(categories);
+    return new GetAllResponseDto(dto.url, categories);
   }
 }

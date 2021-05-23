@@ -7,6 +7,7 @@ import { Logger } from './helpers/logger';
 import { configureTypeORMTransactions } from './helpers/transactions';
 import { setupSwagger } from './helpers/swagger';
 import { setupPipes } from './helpers/pipes';
+import { setupFilters } from './helpers/filters';
 
 const APP_PORT = getEnv.int('APP_PORT');
 
@@ -18,6 +19,7 @@ const bootstrap = async () => {
   });
   setupSwagger(app);
   setupPipes(app);
+  setupFilters(app);
   app.enableCors();
   await app.listen(APP_PORT);
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Packaging } from '../../models';
@@ -8,6 +8,10 @@ import { PackagingFindByProviderRequest } from './dto/packaging-find-by-provider
 import { PackagingCreateRequest } from './dto/packaging-create-request.dto';
 import { PackagingUpdateResponse } from './dto/packaging-update-response.dto';
 import { PackagingUpdateRequest } from './dto/packaging-update-request.dto';
+import { PackagingPublishRequest } from './dto/packaging-publish-request.dto';
+import { PackagingPublishResponse } from './dto/packaging-publish-response.dto';
+import { UserTokenInfo } from '../../helpers/interfaces/request.interface';
+import { meliPost } from '../../helpers/mercadolibre';
 
 @Injectable()
 export class PackagingService {
@@ -35,5 +39,69 @@ export class PackagingService {
     });
 
     return packaging;
+  }
+
+  async publish(user: UserTokenInfo, dto: PackagingPublishRequest): Promise<PackagingPublishResponse> {
+    const packaging = await this.packagingRepository
+      .createQueryBuilder('pck')
+      .innerJoinAndSelect('pck.product', 'prod')
+      .innerJoinAndSelect('prod.category', 'cat')
+      .innerJoinAndSelect('pck.provider', 'prov')
+      .whereInIds(dto.id)
+      .getOne();
+    if (!packaging) throw new NotFoundException();
+
+    const title = `${packaging.product.name} ${packaging.name}`;
+    const description = `${packaging.product.description}`;
+    const price = Math.ceil(packaging.price);
+
+    const body = {
+      title: title,
+      category_id: 'MLA3530',
+      price: price,
+      currency_id: 'ARS',
+      available_quantity: 10,
+      buying_mode: 'buy_it_now',
+      condition: 'new',
+      listing_type_id: 'gold_special',
+      description: {
+        plain_text: description,
+      },
+      video_id: 'YOUTUBE_ID_HERE',
+      sale_terms: [
+        {
+          id: 'WARRANTY_TYPE',
+          value_name: 'Garantía del vendedor',
+        },
+        {
+          id: 'WARRANTY_TIME',
+          value_name: '1 día',
+        },
+      ],
+      pictures: [
+        {
+          source: 'http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg',
+        },
+      ],
+      attributes: [
+        {
+          id: 'BRAND',
+          value_name: 'Marca del producto',
+        },
+        {
+          id: 'EAN',
+          value_name: '7898095297749',
+        },
+      ],
+    };
+
+    try {
+      const response = await meliPost(user, 'items', body, null);
+      console.log(response);
+    } catch (exception) {
+      throw new InternalServerErrorException(exception);
+    }
+
+    return new PackagingPublishResponse();
   }
 }

@@ -50,14 +50,19 @@ export class ProductDto {
   }
 }
 
-export class SideBarGetAllDto {
+export class GetAllResponseDto {
   @ApiProperty()
   @ValidateNested()
   @Type(() => CategoryDto)
   @IsArray()
   categories: Array<CategoryDto>;
 
-  constructor(categories: Array<Category>) {
+  @ApiProperty()
+  @IsString()
+  url: string;
+
+  constructor(url: string, categories: Array<Category>) {
+    this.url = url;
     this.categories = categories.filter((c) => c.products.length > 0).map((category) => new CategoryDto(category));
   }
 }

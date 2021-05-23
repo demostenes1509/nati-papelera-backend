@@ -1,6 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Inject, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { TokenInfo } from '../../helpers/interfaces';
+import { NatiRequest } from '../../helpers/interfaces';
 import { Logger } from '../../helpers/logger';
 import { AccessTokenType } from '../../helpers/types';
 import { AuthService } from '../auth/auth.service';
@@ -21,7 +21,7 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  login(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
+  login(@Request() { user }: NatiRequest): Promise<AccessTokenType> {
     this.logger.debug(`Local log in with user: ${user.emailAddress}`);
     return this.authService.login(user);
   }
@@ -30,16 +30,16 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
-  getProfile(@Request() req) {
-    this.logger.debug(`Getting profile user: ${req.user.emailAddress}`);
-    return req.user;
+  getProfile(@Request() { user }: NatiRequest) {
+    this.logger.debug(`Getting profile user: ${user.emailAddress}`);
+    return user;
   }
 
   @Post('/facebook')
   @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
   @UseGuards(FacebookAuthGuard)
-  async facebookLoginRedirect(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
+  async facebookLoginRedirect(@Request() { user }: NatiRequest): Promise<AccessTokenType> {
     this.logger.debug(`Facebook log in with user: ${user.emailAddress}`);
     return await this.authService.login(user);
   }
@@ -48,7 +48,7 @@ export class AppController {
   @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
   @UseGuards(InstragramAuthGuard)
-  async instagramLoginRedirect(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
+  async instagramLoginRedirect(@Request() { user }: NatiRequest): Promise<AccessTokenType> {
     this.logger.debug(`Instagram log in with user: ${user.emailAddress}`);
     return await this.authService.login(user);
   }
@@ -57,7 +57,7 @@ export class AppController {
   @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
   @UseGuards(MercadoLibreAuthGuard)
-  async mercadoLibreRedirect(@Request() { user }: TokenInfo): Promise<AccessTokenType> {
+  async mercadoLibreRedirect(@Request() { user }: NatiRequest): Promise<AccessTokenType> {
     this.logger.debug(`Mercado Libre log in with user: ${user.emailAddress}`);
     return await this.authService.login(user);
   }
