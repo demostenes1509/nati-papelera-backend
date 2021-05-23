@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-mercadolibre';
 import { UserTokenInfo } from 'src/helpers/interfaces';
@@ -28,7 +28,7 @@ export class MercadoLibreStrategy extends PassportStrategy(Strategy) {
     this.logger.log(`Email ${profile.email} has logged in`);
     const user = await this.authService.getUser(profile.email, 'mercadolibre');
     if (!user) {
-      return done('Usuario no autorizado');
+      throw new UnauthorizedException();
     }
     const userTokenInfo: UserTokenInfo = {
       emailAddress: user.emailAddress,

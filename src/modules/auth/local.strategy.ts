@@ -20,13 +20,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   async validate(
     emailAddress: string,
     password: string,
-    done: (err: string, user?: UserTokenInfo) => void,
+    done: (err: string, user: UserTokenInfo) => void,
   ): Promise<void> {
     this.logger.debug(`Authenticating email ${emailAddress}`);
     const user = await this.authService.validateUser(emailAddress, password);
     if (!user) {
-      return done('Usuario no autorizado');
-      // throw new UnauthorizedException();
+      throw new UnauthorizedException();
     }
     const userTokenInfo: UserTokenInfo = {
       emailAddress: user.emailAddress,

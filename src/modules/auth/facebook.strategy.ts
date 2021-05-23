@@ -32,7 +32,6 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
     const email = emails[0].value;
     this.logger.log(`Email ${email} has logged in`);
     const user = await this.authService.createOrReplaceUser(email, firstName + ' ' + lastName, 'facebook');
-
     const userTokenInfo: UserTokenInfo = {
       emailAddress: user.emailAddress,
       fullName: user.fullName,

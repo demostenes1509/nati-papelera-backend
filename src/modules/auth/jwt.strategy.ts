@@ -17,8 +17,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(userTokenInfo: UserTokenInfo, done: (err: string, user?: UserTokenInfo) => void): Promise<void> {
-    // Validate if token info is valid
-
     done(null, userTokenInfo);
   }
 }

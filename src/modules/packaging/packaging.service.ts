@@ -8,6 +8,8 @@ import { PackagingFindByProviderRequest } from './dto/packaging-find-by-provider
 import { PackagingCreateRequest } from './dto/packaging-create-request.dto';
 import { PackagingUpdateResponse } from './dto/packaging-update-response.dto';
 import { PackagingUpdateRequest } from './dto/packaging-update-request.dto';
+import { PackagingPublishRequest } from './dto/packaging-publish-request.dto';
+import { PackagingPublishResponse } from './dto/packaging-publish-response.dto';
 
 @Injectable()
 export class PackagingService {
@@ -35,5 +37,10 @@ export class PackagingService {
     });
 
     return packaging;
+  }
+
+  async publish(dto: PackagingPublishRequest): Promise<PackagingPublishResponse> {
+    const packaging = await this.packagingRepository.findOneOrFail(dto.id);
+    return new PackagingPublishResponse();
   }
 }
