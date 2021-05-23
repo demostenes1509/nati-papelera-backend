@@ -1,8 +1,9 @@
-import { Body, Controller, HttpCode, HttpStatus, Inject, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Inject, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { Roles } from '../../helpers/decorators';
 import { Role } from '../../helpers/enums';
+import { NatiRequest } from '../../helpers/interfaces';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PackagingPublishRequest } from './dto/packaging-publish-request.dto';
 import { PackagingPublishResponse } from './dto/packaging-publish-response.dto';
@@ -31,7 +32,7 @@ export class PackagingController {
   @HttpCode(HttpStatus.OK)
   @Post('/publish')
   @Transactional()
-  publish(@Body() dto: PackagingPublishRequest): Promise<PackagingPublishResponse> {
-    return this.packagingService.publish(dto);
+  publish(@Request() { user }: NatiRequest, @Body() dto: PackagingPublishRequest): Promise<PackagingPublishResponse> {
+    return this.packagingService.publish(user, dto);
   }
 }
