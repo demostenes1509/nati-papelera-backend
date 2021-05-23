@@ -6,7 +6,7 @@ import { HttpStatus } from '@nestjs/common';
 export class SideBarTest extends AbstractTestSuite {
   @Test('Get All')
   public async getAll() {
-    const { body: sidebar } = await this.httpGet('/sidebar/get-all').expect(HttpStatus.OK);
+    const { body: sidebar } = await this.httpGet('/sidebar/get-all?url=/').expect(HttpStatus.OK);
     expect(sidebar.categories.length).toBeGreaterThan(0);
     expect(sidebar.categories.filter((c) => c.products.length === 0).length).toBe(0);
   }
