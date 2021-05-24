@@ -52,6 +52,7 @@ export class ProvidersController {
   @Get('/get-all')
   @HttpCode(HttpStatus.OK)
   getAll(): Promise<ProvidersGetAllDto> {
+    console.log("FHB Log Get-All Providers");
     return this.providersService.getAll();
   }
 
@@ -61,8 +62,9 @@ export class ProvidersController {
   @HttpCode(HttpStatus.OK)
   @Put('/provider-update')
   @Transactional()
+  @HttpCode(HttpStatus.OK)
   update(@Body() dto: ProviderUpdateRequestDto): Promise<ProviderUpdateResponse>  {
-    console.log("Update provider");
+    console.log("FHB Log Update provider");
     return this.providersService.update(dto);
   }
   

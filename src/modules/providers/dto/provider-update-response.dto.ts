@@ -12,12 +12,17 @@ export class ProviderUpdateResponse {
   name: string;
 
   @ApiProperty()
+  @IsString()
+  url: string;
+
+  @ApiProperty()
   @IsNumber()
   percentage: number;
 
   constructor(provider: Provider) {
     this.id = provider.id;
     this.name = provider.name
+    this.url = provider.url
     this.percentage = provider.percentage;
   }
 }

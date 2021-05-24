@@ -3,6 +3,8 @@ import { TestSuite, Test } from '../../helpers/decorators';
 import { AbstractTestSuite } from '../abstract-test-suite';
 import { ManapelParser } from '../../../src/modules/providers/parsers/manapel/manapel-parser';
 import * as expect from 'expect';
+import { identity } from 'rxjs';
+import {ProviderUpdateRequestDto } from '../../../src/modules/providers/dto/provider-update-request.dto';
 
 @TestSuite('Providers Suite')
 export class ProvidersTest extends AbstractTestSuite {
@@ -88,29 +90,17 @@ export class ProvidersTest extends AbstractTestSuite {
     expect(result[1]).toBe(packaging);
   }
 
+  @Test('Provider get-all')
+  public async testProviderGetAll() {
+    const { body } = await this.httpAdminGet('/providers/get-all').expect(HttpStatus.OK);
+    expect(body.providers.length).toBeGreaterThan(0)
+  }
+
   @Test('Provider update')
   public async testProviderUpdate() {
-    //this.httpGet('/providers/provider-update').expect(HttpStatus.OK);
-    await this.httpAdminPut('/providers/provider-update').expect(HttpStatus.OK);
+    const dto = { id: 'ff76a512-fe29-4b31-88b3-f3e98fc8581f', name: 'Casa', url: 'casa', percentage: 20 };
+    await this.httpAdminPut('/providers/provider-update/').send(dto).expect(HttpStatus.OK);    
   }
-  /*
-  public providerUpdateTest() {
-    //this.httpGet('/healthcheck').expect(200).expect('OK');
-    console.log('Provider path');
-    return this.httpGet('/providers/provider-update').expect(200).expect('OK');
-
-    //console.log('Provider update test');
-    //return this.httpGet('/providers').expect(200).expect('OK');
-
-    
-    const {
-       body: { id: providerId },
-    } = await this.httpGet('/providers/provider-update').expect(HttpStatus.OK);
-    
-    const dto = {id: }
-    await (await this.httpAdminPut('/provider-update/')).
-    
-  }
-  */
+  
 }
 
