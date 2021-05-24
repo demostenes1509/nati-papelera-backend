@@ -1,9 +1,10 @@
-import { Strategy } from 'passport-local';
-import { PassportStrategy } from '@nestjs/passport';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { User } from '../../models';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy } from 'passport-local';
+import { Role } from '../../helpers/enums';
+import { UserTokenInfo } from '../../helpers/interfaces/request.interface';
 import { Logger } from '../../helpers/logger';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -16,12 +17,24 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super({ usernameField: 'emailAddress' });
   }
 
-  async validate(emailAddress: string, password: string): Promise<User> {
+  async validate(
+    emailAddress: string,
+    password: string,
+    done: (err: string, user: UserTokenInfo) => void,
+  ): Promise<void> {
     this.logger.debug(`Authenticating email ${emailAddress}`);
     const user = await this.authService.validateUser(emailAddress, password);
     if (!user) {
       throw new UnauthorizedException();
     }
-    return user;
+    const userTokenInfo: UserTokenInfo = {
+      emailAddress: user.emailAddress,
+      fullName: user.fullName,
+      role: user.role,
+      isAdmin: user.role === Role.Admin,
+      oauthAccessToken: null,
+      oauthRefreshToken: null,
+    };
+    done(null, userTokenInfo);
   }
 }

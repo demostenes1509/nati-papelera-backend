@@ -11,6 +11,7 @@ import { AbstractTestSuite } from './src/abstract-test-suite';
 import { Logger } from '../src/helpers/logger';
 import { setupPipes } from '../src/helpers/pipes';
 import { configureTypeORMTransactions } from '../src/helpers/transactions';
+import { setupFilters } from '../src/helpers/filters';
 
 const TESTTORUN = getEnv('TESTTORUN', null);
 const SUITETORUN = getEnv('SUITETORUN', null);
@@ -28,6 +29,7 @@ describe('Nati Backend Test Suite', function () {
     app = moduleFixture.createNestApplication();
     app.useLogger(new Logger());
     setupPipes(app);
+    setupFilters(app);
 
     await app.init();
   });

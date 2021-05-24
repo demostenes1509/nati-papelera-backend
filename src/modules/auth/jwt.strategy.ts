@@ -1,10 +1,8 @@
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
 import * as getEnv from 'getenv';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
-import { User } from '../../models';
 import { UserTokenInfo } from '../../helpers/interfaces';
-import { Role } from '../../helpers/enums';
 
 const JWT_SECRET_KEY = getEnv('JWT_SECRET_KEY');
 
@@ -18,12 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(user: User): Promise<UserTokenInfo> {
-    return {
-      emailAddress: user.emailAddress,
-      isAdmin: user.role === Role.Admin,
-      role: user.role,
-      fullName: user.fullName,
-    };
+  async validate(userTokenInfo: UserTokenInfo, done: (err: string, user?: UserTokenInfo) => void): Promise<void> {
+    done(null, userTokenInfo);
   }
 }

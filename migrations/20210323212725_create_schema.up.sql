@@ -33,7 +33,7 @@ CREATE TABLE users (
     password varchar(255),
     first_name varchar(256),
     last_name varchar(256),
-	full_name varchar(256),
+	full_name varchar(256) NOT NULL,
     role varchar(256) NOT NULL,
     address varchar(255),
     city varchar(255),

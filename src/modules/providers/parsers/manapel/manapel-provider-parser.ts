@@ -1,25 +1,15 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { capitalizeLine } from '../../../../helpers/string';
+import { BadRequestException, Inject } from '@nestjs/common';
 import * as xslx from 'xlsx';
 import { UploadedFileProps } from '../../../../helpers/interfaces';
 import { Logger } from '../../../../helpers/logger';
+import { capitalizeLine } from '../../../../helpers/string';
 import { Category, Packaging, Product, Provider } from '../../../../models';
 import { CategoriesService } from '../../../../modules/categories/categories.service';
 import { PackagingService } from '../../../../modules/packaging/packaging.service';
 import { ProductsService } from '../../../../modules/products/products.service';
-import { ProviderParser, ParseResult } from '../abstract-provider-parser';
+import { ParseResult, ProviderParser } from '../abstract-provider-parser';
 import { ManapelParser } from './manapel-parser';
 
-const ColumnsIndexesEnum = {
-  ARTICULO: 0,
-  NOMBRE: 1,
-  PRECIO: 2,
-  ANTERIOR: 3,
-  CANTIDAD: 4,
-  BLOQUE: 5,
-};
-
-@Injectable()
 export class MapapelProviderParser extends ProviderParser {
   private readonly logger = new Logger(MapapelProviderParser.name);
 
@@ -47,23 +37,31 @@ export class MapapelProviderParser extends ProviderParser {
     }
     let importOrder = 1;
     const excelData = xslx.utils.sheet_to_json(workbook.Sheets[sheetNamesList[0]]);
-    for (const row1 of excelData) {
-      const rowValues = Object.values(row1);
+    for (const row of excelData) {
+      const rowValues2 = Object.values(row);
 
-      this.logger.debug(`Processing article ${rowValues[ColumnsIndexesEnum.ARTICULO]}`);
+      const articulo = rowValues2[0];
+      const nombre = rowValues2[1];
+      const precio = rowValues2[2];
+      // const anterior = rowValues2.length === 7 ? rowValues2[3] : null;
+      // const aumento = rowValues2.length === 7 ? rowValues2[4] : rowValues2[3];
+      // const cantidad = rowValues2.length === 7 ? rowValues2[5] : rowValues2[4];
+      const bloque = rowValues2.length === 7 ? rowValues2[6] : rowValues2[5];
+
+      this.logger.debug(`Processing article ${articulo}`);
 
       const packaging: Packaging = await this.packagingService.findByProvider({
         providerId: provider.id,
-        providerProductId: rowValues[ColumnsIndexesEnum.ARTICULO],
+        providerProductId: articulo,
       });
 
       if (!packaging) {
-        this.logger.debug(`Article ${rowValues[ColumnsIndexesEnum.ARTICULO]} does not exists`);
-        const bloqueFirstWord = rowValues[ColumnsIndexesEnum.BLOQUE].split(' ')[0];
+        this.logger.debug(`Article ${articulo} does not exists`);
+        const bloqueFirstWord = bloque.split(' ')[0];
         const categoryToSearch = capitalizeLine(bloqueFirstWord);
         const category: Category = await this.categoryService.findOrCreate({ name: categoryToSearch });
 
-        const capitalizedArticle = capitalizeLine(rowValues[ColumnsIndexesEnum.NOMBRE]);
+        const capitalizedArticle = capitalizeLine(nombre);
         const [productName, packaging] = parser.parseProduct(capitalizedArticle);
 
         const product: Product = await this.productService.findOrCreate({
@@ -72,23 +70,23 @@ export class MapapelProviderParser extends ProviderParser {
           categoryId: category.id,
         });
 
-        this.logger.debug(`Creating packaging ${rowValues[ColumnsIndexesEnum.ARTICULO]}`);
+        this.logger.debug(`Creating packaging ${articulo}`);
         await this.packagingService.create({
           name: packaging || ' x Unidad',
           productId: product.id,
           providerId: provider.id,
-          providerProductId: rowValues[ColumnsIndexesEnum.ARTICULO],
-          price: rowValues[ColumnsIndexesEnum.PRECIO],
+          providerProductId: articulo,
+          price: precio,
           importOrder,
         });
         importOrder++;
         result.insertedRecords++;
       } else {
-        this.logger.debug(`Updating packaging ${rowValues[ColumnsIndexesEnum.ARTICULO]} price`);
+        this.logger.debug(`Updating packaging ${articulo} price`);
         await this.packagingService.update({
           id: packaging.id,
           name: packaging.name,
-          price: rowValues[ColumnsIndexesEnum.PRECIO],
+          price: precio,
         });
         result.updatedRecords++;
       }

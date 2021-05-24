@@ -9,10 +9,11 @@ import { FacebookStrategy } from './facebook.strategy';
 import { InstagramStrategy } from './instagram.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
+import { MercadoLibreStrategy } from './mercadolibre.strategy';
 
 @Module({
   imports: [UsersModule, PassportModule, JwtModule.register(jwtParams()), SessionModule],
-  providers: [AuthService, LocalStrategy, JwtStrategy, FacebookStrategy, InstagramStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, FacebookStrategy, InstagramStrategy, MercadoLibreStrategy],
   exports: [AuthService, JwtModule, SessionModule],
 })
 export class AuthModule {}
