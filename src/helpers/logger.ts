@@ -7,12 +7,14 @@ const LOG_LEVEL = getEnv('LOG_LEVEL');
 
 const getLogLevel = () => {
   switch (LOG_LEVEL) {
-    case 'log':
-      return 'notice';
+    case 'crit':
+      return 'crit';
     case 'error':
       return 'error';
     case 'warn':
       return 'warning';
+    case 'log':
+      return 'notice';
     case 'debug':
       return 'info';
     case 'verbose':
@@ -38,7 +40,7 @@ export class Logger implements LoggerService {
     winston.addColors({
       error: 'red',
       warning: 'yellow',
-      notice: 'blue',
+      notice: 'green',
       info: 'magenta',
       debug: 'cyan',
     });
@@ -51,6 +53,9 @@ export class Logger implements LoggerService {
     });
   }
 
+  crit(message: string, trace?: string, context?: string) {
+    this.logger.log('crit', this.getMessage(message, context, trace));
+  }
   error(message: string, trace?: string, context?: string) {
     this.logger.log('error', this.getMessage(message, context, trace));
   }
