@@ -1,4 +1,4 @@
-import { ArgumentsHost, HttpException, INestApplication } from '@nestjs/common';
+import { ArgumentsHost, HttpException, HttpStatus, INestApplication } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Logger } from './logger';
 
@@ -9,9 +9,15 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     this.logger.error(JSON.stringify(exception, null, ' '));
-    const status = exception.getStatus();
-
-    response.status(status).json(exception.message);
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    let message = 'Internal Server Error';
+    try {
+      message = exception.message;
+      status = exception.getStatus();
+    } catch (ex) {
+      this.logger.error('getStatus() is not implemented');
+    }
+    response.status(status).json(message);
   }
 }
 
