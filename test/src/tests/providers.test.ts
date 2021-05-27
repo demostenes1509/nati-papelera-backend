@@ -2,9 +2,8 @@ import { HttpStatus } from '@nestjs/common';
 import { TestSuite, Test } from '../../helpers/decorators';
 import { AbstractTestSuite } from '../abstract-test-suite';
 import { ManapelParser } from '../../../src/modules/providers/parsers/manapel/manapel-parser';
+import { ProviderDto } from '../../../src/modules/providers/dto/providers-get-all-response.dto';
 import * as expect from 'expect';
-import { identity } from 'rxjs';
-import {ProviderUpdateRequestDto } from '../../../src/modules/providers/dto/provider-update-request.dto';
 
 @TestSuite('Providers Suite')
 export class ProvidersTest extends AbstractTestSuite {
@@ -93,14 +92,27 @@ export class ProvidersTest extends AbstractTestSuite {
   @Test('Provider get-all')
   public async testProviderGetAll() {
     const { body } = await this.httpAdminGet('/providers/get-all').expect(HttpStatus.OK);
-    expect(body.providers.length).toBeGreaterThan(0)
+    expect(body.providers.length).toBeGreaterThan(0);
   }
 
   @Test('Provider update')
   public async testProviderUpdate() {
-    const dto = { id: 'ff76a512-fe29-4b31-88b3-f3e98fc8581f', name: 'Casa', url: 'casa', percentage: 20 };
-    await this.httpAdminPut('/providers/provider-update/').send(dto).expect(HttpStatus.OK);    
+    const { body:dtoProvider } = await this.httpAdminGet('/providers/get-all')
+                                  .expect(HttpStatus.OK);
+    expect(dtoProvider.providers.length).toBeGreaterThan(0);
+    console.log("Providers Get-All length: " + dtoProvider.providers.length);
+
+    const providerToUpdate: ProviderDto = 
+          dtoProvider.providers[Object.keys(dtoProvider.providers)[0]];
+    console.log("id Provider to update: " + providerToUpdate.id);
+    console.log("Name Provider to update: " + providerToUpdate.name);
+    console.log("url Provider to update: " + providerToUpdate.url);
+
+    const dto = { id: providerToUpdate.id, 
+                  name: providerToUpdate.name, 
+                  url: providerToUpdate.url, 
+                  percentage: 20 };
+    await this.httpAdminPut('/providers/provider-update/').send(dto).expect(HttpStatus.OK);
   }
-  
 }
 

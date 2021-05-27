@@ -11,7 +11,6 @@ import { AbstractParserProvider } from './parsers/parser-abstract-factory';
 import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
 import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
 import { ProviderUpdateRequestDto } from './dto/provider-update-request.dto';
-import { ProviderUpdateResponse } from './dto/provider-update-response.dto';
 
 @Injectable()
 export class ProvidersService {
@@ -44,9 +43,9 @@ export class ProvidersService {
     return new ProvidersGetAllDto(providers);
   }
 
-  async update(dto: ProviderUpdateRequestDto): Promise<ProviderUpdateResponse> {
-    await this.providerRepository.update(dto.id, { ...dto});
-    const provider = await this.providerRepository.findOneOrFail(dto.id);
-    return new ProviderUpdateResponse(provider);
-  }
+  async update(dto: ProviderUpdateRequestDto): Promise< void > {
+    const { affected } = await this.providerRepository.update(dto.id, { ...dto});
+    console.log(" Provider-update affected rows: " + affected);
+    if (affected===0) throw new NotFoundException(); 
+    }
 }

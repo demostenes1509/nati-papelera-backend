@@ -24,7 +24,6 @@ import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
 import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
 import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
 import { ProviderUpdateRequestDto } from './dto/provider-update-request.dto';
-import { ProviderUpdateResponse } from './dto/provider-update-response.dto';
 
 @Controller()
 export class ProvidersController {
@@ -52,20 +51,20 @@ export class ProvidersController {
   @Get('/get-all')
   @HttpCode(HttpStatus.OK)
   getAll(): Promise<ProvidersGetAllDto> {
-    console.log("FHB Log Get-All Providers");
+    console.log('FHB Log Get-All Providers');
     return this.providersService.getAll();
   }
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.Admin)
-  @ApiResponse({ status: HttpStatus.OK })
+  @ApiResponse({ status: HttpStatus.NO_CONTENT })
   @HttpCode(HttpStatus.OK)
   @Put('/provider-update')
   @Transactional()
   @HttpCode(HttpStatus.OK)
-  update(@Body() dto: ProviderUpdateRequestDto): Promise<ProviderUpdateResponse>  {
-    console.log("FHB Log Update provider");
-    return this.providersService.update(dto);
+  upate(@Body() dto: ProviderUpdateRequestDto): Promise <void> {
+    this.providersService.update(dto);
+    console.log("Controller provider update");
+    return;
   }
-  
 }

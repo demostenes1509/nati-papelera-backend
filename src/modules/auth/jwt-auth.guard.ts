@@ -45,9 +45,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     this.logger.verbose('Checking if method is restricted to some role');
     const user: UserTokenInfo = context.switchToHttp().getRequest().user;
-    console.log("Previo logger verbose user");
+    console.log('Previo logger verbose user');
     this.logger.verbose(JSON.stringify(user));
-    console.log("Posterior logger verborse user");
+    console.log('Posterior logger verborse user');
     return requiredRoles.some((role) => user.role?.includes(role));
   }
 }
