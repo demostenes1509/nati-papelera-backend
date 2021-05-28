@@ -43,9 +43,6 @@ export class MapapelProviderParser extends ProviderParser {
       const articulo = rowValues2[0];
       const nombre = rowValues2[1];
       const precio = rowValues2[2];
-      // const anterior = rowValues2.length === 7 ? rowValues2[3] : null;
-      // const aumento = rowValues2.length === 7 ? rowValues2[4] : rowValues2[3];
-      // const cantidad = rowValues2.length === 7 ? rowValues2[5] : rowValues2[4];
       const bloque = rowValues2.length === 7 ? rowValues2[6] : rowValues2[5];
 
       this.logger.debug(`Processing article ${articulo}`);
@@ -82,13 +79,15 @@ export class MapapelProviderParser extends ProviderParser {
         importOrder++;
         result.insertedRecords++;
       } else {
-        this.logger.debug(`Updating packaging ${articulo} price`);
-        await this.packagingService.update({
-          id: packaging.id,
-          name: packaging.name,
-          price: precio,
-        });
-        result.updatedRecords++;
+        if (packaging.price !== precio) {
+          this.logger.debug(`Updating packaging ${articulo} price`);
+          await this.packagingService.update({
+            id: packaging.id,
+            name: packaging.name,
+            price: precio,
+          });
+          result.updatedRecords++;
+        }
       }
     }
     return result;

@@ -22,16 +22,16 @@ export class ProvidersService {
   private readonly providerRepository: Repository<Provider>;
 
   async uploadNewFile(dto: UploadNewFileRequestDto, file: UploadedFileProps): Promise<UploadNewFileResponseDto> {
-    this.logger.log('Importing file of provider ' + dto.providerUrl);
-    const provider = await this.providerRepository.findOne({ url: dto.providerUrl });
+    this.logger.log('Importing file of provider ');
+    const provider = await this.providerRepository.findOne({ id: dto.providerId });
     if (!provider) throw new NotFoundException();
 
     await uploadProviderFile(file);
 
-    const providerParser: ProviderParser = this.abstractParserProvider.getParser(dto.providerUrl);
+    const providerParser: ProviderParser = this.abstractParserProvider.getParser(provider.url);
     const result = await providerParser.parseFile(provider, file);
 
-    this.logger.log('Provider ' + dto.providerUrl + ' import finished !');
+    this.logger.log('Provider ' + provider.name + ' import finished !');
 
     return new UploadNewFileResponseDto(result.insertedRecords, result.updatedRecords);
   }
