@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { CategoryCreateDto } from './dto/category-create-request.dto';
 import { Logger } from '../../helpers/logger';
 import { slugifyLine } from '../../helpers/string';
+import { CategoriesGetAllDto } from './dto/category-get-all-response.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -14,9 +15,10 @@ export class CategoriesService {
   @InjectRepository(Category)
   private readonly categoryRepository: Repository<Category>;
 
-  getAll(): Promise<Array<Category>> {
+  async getAll(): Promise<CategoriesGetAllDto> {
     this.logger.debug('Getting Categories');
-    return this.categoryRepository.find({ order: { name: 'ASC' } });
+    const categories = await this.categoryRepository.find({ order: { name: 'ASC' } });
+    return new CategoriesGetAllDto(categories);
   }
 
   create(dto: CategoryCreateDto): Promise<Category> {
