@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Provider } from '../../models';
 import { Repository } from 'typeorm';
@@ -11,6 +11,10 @@ import { AbstractParserProvider } from './parsers/parser-abstract-factory';
 import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
 import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
 import { ProviderUpdateRequestDto } from './dto/provider-update-request.dto';
+import { ObjectUnsubscribedError } from 'rxjs';
+import { Number } from 'aws-sdk/clients/iot';
+import { NotContains } from 'class-validator';
+import { truncate } from 'fs';
 
 @Injectable()
 export class ProvidersService {
@@ -43,9 +47,18 @@ export class ProvidersService {
     return new ProvidersGetAllDto(providers);
   }
 
-  async update(dto: ProviderUpdateRequestDto): Promise< void > {
+  async update(dto: ProviderUpdateRequestDto): Promise <void> {
     const { affected } = await this.providerRepository.update(dto.id, { ...dto});
     console.log(" Provider-update affected rows: " + affected);
-    if (affected===0) throw new NotFoundException(); 
+    if (affected===0) {
+      console.log("Record NOT FOUND");
+      throw new NotFoundException(); 
+    } else {
+      console.log("Probando porcentage");
+      if ( dto.percentage < 0 || dto.percentage > 200) {
+        console.log("Percentage value out of range");
+        throw new BadRequestException();
+      }
     }
+  }
 }

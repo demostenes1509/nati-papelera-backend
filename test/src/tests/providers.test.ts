@@ -4,6 +4,8 @@ import { AbstractTestSuite } from '../abstract-test-suite';
 import { ManapelParser } from '../../../src/modules/providers/parsers/manapel/manapel-parser';
 import { ProviderDto } from '../../../src/modules/providers/dto/providers-get-all-response.dto';
 import * as expect from 'expect';
+import { v4 as uuidv4 } from 'uuid';
+import * as faker from 'faker';
 
 @TestSuite('Providers Suite')
 export class ProvidersTest extends AbstractTestSuite {
@@ -100,19 +102,47 @@ export class ProvidersTest extends AbstractTestSuite {
     const { body:dtoProvider } = await this.httpAdminGet('/providers/get-all')
                                   .expect(HttpStatus.OK);
     expect(dtoProvider.providers.length).toBeGreaterThan(0);
-    console.log("Providers Get-All length: " + dtoProvider.providers.length);
 
     const providerToUpdate: ProviderDto = 
           dtoProvider.providers[Object.keys(dtoProvider.providers)[0]];
-    console.log("id Provider to update: " + providerToUpdate.id);
-    console.log("Name Provider to update: " + providerToUpdate.name);
-    console.log("url Provider to update: " + providerToUpdate.url);
 
     const dto = { id: providerToUpdate.id, 
                   name: providerToUpdate.name, 
                   url: providerToUpdate.url, 
                   percentage: 20 };
-    await this.httpAdminPut('/providers/provider-update/').send(dto).expect(HttpStatus.OK);
+    await this.httpAdminPut('/providers/provider-update/').send(dto)
+    .expect(HttpStatus.OK);
+  }
+
+  @Test('Provider id')
+  public async testProviderIncorrectId() {
+    const myRandomId = uuidv4();
+    const dtoToUpdate = { id: myRandomId,
+                          name: faker.company.companyName(),
+                          url: faker.internet.url(),
+                          percentage: 30 };
+
+    await this.httpAdminPut('/providers/provider-update/').send(dtoToUpdate)
+    .expect(HttpStatus.NOT_FOUND);
+  }
+
+  @Test('Provider Percentage')
+  public async ProviderRangePercentage() {
+    const { body:dtoProvider } = await this.httpAdminGet('/providers/get-all')
+                                  .expect(HttpStatus.OK);
+    expect(dtoProvider.providers.length).toBeGreaterThan(0);
+    console.log("Providers Get-All length: " + dtoProvider.providers.length);
+
+    const providerToUpdate: ProviderDto = 
+          dtoProvider.providers[Object.keys(dtoProvider.providers)[0]];
+
+    const dto = { id: providerToUpdate.id, 
+                  name: providerToUpdate.name, 
+                  url: providerToUpdate.url, 
+                  percentage: 300 };
+
+    await this.httpAdminPut('/providers/provider-update/').send(dto)
+    .expect(HttpStatus.BAD_REQUEST);
   }
 }
 

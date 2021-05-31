@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString, IsUUID } from 'class-validator';
+import { IsNumber, IsString, IsUUID, Max, Min } from 'class-validator';
 
 export class ProviderUpdateRequestDto {
   @ApiProperty()
@@ -16,5 +16,7 @@ export class ProviderUpdateRequestDto {
 
   @ApiProperty()
   @IsNumber()
+  @Min(0)
+  @Max(200)
   percentage: number;
 }

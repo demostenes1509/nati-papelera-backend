@@ -11,6 +11,7 @@ import {
   UseGuards,
   UseInterceptors,
   Body,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
@@ -58,12 +59,12 @@ export class ProvidersController {
   @UseGuards(JwtAuthGuard)
   @Roles(Role.Admin)
   @ApiResponse({ status: HttpStatus.NO_CONTENT })
+  //@HttpCode(HttpStatus.NO_CONTENT)
   @HttpCode(HttpStatus.OK)
   @Put('/provider-update')
   @Transactional()
-  @HttpCode(HttpStatus.OK)
-  upate(@Body() dto: ProviderUpdateRequestDto): Promise <void> {
-    this.providersService.update(dto);
+  async upate(@Body() dto: ProviderUpdateRequestDto): Promise <void> {
+    await this.providersService.update(dto);
     console.log("Controller provider update");
     return;
   }

@@ -1,4 +1,5 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Max, Min } from 'class-validator';
+import { Check, Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from './abstract-entity.entity';
 import { Packaging } from './packaging.entity';
 
