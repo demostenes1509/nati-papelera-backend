@@ -15,11 +15,11 @@ import {
 import { ApiResponse } from '@nestjs/swagger';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Role } from '../../helpers/enums';
-import { Roles } from '../../helpers/decorators';
+import { Role } from '../../enums/role.enum';
+import { Roles } from '../../decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ProvidersService } from './providers.service';
-import { UploadedFileProps } from '../../helpers/interfaces';
+import { UploadedFileProps } from '../../interfaces/uploaded-file.interface';
 import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
 import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
 import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
@@ -51,20 +51,17 @@ export class ProvidersController {
   @Get('/get-all')
   @HttpCode(HttpStatus.OK)
   getAll(): Promise<ProvidersGetAllDto> {
-    console.log('FHB Log Get-All Providers');
     return this.providersService.getAll();
   }
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.Admin)
-  @ApiResponse({ status: HttpStatus.NO_CONTENT })
+  @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
   @Put('/provider-update')
   @Transactional()
-  @HttpCode(HttpStatus.OK)
-  upate(@Body() dto: ProviderUpdateRequestDto): Promise <void> {
+  upate(@Body() dto: ProviderUpdateRequestDto): Promise<void> {
     this.providersService.update(dto);
-    console.log("Controller provider update");
     return;
   }
 }

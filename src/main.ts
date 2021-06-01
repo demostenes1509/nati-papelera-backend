@@ -3,11 +3,11 @@ dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as getEnv from 'getenv';
-import { Logger } from './helpers/logger';
-import { configureTypeORMTransactions } from './helpers/transactions';
-import { setupSwagger } from './helpers/swagger';
-import { setupPipes } from './helpers/pipes';
-import { setupFilters } from './helpers/filters';
+import { Logger } from './helpers/logger.helper';
+import { configureTypeORMTransactions } from './helpers/transactions.helper';
+import { setupSwagger } from './helpers/swagger.helper';
+import { setupPipes } from './helpers/pipes.helper';
+import { setupFilters } from './helpers/filters.helper';
 
 const APP_PORT = getEnv.int('APP_PORT');
 

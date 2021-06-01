@@ -1,6 +1,6 @@
 import * as getEnv from 'getenv';
 import * as meli from 'mercadolibre';
-import { UserTokenInfo } from './interfaces/request.interface';
+import { UserTokenInfo } from '../interfaces/request.interface';
 
 const MERCADOLIBRE_APP_ID = getEnv('MERCADOLIBRE_APP_ID');
 const MERCADOLIBRE_CLIENT_SECRET = getEnv('MERCADOLIBRE_CLIENT_SECRET');
@@ -22,7 +22,7 @@ export interface Profile {
   email: string;
 }
 
-export const meliPost = (userTokenInfo: UserTokenInfo, path, body, params) => {
+export const postMercadoLibre = (userTokenInfo: UserTokenInfo, path, body, params = null) => {
   const meliInstance = new meli.Meli(
     MERCADOLIBRE_APP_ID,
     MERCADOLIBRE_CLIENT_SECRET,
@@ -32,6 +32,24 @@ export const meliPost = (userTokenInfo: UserTokenInfo, path, body, params) => {
 
   return new Promise((resolve, reject) => {
     meliInstance.post(path, body, params, (err, res) => {
+      if (err) reject(err);
+      const { error } = res;
+      if (error) reject(res);
+      resolve(res);
+    });
+  });
+};
+
+export const getMercadoLibre = (userTokenInfo: UserTokenInfo, path, params = null) => {
+  const meliInstance = new meli.Meli(
+    MERCADOLIBRE_APP_ID,
+    MERCADOLIBRE_CLIENT_SECRET,
+    userTokenInfo.oauthAccessToken,
+    userTokenInfo.oauthRefreshToken,
+  );
+
+  return new Promise((resolve, reject) => {
+    meliInstance.get(path, params, (err, res) => {
       if (err) reject(err);
       const { error } = res;
       if (error) reject(res);

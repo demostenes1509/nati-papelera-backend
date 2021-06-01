@@ -2,9 +2,9 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Provider } from '../../models';
 import { Repository } from 'typeorm';
-import { Logger } from '../../helpers/logger';
-import { uploadProviderFile } from '../../helpers/aws';
-import { UploadedFileProps } from '../../helpers/interfaces';
+import { Logger } from '../../helpers/logger.helper';
+import { uploadProviderFile } from '../../helpers/aws.helper';
+import { UploadedFileProps } from '../../interfaces/uploaded-file.interface';
 import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
 import { ProviderParser } from './parsers/abstract-provider-parser';
 import { AbstractParserProvider } from './parsers/parser-abstract-factory';
@@ -24,7 +24,7 @@ export class ProvidersService {
 
   async uploadNewFile(dto: UploadNewFileRequestDto, file: UploadedFileProps): Promise<UploadNewFileResponseDto> {
     this.logger.log('Importing file of provider ');
-    const provider = await this.providerRepository.findOne({ id: dto.providerId });
+    const provider = await this.providerRepository.findOne({ ...dto });
     if (!provider) throw new NotFoundException();
 
     await uploadProviderFile(file);
@@ -43,9 +43,8 @@ export class ProvidersService {
     return new ProvidersGetAllDto(providers);
   }
 
-  async update(dto: ProviderUpdateRequestDto): Promise< void > {
-    const { affected } = await this.providerRepository.update(dto.id, { ...dto});
-    console.log(" Provider-update affected rows: " + affected);
-    if (affected===0) throw new NotFoundException(); 
-    }
+  async update(dto: ProviderUpdateRequestDto): Promise<void> {
+    const { affected } = await this.providerRepository.update(dto.id, { ...dto });
+    if (affected === 0) throw new NotFoundException();
+  }
 }

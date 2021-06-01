@@ -1,8 +1,8 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
-import { Roles } from '../../helpers/decorators';
-import { Role } from '../../helpers/enums';
+import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../enums/role.enum';
 import { Product } from '../../models';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetProductResponse } from './dto/get-product-response.dto';

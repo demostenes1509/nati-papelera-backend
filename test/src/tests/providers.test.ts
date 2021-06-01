@@ -9,10 +9,15 @@ import * as expect from 'expect';
 export class ProvidersTest extends AbstractTestSuite {
   @Test('Upload and process Manapel file')
   public async uploadManapelFile() {
-    await this.httpAdminPost('/providers/upload-new-file')
-      .query({ providerUrl: 'manapel' })
-      .attach('file', './test/src/tests/resources/manapel.xls')
+    const {
+      body: { insertedRecords, updatedRecords },
+    } = await this.httpAdminPost('/providers/upload-new-file')
+      .query({ url: 'manapel' })
+      .attach('file', './test/src/tests/resources/minimanapel.xlsx')
       .expect(HttpStatus.CREATED);
+
+    expect(insertedRecords).toBeDefined();
+    expect(updatedRecords).toBeDefined();
   }
 
   @Test('Manapel Parser')
@@ -97,22 +102,10 @@ export class ProvidersTest extends AbstractTestSuite {
 
   @Test('Provider update')
   public async testProviderUpdate() {
-    const { body:dtoProvider } = await this.httpAdminGet('/providers/get-all')
-                                  .expect(HttpStatus.OK);
+    const { body: dtoProvider } = await this.httpAdminGet('/providers/get-all').expect(HttpStatus.OK);
     expect(dtoProvider.providers.length).toBeGreaterThan(0);
-    console.log("Providers Get-All length: " + dtoProvider.providers.length);
-
-    const providerToUpdate: ProviderDto = 
-          dtoProvider.providers[Object.keys(dtoProvider.providers)[0]];
-    console.log("id Provider to update: " + providerToUpdate.id);
-    console.log("Name Provider to update: " + providerToUpdate.name);
-    console.log("url Provider to update: " + providerToUpdate.url);
-
-    const dto = { id: providerToUpdate.id, 
-                  name: providerToUpdate.name, 
-                  url: providerToUpdate.url, 
-                  percentage: 20 };
+    const providerToUpdate: ProviderDto = dtoProvider.providers[Object.keys(dtoProvider.providers)[0]];
+    const dto = { id: providerToUpdate.id, name: providerToUpdate.name, url: providerToUpdate.url, percentage: 20 };
     await this.httpAdminPut('/providers/provider-update/').send(dto).expect(HttpStatus.OK);
   }
 }
-

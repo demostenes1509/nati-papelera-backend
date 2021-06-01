@@ -1,12 +1,11 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-mercadolibre';
-import { UserTokenInfo } from 'src/helpers/interfaces';
-import { Role } from '../../helpers/enums';
-import { Logger } from '../../helpers/logger';
-import { mercadoLibreParams, Profile } from '../../helpers/mercadolibre';
+import { UserTokenInfo } from '../../interfaces/request.interface';
+import { Logger } from '../../helpers/logger.helper';
+import { mercadoLibreParams, Profile } from '../../helpers/mercadolibre.helper';
 import { AuthService } from './auth.service';
-
+import { Role } from '../../enums/role.enum';
 @Injectable()
 export class MercadoLibreStrategy extends PassportStrategy(Strategy) {
   private readonly logger = new Logger(MercadoLibreStrategy.name);

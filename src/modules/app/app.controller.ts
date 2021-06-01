@@ -1,8 +1,8 @@
 import { Controller, Get, HttpCode, HttpStatus, Inject, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { NatiRequest } from '../../helpers/interfaces';
-import { Logger } from '../../helpers/logger';
-import { AccessTokenType } from '../../helpers/types';
+import { NatiRequest } from '../../interfaces/request.interface';
+import { Logger } from '../../helpers/logger.helper';
+import { AccessTokenType } from '../../types/access-token.type';
 import { AuthService } from '../auth/auth.service';
 import { FacebookAuthGuard } from '../auth/facebook-auth.guard';
 import { InstragramAuthGuard } from '../auth/instagram-auth.guard';

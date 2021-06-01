@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../models';
 import { Repository } from 'typeorm';
-import { Logger } from '../../helpers/logger';
+import { Logger } from '../../helpers/logger.helper';
 
 @Injectable()
 export class UsersService {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import * as getEnv from 'getenv';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UserTokenInfo } from '../../helpers/interfaces';
+import { UserTokenInfo } from '../../interfaces/request.interface';
 
 const JWT_SECRET_KEY = getEnv('JWT_SECRET_KEY');
 

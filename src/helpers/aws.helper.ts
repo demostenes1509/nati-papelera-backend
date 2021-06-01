@@ -3,7 +3,7 @@ import { GetObjectOutput, PutObjectOutput, PutObjectRequest } from 'aws-sdk/clie
 import * as getEnv from 'getenv';
 import * as moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
-import { UploadedFileProps } from './interfaces';
+import { UploadedFileProps } from '../interfaces/uploaded-file.interface';
 
 const AWS_ACCESS_KEY_ID = getEnv('AWS_ACCESS_KEY_ID');
 const AWS_SECRET_ACCESS_KEY = getEnv('AWS_SECRET_ACCESS_KEY');
