@@ -28,7 +28,7 @@ export class MercadoLibreService {
   private readonly categoryRepository: Repository<MercadoLibreCategory>;
 
   async getAllCategories(dto: MercadoLibreCategoriesGetAllRequestDto): Promise<Partial<MercadoLibreCategory>[]> {
-    this.logger.debug('Getting category pattern');
+    this.logger.debug('Getting category pattern:' + dto.pattern);
 
     const query = `WITH RECURSIVE t
                     AS (
@@ -43,7 +43,6 @@ export class MercadoLibreService {
                     )
                     SELECT DISTINCT * FROM t
                     ORDER BY t.name
-                    LIMIT 20
     `;
 
     const results = await this.categoryRepository.query(query, [`%${dto.pattern}%`]);
@@ -62,7 +61,9 @@ export class MercadoLibreService {
       } while (current);
       categories.push({ id: treenode.id, name });
     }
-    return categories;
+    return categories.sort((a, b) => {
+      return a.name < b.name ? -1 : 1;
+    });
   }
 
   async postProduct(user: UserTokenInfo, packaging: Packaging): Promise<void> {
@@ -128,40 +129,5 @@ export class MercadoLibreService {
       this.logger.verbose('Records processed:' + procesados);
     }
     this.logger.log('Records processed:' + procesados);
-
-    /*
-    const query = `WITH RECURSIVE t
-                    AS (
-                      SELECT sa.id, sa.name, sa.parent_id, sa.childs
-                      FROM mercado_libre_categories sa
-                      WHERE sa.name ilike 'rejilla%'
-                      AND sa.childs = 0
-                      UNION ALL
-                      SELECT next.id, next.name, next.parent_id, next.childs
-                      FROM t prev
-                      JOIN mercado_libre_categories next ON (next.id = prev.parent_id)
-                    )
-                    SELECT DISTINCT * FROM t
-    `;
-
-    const results = await this.categoryRepository.query(query);
-    const tree = results.filter((r) => r.childs === 0);
-    const categories = [];
-    for (const treenode of tree) {
-      let current = treenode;
-      let name = current.name;
-      do {
-        let parentId = current.parent_id;
-        const parent = results.find((t) => t.id === parentId);
-        if (parent) {
-          name = parent?.name + ' - ' + name;
-        }
-        current = parent;
-      } while (current);
-      categories.push({ id: treenode.id, name });
-    }
-
-    console.log(categories);
-    */
   }
 }

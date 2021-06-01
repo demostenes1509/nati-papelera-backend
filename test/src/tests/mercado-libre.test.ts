@@ -13,7 +13,7 @@ export class MercadoLibreTest extends AbstractTestSuite {
 
     const {
       body: { categories },
-    } = await this.httpAdminGet('/mercado-libre/categories').query({ pattern: 'insumos' }).expect(HttpStatus.OK);
+    } = await this.httpGet('/mercado-libre/categories').query({ pattern: 'insumos' }).expect(HttpStatus.OK);
     expect(categories.length).toBe(2);
     expect(categories[0].name).toBe('Agro - Insumos Agrícolas');
     expect(categories[1].name).toBe('Agro - Insumos Ganaderos');

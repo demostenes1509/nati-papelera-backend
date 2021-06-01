@@ -26,8 +26,6 @@ export class MercadoLibreController {
   @Inject()
   private readonly mercadoLibreService: MercadoLibreService;
 
-  @UseGuards(JwtAuthGuard)
-  @Roles(Role.Admin)
   @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
   @Get('/categories')
@@ -45,7 +43,6 @@ export class MercadoLibreController {
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor('file'))
   async processCategories(@UploadedFile() file: UploadedFileProps): Promise<void> {
-    console.log('PROCESANDOOOO ');
     return this.mercadoLibreService.processCategories(file);
   }
 }
