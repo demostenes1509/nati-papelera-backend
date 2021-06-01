@@ -1,16 +1,16 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Provider } from '../../models';
 import { Repository } from 'typeorm';
-import { Logger } from '../../helpers/logger.helper';
 import { uploadProviderFile } from '../../helpers/aws.helper';
+import { Logger } from '../../helpers/logger.helper';
 import { UploadedFileProps } from '../../interfaces/uploaded-file.interface';
+import { Provider } from '../../models';
+import { ProviderUpdateRequestDto } from './dto/provider-update-request.dto';
+import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
 import { UploadNewFileRequestDto } from './dto/upload-new-file-request.dto';
+import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
 import { ProviderParser } from './parsers/abstract-provider-parser';
 import { AbstractParserProvider } from './parsers/parser-abstract-factory';
-import { ProvidersGetAllDto } from './dto/providers-get-all-response.dto';
-import { UploadNewFileResponseDto } from './dto/upload-new-file-response.dto';
-import { ProviderUpdateRequestDto } from './dto/provider-update-request.dto';
 
 @Injectable()
 export class ProvidersService {

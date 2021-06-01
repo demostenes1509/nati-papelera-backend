@@ -60,8 +60,7 @@ export class ProvidersController {
   @HttpCode(HttpStatus.OK)
   @Put('/provider-update')
   @Transactional()
-  upate(@Body() dto: ProviderUpdateRequestDto): Promise<void> {
-    this.providersService.update(dto);
-    return;
+  async update(@Body() dto: ProviderUpdateRequestDto): Promise<void> {
+    return await this.providersService.update(dto);
   }
 }
