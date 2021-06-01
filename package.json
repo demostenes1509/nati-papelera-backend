@@ -44,6 +44,7 @@
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "compression": "^1.7.4",
     "dotenv-flow": "^3.2.0",
     "expect": "^26.6.2",
     "faker": "^5.5.3",

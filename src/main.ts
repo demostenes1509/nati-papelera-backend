@@ -8,6 +8,8 @@ import { configureTypeORMTransactions } from './helpers/transactions.helper';
 import { setupSwagger } from './helpers/swagger.helper';
 import { setupPipes } from './helpers/pipes.helper';
 import { setupFilters } from './helpers/filters.helper';
+import * as compression from 'compression';
+import { urlencoded, json } from 'express';
 
 const APP_PORT = getEnv.int('APP_PORT');
 
@@ -21,6 +23,10 @@ const bootstrap = async () => {
   setupPipes(app);
   setupFilters(app);
   app.enableCors();
+  app.use(compression());
+  app.use(json({ limit: '2mb' }));
+  app.use(urlencoded({ limit: '2mb', extended: true }));
+
   await app.listen(APP_PORT);
 
   logger.log(`Application is running on: ${await app.getUrl()}`);

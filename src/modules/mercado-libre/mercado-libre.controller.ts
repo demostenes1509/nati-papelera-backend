@@ -45,6 +45,7 @@ export class MercadoLibreController {
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FileInterceptor('file'))
   async processCategories(@UploadedFile() file: UploadedFileProps): Promise<void> {
+    console.log('PROCESANDOOOO ');
     return this.mercadoLibreService.processCategories(file);
   }
 }
