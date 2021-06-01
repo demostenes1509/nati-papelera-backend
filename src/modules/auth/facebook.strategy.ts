@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-facebook-token-nest';
-import { Role } from '../../helpers/enums/role.enum';
-import { facebookParams } from '../../helpers/facebook';
-import { UserTokenInfo } from '../../helpers/interfaces/request.interface';
-import { Logger } from '../../helpers/logger';
+import { Role } from '../../enums/role.enum';
+import { facebookParams } from '../../helpers/facebook.helper';
+import { UserTokenInfo } from '../../interfaces/request.interface';
+import { Logger } from '../../helpers/logger.helper';
 import { AuthService } from './auth.service';
 
 @Injectable()

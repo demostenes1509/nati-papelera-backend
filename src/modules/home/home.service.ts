@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Logger } from '../../helpers/logger';
+import { Logger } from '../../helpers/logger.helper';
 import { Category } from '../../models';
 import { GetCategoryProductsResponse } from './dto/get-category-products-response.dto';
 

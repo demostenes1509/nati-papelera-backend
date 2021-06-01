@@ -1,10 +1,10 @@
 import { ExecutionContext, HttpException, Inject, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { Logger } from '../../helpers/logger';
-import { UserTokenInfo } from '../../helpers/interfaces';
-import { ROLES_KEY } from '../../helpers/decorators';
-import { Role } from '../../helpers/enums';
+import { Logger } from '../../helpers/logger.helper';
+import { UserTokenInfo } from '../../interfaces/request.interface';
+import { ROLES_KEY } from '../../decorators/roles.decorator';
+import { Role } from '../../enums/role.enum';
 import { SessionService } from '../session/session.service';
 
 class SessionExpiredException extends HttpException {
@@ -45,6 +45,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     this.logger.verbose('Checking if method is restricted to some role');
     const user: UserTokenInfo = context.switchToHttp().getRequest().user;
+    this.logger.verbose(JSON.stringify(user));
     return requiredRoles.some((role) => user.role?.includes(role));
   }
 }

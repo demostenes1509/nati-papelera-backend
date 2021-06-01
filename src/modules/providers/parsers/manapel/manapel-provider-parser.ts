@@ -1,8 +1,8 @@
 import { BadRequestException, Inject } from '@nestjs/common';
 import * as xslx from 'xlsx';
-import { UploadedFileProps } from '../../../../helpers/interfaces';
-import { Logger } from '../../../../helpers/logger';
-import { capitalizeLine } from '../../../../helpers/string';
+import { UploadedFileProps } from '../../../../interfaces/uploaded-file.interface';
+import { Logger } from '../../../../helpers/logger.helper';
+import { capitalizeLine } from '../../../../helpers/string.helper';
 import { Category, Packaging, Product, Provider } from '../../../../models';
 import { CategoriesService } from '../../../../modules/categories/categories.service';
 import { PackagingService } from '../../../../modules/packaging/packaging.service';

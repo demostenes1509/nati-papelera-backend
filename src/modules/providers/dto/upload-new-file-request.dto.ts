@@ -1,8 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class UploadNewFileRequestDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsUUID()
-  providerId: string;
+  @IsOptional()
+  id: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  url: string;
 }

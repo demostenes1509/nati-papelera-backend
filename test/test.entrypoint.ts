@@ -8,10 +8,10 @@ import { AppModule } from '../src/app.module';
 import { TestModule } from './src/test.module';
 import { REGISTRY } from './helpers/decorators';
 import { AbstractTestSuite } from './src/abstract-test-suite';
-import { Logger } from '../src/helpers/logger';
-import { setupPipes } from '../src/helpers/pipes';
-import { configureTypeORMTransactions } from '../src/helpers/transactions';
-import { setupFilters } from '../src/helpers/filters';
+import { Logger } from '../src/helpers/logger.helper';
+import { setupPipes } from '../src/helpers/pipes.helper';
+import { configureTypeORMTransactions } from '../src/helpers/transactions.helper';
+import { setupFilters } from '../src/helpers/filters.helper';
 
 const TESTTORUN = getEnv('TESTTORUN', null);
 const SUITETORUN = getEnv('SUITETORUN', null);

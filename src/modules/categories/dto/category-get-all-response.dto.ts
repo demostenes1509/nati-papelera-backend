@@ -1,27 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
+import { IsArray, ValidateNested } from 'class-validator';
 import { Category } from '../../../models';
-
-export class CategoryDto {
-  @ApiProperty()
-  @IsNumber()
-  id: string;
-
-  @ApiProperty()
-  @IsString()
-  name: string;
-
-  @ApiProperty()
-  @IsString()
-  url: string;
-
-  constructor(category: Category) {
-    this.id = category.id;
-    this.name = category.name;
-    this.url = category.url;
-  }
-}
+import { CategoryDto } from './category.dto';
 
 export class CategoriesGetAllDto {
   @ApiProperty()
@@ -30,7 +11,7 @@ export class CategoriesGetAllDto {
   @IsArray()
   categories: Array<CategoryDto>;
 
-  constructor(providers: Array<Category>) {
-    this.categories = providers.map((category) => new CategoryDto(category));
+  constructor(categories: Array<Category>) {
+    this.categories = categories.map((category) => new CategoryDto(category));
   }
 }

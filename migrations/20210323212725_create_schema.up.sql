@@ -2,10 +2,17 @@ CREATE TABLE providers (
     id uuid NOT NULL,
     name varchar(255) NOT NULL,
     url varchar(255) NOT NULL,
+    percentage numeric(5,2),
     deleted_at timestamptz
 );
 
 ALTER TABLE providers ADD CONSTRAINT providers_pkey PRIMARY KEY (id);
+ALTER TABLE providers ADD CONSTRAINT percentage_range 
+CHECK (
+    percentage >= 0
+    AND percentage <= 200
+);
+
 CREATE UNIQUE INDEX providers_name_index ON providers(name) WHERE deleted_at IS NULL;
 CREATE UNIQUE INDEX providers_url_index ON providers(url) WHERE deleted_at IS NULL;
 
@@ -13,6 +20,7 @@ CREATE TABLE categories (
     id uuid NOT NULL,
     name varchar(255) NOT NULL,
     url varchar(255) NOT NULL,
+    ml_category_id varchar(255) NULL,
     deleted_at timestamptz
 );
 
@@ -48,6 +56,7 @@ CREATE TABLE products (
     description varchar(4096) NOT NULL,
     url varchar(255) NOT NULL,
     show_format boolean DEFAULT false NOT NULL,
+    ml_category_id varchar(255) NULL,
     is_visible boolean DEFAULT false NOT NULL,
     is_offer boolean DEFAULT false NOT NULL,
     deleted_at timestamptz
@@ -90,7 +99,6 @@ ALTER TABLE posters ADD CONSTRAINT posters_position_key UNIQUE (position);
 ALTER TABLE posters ADD CONSTRAINT posters_category_id_fkey FOREIGN KEY (category_id) REFERENCES categories(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE posters ADD CONSTRAINT posters_product_id_fkey FOREIGN KEY (product_id) REFERENCES products(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
-
 CREATE TABLE products_pictures (
     id uuid NOT NULL,
     product_id uuid NOT NULL,
@@ -100,3 +108,15 @@ CREATE TABLE products_pictures (
 
 ALTER TABLE products_pictures ADD CONSTRAINT products_pictures_pkey PRIMARY KEY (id);
 ALTER TABLE products_pictures ADD CONSTRAINT products_pictures_product_id_fkey FOREIGN KEY (product_id) REFERENCES products(id);
+
+CREATE TABLE mercado_libre_categories (
+    id varchar(20) NOT NULL,
+    name varchar(255) NOT NULL,
+    parent_id varchar(20) NULL,
+    childs integer DEFAULT 0 NOT NULL,
+    deleted_at timestamptz
+);
+
+ALTER TABLE mercado_libre_categories ADD CONSTRAINT mercado_libre_categories_pkey PRIMARY KEY (id);
+CREATE INDEX mercado_libre_categories_name_index ON mercado_libre_categories(name) WHERE deleted_at IS NULL;
+ALTER TABLE mercado_libre_categories ADD CONSTRAINT mercado_libre_parent_categories_id FOREIGN KEY (parent_id) REFERENCES mercado_libre_categories(id) ;

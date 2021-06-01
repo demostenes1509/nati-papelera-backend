@@ -1,9 +1,9 @@
 import { HttpStatus, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { getProductPicture, uploadProductPicture } from '../../helpers/aws';
-import { UploadedFileProps } from '../../helpers/interfaces';
-import { Logger } from '../../helpers/logger';
+import { getProductPicture, uploadProductPicture } from '../../helpers/aws.helper';
+import { UploadedFileProps } from '../../interfaces/uploaded-file.interface';
+import { Logger } from '../../helpers/logger.helper';
 import { ProductPicture } from '../../models';
 import { CreatePictureRequestDto } from './dto/create-picture-request.dto';
 import { CreatePictureResponseDto } from './dto/create-picture-response.dto';

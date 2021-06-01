@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from '../../models';
 import { Repository } from 'typeorm';
-import { Logger } from '../../helpers/logger';
+import { Logger } from '../../helpers/logger.helper';
 import { GetAllResponseDto } from './dto/sidebar-get-all-response.dto';
 import { GetAllRequestDto } from './dto/sidebar-get-all-request.dto';
 

@@ -1,9 +1,9 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { Role } from '../../helpers/enums';
-import { UserTokenInfo } from '../../helpers/interfaces/request.interface';
-import { Logger } from '../../helpers/logger';
+import { Role } from '../../enums/role.enum';
+import { UserTokenInfo } from '../../interfaces/request.interface';
+import { Logger } from '../../helpers/logger.helper';
 import { AuthService } from './auth.service';
 
 @Injectable()

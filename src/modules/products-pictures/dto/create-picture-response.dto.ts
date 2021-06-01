@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { ProductPicture } from 'src/models';
+import { ProductPicture } from '../../../models';
 
 export class CreatePictureResponseDto {
   @ApiProperty()

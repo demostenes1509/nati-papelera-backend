@@ -1,9 +1,9 @@
 import { Body, Controller, HttpCode, HttpStatus, Inject, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
-import { Roles } from '../../helpers/decorators';
-import { Role } from '../../helpers/enums';
-import { NatiRequest } from '../../helpers/interfaces';
+import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../enums/role.enum';
+import { NatiRequest } from '../../interfaces/request.interface';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PackagingPublishRequest } from './dto/packaging-publish-request.dto';
 import { PackagingPublishResponse } from './dto/packaging-publish-response.dto';

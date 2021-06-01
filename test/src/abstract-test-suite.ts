@@ -1,6 +1,6 @@
 import { INestApplication, Inject, Injectable } from '@nestjs/common';
 import * as request from 'supertest';
-import { NATI_BACKEND_PATH } from '../../src/helpers/constants';
+import { NATI_BACKEND_PATH } from '../../src/helpers/constants.helper';
 import { TestTokens } from './providers/test-tokens.service';
 
 @Injectable()
@@ -16,6 +16,14 @@ export abstract class AbstractTestSuite {
 
   public httpGet(path: string) {
     return request(this.app.getHttpServer()).get(`${NATI_BACKEND_PATH}${path}`);
+  }
+
+  public httpPut(path: string) {
+    return request(this.app.getHttpServer()).put(`${NATI_BACKEND_PATH}${path}`);
+  }
+
+  public httpAdminPut(path: string) {
+    return this.httpPut(path).set('Authorization', `Bearer ${this.testTokens.adminToken}`);
   }
 
   public httpAdminGet(path: string) {

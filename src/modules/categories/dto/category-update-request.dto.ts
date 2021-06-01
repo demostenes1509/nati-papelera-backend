@@ -1,7 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
-export class CategoryCreateRequestDto {
+export class CategoryUpdateDto {
+  @ApiProperty()
+  @IsUUID()
+  id: string;
+
   @ApiProperty()
   @IsString()
   name: string;
@@ -9,5 +13,5 @@ export class CategoryCreateRequestDto {
   @ApiPropertyOptional()
   @IsString()
   @IsOptional()
-  mlCategoryId?: string;
+  mlCategoryId: string;
 }

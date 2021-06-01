@@ -10,6 +10,9 @@ export class Category extends AbstractEntity {
   @Column('character varying', { nullable: false, length: 255, name: 'url' })
   url: string;
 
+  @Column('character varying', { nullable: false, length: 255, name: 'ml_category_id' })
+  mlCategoryId: string;
+
   @OneToMany(() => Product, (product: Product) => product.category, { cascade: false })
   products: Product[];
 }
