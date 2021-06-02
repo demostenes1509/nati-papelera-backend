@@ -45,8 +45,8 @@ export class ProductsController {
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.Admin)
-  @ApiResponse({ status: HttpStatus.NO_CONTENT })
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({ status: HttpStatus.OK })
+  @HttpCode(HttpStatus.OK)
   @Put('/')
   @Transactional()
   update(@Body() dto: ProductUpdateRequest): Promise<void> {
