@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UploadedFileProps } from 'src/interfaces/uploaded-file.interface';
 import { Repository } from 'typeorm';
@@ -9,6 +9,7 @@ import { UserTokenInfo } from '../../interfaces/request.interface';
 import { MercadoLibreCategory } from '../../models';
 import { Packaging } from '../../models/packaging.entity';
 import { MercadoLibreCategoriesGetAllRequestDto } from './dto/mercado-libre-get-all-categories-request.dto';
+import { MercadoLibreGetCategoryRequestDto } from './dto/mercado-libre-get-category-request.dto';
 
 interface MercadoLibreNode {
   id: string;
@@ -70,7 +71,7 @@ export class MercadoLibreService {
     const title = `${packaging.product.name} ${packaging.name}`;
     const description = `${packaging.product.description}`;
     const price = Math.ceil(packaging.price);
-    const category_id = packaging.product.category.mlCategoryId;
+    const category_id = packaging.product.mlCategoryId || packaging.product.category.mlCategoryId;
 
     const body = {
       title: title,
@@ -129,5 +130,11 @@ export class MercadoLibreService {
       this.logger.verbose('Records processed:' + procesados);
     }
     this.logger.log('Records processed:' + procesados);
+  }
+
+  async getCategory(dto: MercadoLibreGetCategoryRequestDto): Promise<MercadoLibreCategory> {
+    const mlCategory = await this.categoryRepository.findOne(dto.id);
+    if (!mlCategory) throw new NotFoundException();
+    return mlCategory;
   }
 }

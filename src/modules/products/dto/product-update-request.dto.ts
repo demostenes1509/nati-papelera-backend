@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsUUID } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class ProductUpdateRequest {
   @ApiProperty()
@@ -13,4 +13,9 @@ export class ProductUpdateRequest {
   @ApiProperty()
   @IsString()
   description: string;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  mlCategoryId: string;
 }

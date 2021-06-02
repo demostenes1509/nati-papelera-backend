@@ -15,9 +15,14 @@ export class ProductUpdateResponse {
   @IsString()
   description: string;
 
+  @ApiProperty()
+  @IsString()
+  mlCategoryId: string;
+
   constructor(product: Product) {
     this.id = product.id;
     this.name = product.name;
     this.description = product.description;
+    this.mlCategoryId = product.mlCategoryId;
   }
 }

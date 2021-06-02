@@ -45,11 +45,11 @@ export class ProductsController {
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.Admin)
-  @ApiResponse({ status: HttpStatus.OK })
-  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.NO_CONTENT })
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Put('/')
   @Transactional()
-  update(@Body() dto: ProductUpdateRequest): Promise<ProductUpdateResponse> {
+  update(@Body() dto: ProductUpdateRequest): Promise<void> {
     return this.productService.update(dto);
   }
 }
