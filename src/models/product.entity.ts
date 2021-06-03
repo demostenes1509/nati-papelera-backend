@@ -24,6 +24,9 @@ export class Product extends AbstractEntity {
   @Column({ name: 'category_id', nullable: false })
   categoryId: string;
 
+  @Column('character varying', { nullable: false, length: 255, name: 'ml_category_id' })
+  mlCategoryId: string;
+
   @OneToMany(() => Packaging, (packaging: Packaging) => packaging.product, { cascade: false })
   packaging: Packaging[];
 

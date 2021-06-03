@@ -1,11 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as faker from 'faker';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Logger } from '../../helpers/logger.helper';
 import { slugifyLine } from '../../helpers/string.helper';
-import { Product } from '../../models';
+import { MercadoLibreCategory, Product } from '../../models';
+import { MercadoLibreService } from '../mercado-libre/mercado-libre.service';
 import { GetProductResponse } from './dto/get-product-response.dto';
 import { ProductCreateRequestDto } from './dto/product-create-request.dto';
 import { ProductFindOrCreateRequest } from './dto/product-find-by-name-request.dto';
@@ -19,6 +20,9 @@ export class ProductsService {
   @InjectRepository(Product)
   private readonly productRepository: Repository<Product>;
 
+  @Inject()
+  private readonly mercadoLibreService: MercadoLibreService;
+
   getAll(): Promise<Array<Product>> {
     this.logger.debug('Getting Products');
     return this.productRepository.find({ order: { name: 'ASC' } });
@@ -30,11 +34,9 @@ export class ProductsService {
     return this.productRepository.save({ id: uuidv4(), ...dto, url });
   }
 
-  async update(dto: ProductUpdateRequest): Promise<ProductUpdateResponse> {
+  async update(dto: ProductUpdateRequest): Promise<void> {
     this.logger.debug('Updating product');
     await this.productRepository.update(dto.id, { ...dto });
-    const packaging = await this.productRepository.findOneOrFail(dto.id);
-    return new ProductUpdateResponse(packaging);
   }
 
   async findOrCreate(dto: ProductFindOrCreateRequest): Promise<Product> {
@@ -76,6 +78,11 @@ export class ProductsService {
       .addOrderBy('pck.importOrder')
       .getOne();
     if (!product) throw new NotFoundException();
-    return new GetProductResponse(product);
+
+    let mlCategory: Partial<MercadoLibreCategory>;
+    if (product.mlCategoryId) {
+      mlCategory = await this.mercadoLibreService.getCategoryById({ id: product.mlCategoryId });
+    }
+    return new GetProductResponse(product, mlCategory);
   }
 }

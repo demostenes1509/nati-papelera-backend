@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-import { Packaging, Product, ProductPicture } from '../../../models';
+import { MercadoLibreCategory, Packaging, Product, ProductPicture } from '../../../models';
 
 class PackagingDto {
   @ApiProperty()
@@ -52,6 +52,14 @@ export class GetProductResponse {
 
   @ApiProperty()
   @IsString()
+  mlCategoryId: string;
+
+  @ApiProperty()
+  @IsString()
+  mlCategoryName: string;
+
+  @ApiProperty()
+  @IsString()
   url: string;
 
   @ApiProperty()
@@ -60,12 +68,15 @@ export class GetProductResponse {
   @ApiProperty()
   pictures: Array<ProductPictureDto>;
 
-  constructor(product: Product) {
+  constructor(product: Product, mlCategory: Partial<MercadoLibreCategory>) {
     this.id = product.id;
     this.name = product.name;
     this.description = product.description;
     this.url = product.url;
+    this.mlCategoryId = product.mlCategoryId;
     this.packaging = product.packaging.map((p) => new PackagingDto(p));
     this.pictures = product.pictures.map((p) => new ProductPictureDto(p));
+
+    if (mlCategory) this.mlCategoryName = mlCategory.name;
   }
 }

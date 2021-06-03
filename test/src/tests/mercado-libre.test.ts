@@ -18,4 +18,17 @@ export class MercadoLibreTest extends AbstractTestSuite {
     expect(categories[0].name).toBe('Agro - Insumos Agrícolas');
     expect(categories[1].name).toBe('Agro - Insumos Ganaderos');
   }
+
+  @Test('Mercado Libre Get Categories con Atributos')
+  public async getCategoriesAttributes() {
+    await this.httpAdminPost('/mercado-libre/process-categories')
+      .attach('file', './test/src/tests/resources/mercado-libre-categories-attributes.json.gz')
+      .expect(HttpStatus.OK);
+
+    const {
+      body: { categories },
+    } = await this.httpGet('/mercado-libre/categories').query({ pattern: 'mayonesa' }).expect(HttpStatus.OK);
+    expect(categories.length).toBe(1);
+    expect(categories[0].name).toBe('Salsas y Aderezos - Mayonesa');
+  }
 }

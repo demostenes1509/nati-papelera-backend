@@ -18,11 +18,11 @@ export class PackagingController {
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.Admin)
-  @ApiResponse({ status: HttpStatus.OK })
-  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.NO_CONTENT })
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Put('/')
   @Transactional()
-  update(@Body() dto: PackagingUpdateRequest): Promise<PackagingUpdateResponse> {
+  update(@Body() dto: PackagingUpdateRequest): Promise<void> {
     return this.packagingService.update(dto);
   }
 
