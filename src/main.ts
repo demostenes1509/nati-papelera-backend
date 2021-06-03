@@ -24,8 +24,8 @@ const bootstrap = async () => {
   setupFilters(app);
   app.enableCors();
   app.use(compression());
-  app.use(json({ limit: '2mb' }));
-  app.use(urlencoded({ limit: '2mb', extended: true }));
+  app.use(json({ limit: '10mb' }));
+  app.use(urlencoded({ limit: '10mb', extended: true }));
 
   await app.listen(APP_PORT);
 

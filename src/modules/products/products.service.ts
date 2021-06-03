@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Logger } from '../../helpers/logger.helper';
 import { slugifyLine } from '../../helpers/string.helper';
-import { Product } from '../../models';
+import { MercadoLibreCategory, Product } from '../../models';
 import { MercadoLibreService } from '../mercado-libre/mercado-libre.service';
 import { GetProductResponse } from './dto/get-product-response.dto';
 import { ProductCreateRequestDto } from './dto/product-create-request.dto';
@@ -79,9 +79,9 @@ export class ProductsService {
       .getOne();
     if (!product) throw new NotFoundException();
 
-    let mlCategory;
+    let mlCategory: Partial<MercadoLibreCategory>;
     if (product.mlCategoryId) {
-      mlCategory = await this.mercadoLibreService.getCategory({ id: product.mlCategoryId });
+      mlCategory = await this.mercadoLibreService.getCategoryById({ id: product.mlCategoryId });
     }
     return new GetProductResponse(product, mlCategory);
   }

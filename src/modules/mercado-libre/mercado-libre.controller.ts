@@ -30,7 +30,7 @@ export class MercadoLibreController {
   @HttpCode(HttpStatus.OK)
   @Get('/categories')
   async getAll(@Query() dto: MercadoLibreCategoriesGetAllRequestDto): Promise<MercadoLibreCategoriesGetAllResponseDto> {
-    const categories = await this.mercadoLibreService.getAllCategories(dto);
+    const categories = await this.mercadoLibreService.getAllCategoriesByPattern(dto);
     return new MercadoLibreCategoriesGetAllResponseDto(categories);
   }
 

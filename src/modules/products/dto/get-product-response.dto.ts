@@ -68,7 +68,7 @@ export class GetProductResponse {
   @ApiProperty()
   pictures: Array<ProductPictureDto>;
 
-  constructor(product: Product, mlCategory: MercadoLibreCategory) {
+  constructor(product: Product, mlCategory: Partial<MercadoLibreCategory>) {
     this.id = product.id;
     this.name = product.name;
     this.description = product.description;

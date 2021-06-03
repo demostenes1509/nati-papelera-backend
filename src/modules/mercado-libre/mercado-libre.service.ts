@@ -16,9 +16,15 @@ interface MercadoLibreNode {
   name: string;
 }
 
+interface MercadoLibreAttribute {
+  id: string;
+  values: Array<MercadoLibreNode>;
+}
+
 interface MercadoLibreRecord extends MercadoLibreNode {
   path_from_root: Array<MercadoLibreNode>;
   children_categories: Array<MercadoLibreNode>;
+  attributes: Array<MercadoLibreAttribute>;
 }
 
 @Injectable()
@@ -28,14 +34,19 @@ export class MercadoLibreService {
   @InjectRepository(MercadoLibreCategory)
   private readonly categoryRepository: Repository<MercadoLibreCategory>;
 
-  async getAllCategories(dto: MercadoLibreCategoriesGetAllRequestDto): Promise<Partial<MercadoLibreCategory>[]> {
+  async getAllCategoriesByPattern(
+    dto: MercadoLibreCategoriesGetAllRequestDto,
+  ): Promise<Partial<MercadoLibreCategory>[]> {
     this.logger.debug('Getting category pattern:' + dto.pattern);
+    return await this.getAllCategories(`%${dto.pattern}%`, 'sa.name ilike $1 ');
+  }
 
+  async getAllCategories(value: string, where: string): Promise<Partial<MercadoLibreCategory>[]> {
     const query = `WITH RECURSIVE t
                     AS (
                       SELECT sa.id, sa.name, sa.parent_id, sa.childs
                       FROM mercado_libre_categories sa
-                      WHERE sa.name ilike $1
+                      WHERE ${where}
                       AND sa.childs = 0
                       UNION ALL
                       SELECT next.id, next.name, next.parent_id, next.childs
@@ -46,7 +57,7 @@ export class MercadoLibreService {
                     ORDER BY t.name
     `;
 
-    const results = await this.categoryRepository.query(query, [`%${dto.pattern}%`]);
+    const results = await this.categoryRepository.query(query, [value]);
     const tree = results.filter((r) => r.childs === 0);
     const categories: Partial<MercadoLibreCategory>[] = [];
     for (const treenode of tree) {
@@ -118,23 +129,43 @@ export class MercadoLibreService {
   }
 
   async processCategories(file: UploadedFileProps): Promise<void> {
+    this.logger.log('Starting Categories Process');
+    this.logger.log('File length:' + file.buffer.length);
     const fileToProcess = await JSON.parse(zlib.unzipSync(file.buffer).toString());
     let procesados = 0;
     for (const value of Object.values<MercadoLibreRecord>(fileToProcess)) {
-      const { id, name, children_categories } = value;
+      console.log('MEC>1');
+      const { id, name, children_categories, attributes } = value;
       const recordsToInsert = [];
-      recordsToInsert.push({ id, name, childs: children_categories.length });
-      recordsToInsert.push(...children_categories.map((cc) => ({ id: cc.id, name: cc.name, parentId: id, childs: 0 })));
+      console.log('MEC>2');
+
+      const childrens = children_categories.map((cc) => ({ id: cc.id, name: cc.name, parentId: id, childs: 0 }));
+
+      console.log('MEC>3');
+      const productTypes = attributes
+        ? attributes.find((a) => a.id === 'PRODUCT_TYPE')
+        : // .values.map((v) => ({ id: v.id, name: v.name, parentId: id, childs: 0 }))
+          null;
+      console.log('MEC>4');
+      const attrs = productTypes
+        ? productTypes.values.map((v) => ({ id: v.id, name: v.name, parentId: id, childs: 0 }))
+        : [];
+      console.log('MEC>5');
+
+      recordsToInsert.push({ id, name, childs: childrens.length + attrs.length });
+      recordsToInsert.push(...childrens);
+      recordsToInsert.push(...attrs);
+
       await this.categoryRepository.save(recordsToInsert);
       procesados += recordsToInsert.length;
-      this.logger.verbose('Records processed:' + procesados);
+      this.logger.log('Records processed:' + procesados);
     }
-    this.logger.log('Records processed:' + procesados);
+    this.logger.log('Process finished with records:' + procesados);
   }
 
-  async getCategory(dto: MercadoLibreGetCategoryRequestDto): Promise<MercadoLibreCategory> {
-    const mlCategory = await this.categoryRepository.findOne(dto.id);
-    if (!mlCategory) throw new NotFoundException();
-    return mlCategory;
+  async getCategoryById(dto: MercadoLibreGetCategoryRequestDto): Promise<Partial<MercadoLibreCategory>> {
+    const categories = await this.getAllCategories(dto.id, ' sa.id = $1 ');
+    if (categories.length === 0) throw new NotFoundException();
+    return categories[0];
   }
 }

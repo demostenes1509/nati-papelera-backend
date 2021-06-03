@@ -8,7 +8,6 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { GetProductResponse } from './dto/get-product-response.dto';
 import { ProductCreateRequestDto } from './dto/product-create-request.dto';
 import { ProductUpdateRequest } from './dto/product-update-request.dto';
-import { ProductUpdateResponse } from './dto/product-update-response.dto';
 import { ProductsService } from './products.service';
 
 @Controller()
@@ -45,8 +44,8 @@ export class ProductsController {
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.Admin)
-  @ApiResponse({ status: HttpStatus.OK })
-  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.NO_CONTENT })
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Put('/')
   @Transactional()
   update(@Body() dto: ProductUpdateRequest): Promise<void> {

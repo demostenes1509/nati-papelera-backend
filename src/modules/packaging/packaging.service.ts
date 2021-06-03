@@ -27,11 +27,10 @@ export class PackagingService {
     return await this.packagingRepository.save({ id: uuidv4(), ...dto });
   }
 
-  async update(dto: PackagingUpdateRequest): Promise<PackagingUpdateResponse> {
+  async update(dto: PackagingUpdateRequest): Promise<void> {
     this.logger.debug('Updating packaging');
-    await this.packagingRepository.update(dto.id, { ...dto });
-    const packaging = await this.packagingRepository.findOneOrFail(dto.id);
-    return new PackagingUpdateResponse(packaging);
+    const { affected } = await this.packagingRepository.update(dto.id, { ...dto });
+    if (affected === 0) throw new NotFoundException();
   }
 
   async findByProvider(dto: PackagingFindByProviderRequest): Promise<Packaging> {
