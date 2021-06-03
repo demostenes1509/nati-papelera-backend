@@ -129,6 +129,7 @@ export class ProvidersTest extends AbstractTestSuite {
   @Test('Provider Percentage')
   public async ProviderRangePercentage() {
     const dto = { id: uuidv4(), name: faker.company.companyName(), url: faker.internet.url(), percentage: 300 };
-    expect(HttpStatus.BAD_REQUEST);
+
+    await this.httpAdminPut('/providers/provider-update/').send(dto).expect(HttpStatus.BAD_REQUEST);
   }
 }
