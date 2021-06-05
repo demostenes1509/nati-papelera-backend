@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as zlib from 'zlib';
 import { Logger } from '../../helpers/logger.helper';
-import { postMercadoLibre } from '../../helpers/mercadolibre.helper';
+import { postMercadoLibre, putMercadoLibre } from '../../helpers/mercadolibre.helper';
 import { MercadoLibreArticle } from '../../interfaces/mercado-libre-product.interface';
 import { UserTokenInfo } from '../../interfaces/request.interface';
 import { UploadedFileProps } from '../../interfaces/uploaded-file.interface';
@@ -84,19 +84,26 @@ export class MercadoLibreService {
     const description = `${packaging.product.description}`;
     const price = Math.ceil(packaging.price);
     const category_id = packaging.product.mlCategoryId || packaging.product.category.mlCategoryId;
+    const id = packaging.mlProductId;
+
+    const newFields = id
+      ? {}
+      : {
+          listing_type_id: 'gold_special',
+          description: {
+            plain_text: description,
+          },
+        };
 
     const body = {
-      title: title,
+      title,
       category_id,
-      price: price,
+      price,
       currency_id: 'ARS',
       available_quantity: 10,
       buying_mode: 'buy_it_now',
       condition: 'new',
-      listing_type_id: 'gold_special',
-      description: {
-        plain_text: description,
-      },
+      ...newFields,
       video_id: 'YOUTUBE_ID_HERE',
       sale_terms: [
         {
@@ -125,7 +132,10 @@ export class MercadoLibreService {
       ],
     };
 
-    const response = await postMercadoLibre<MercadoLibreArticle>(user, 'items', body);
+    const method = !id
+      ? postMercadoLibre<MercadoLibreArticle>(user, `items`, body)
+      : putMercadoLibre<MercadoLibreArticle>(user, `items/${id}`, body);
+    const response = await method;
     return response;
   }
 

@@ -40,6 +40,24 @@ export const postMercadoLibre = <MercadoLibreType>(userTokenInfo: UserTokenInfo,
   });
 };
 
+export const putMercadoLibre = <MercadoLibreType>(userTokenInfo: UserTokenInfo, path, body, params = null) => {
+  const meliInstance = new meli.Meli(
+    MERCADOLIBRE_APP_ID,
+    MERCADOLIBRE_CLIENT_SECRET,
+    userTokenInfo.oauthAccessToken,
+    userTokenInfo.oauthRefreshToken,
+  );
+
+  return new Promise<MercadoLibreType>((resolve, reject) => {
+    meliInstance.put(path, body, params, (err, res) => {
+      if (err) reject(err);
+      const { error } = res;
+      if (error) reject(res);
+      resolve(res);
+    });
+  });
+};
+
 export const getMercadoLibre = (userTokenInfo: UserTokenInfo, path, params = null) => {
   const meliInstance = new meli.Meli(
     MERCADOLIBRE_APP_ID,
