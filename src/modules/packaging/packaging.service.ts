@@ -52,7 +52,8 @@ export class PackagingService {
       .getOne();
     if (!packaging) throw new NotFoundException();
 
-    await this.mercadoLibreService.postProduct(user, packaging);
+    const product = await this.mercadoLibreService.publishProduct(user, packaging);
+    await this.packagingRepository.update(packaging.id, { mlProductId: product.id });
 
     return new PackagingPublishResponse();
   }

@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UploadedFileProps } from 'src/interfaces/uploaded-file.interface';
 import { Repository } from 'typeorm';
 import * as zlib from 'zlib';
 import { Logger } from '../../helpers/logger.helper';
 import { postMercadoLibre } from '../../helpers/mercadolibre.helper';
+import { MercadoLibreArticle } from '../../interfaces/mercado-libre-product.interface';
 import { UserTokenInfo } from '../../interfaces/request.interface';
+import { UploadedFileProps } from '../../interfaces/uploaded-file.interface';
 import { MercadoLibreCategory } from '../../models';
 import { Packaging } from '../../models/packaging.entity';
 import { MercadoLibreCategoriesGetAllRequestDto } from './dto/mercado-libre-get-all-categories-request.dto';
@@ -78,7 +79,7 @@ export class MercadoLibreService {
     });
   }
 
-  async postProduct(user: UserTokenInfo, packaging: Packaging): Promise<void> {
+  async publishProduct(user: UserTokenInfo, packaging: Packaging): Promise<MercadoLibreArticle> {
     const title = `${packaging.product.name} ${packaging.name}`;
     const description = `${packaging.product.description}`;
     const price = Math.ceil(packaging.price);
@@ -124,8 +125,8 @@ export class MercadoLibreService {
       ],
     };
 
-    const response = await postMercadoLibre(user, 'items', body);
-    console.log(response);
+    const response = await postMercadoLibre<MercadoLibreArticle>(user, 'items', body);
+    return response;
   }
 
   async processCategories(file: UploadedFileProps): Promise<void> {
@@ -134,23 +135,18 @@ export class MercadoLibreService {
     const fileToProcess = await JSON.parse(zlib.unzipSync(file.buffer).toString());
     let procesados = 0;
     for (const value of Object.values<MercadoLibreRecord>(fileToProcess)) {
-      console.log('MEC>1');
       const { id, name, children_categories, attributes } = value;
       const recordsToInsert = [];
-      console.log('MEC>2');
 
       const childrens = children_categories.map((cc) => ({ id: cc.id, name: cc.name, parentId: id, childs: 0 }));
 
-      console.log('MEC>3');
       const productTypes = attributes
         ? attributes.find((a) => a.id === 'PRODUCT_TYPE')
         : // .values.map((v) => ({ id: v.id, name: v.name, parentId: id, childs: 0 }))
           null;
-      console.log('MEC>4');
       const attrs = productTypes
         ? productTypes.values.map((v) => ({ id: v.id, name: v.name, parentId: id, childs: 0 }))
         : [];
-      console.log('MEC>5');
 
       recordsToInsert.push({ id, name, childs: childrens.length + attrs.length });
       recordsToInsert.push(...childrens);
