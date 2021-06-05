@@ -2,9 +2,13 @@ import { ArgumentsHost, HttpStatus, INestApplication } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Logger } from './logger.helper';
 
+interface Response {
+  message: Array<string>;
+}
 interface FilterException {
   message: string;
   status?: number;
+  response?: Response;
   getStatus?: () => number;
 }
 
@@ -21,7 +25,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
       this.logger.crit('Exception not correctly handled');
       status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
-    const message = exception.message;
+    const message = (exception.response && exception.response.message) || exception.message;
 
     response.status(status).json(message);
   }
