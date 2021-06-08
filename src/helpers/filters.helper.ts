@@ -32,10 +32,13 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
-    const message =
-      (exception.cause && exception.cause.filter((cause) => cause.type === 'error')).map((cause) => cause.message) || // Mercado Libre
-      (exception.response && exception.response.message) || // Common Exceptions
-      exception.message; // Other exceptions
+    let message = exception.message || [];
+    if (exception.cause) {
+      message = exception.cause.filter((cause) => cause.type === 'error').map((cause) => cause.message);
+    }
+    if (exception.response) {
+      message = exception.response.message;
+    }
 
     response.status(status).json(message);
   }

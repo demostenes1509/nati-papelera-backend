@@ -11,7 +11,9 @@ import { MercadoLibreCategory } from '../../models';
 import { Packaging } from '../../models/packaging.entity';
 import { MercadoLibreCategoriesGetAllRequestDto } from './dto/mercado-libre-get-all-categories-request.dto';
 import { MercadoLibreGetCategoryRequestDto } from './dto/mercado-libre-get-category-request.dto';
+import * as getEnv from 'getenv';
 
+const API_URL = getEnv('API_URL');
 interface MercadoLibreNode {
   id: string;
   name: string;
@@ -85,6 +87,13 @@ export class MercadoLibreService {
     const price = Math.ceil(packaging.price);
     const category_id = packaging.product.mlCategoryId || packaging.product.category.mlCategoryId;
     const id = packaging.mlProductId;
+    const pictures = packaging.product.pictures.map((picture) => ({
+      source: `${API_URL}/products-pictures/${picture.id}`,
+    }));
+    pictures.push({
+      source:
+        'https://media-exp1.licdn.com/dms/image/C4D03AQFI0QUe-Vh58Q/profile-displayphoto-shrink_100_100/0/1555444289536?e=1628726400&v=beta&t=qfPmLh78XHDYip6RpvTxqBg4midyXzUGbAFmqLHeySo',
+    });
 
     const newFields = id
       ? {}
@@ -100,42 +109,39 @@ export class MercadoLibreService {
       category_id,
       price,
       currency_id: 'ARS',
-      available_quantity: 10,
+      available_quantity: 1,
       buying_mode: 'buy_it_now',
       condition: 'new',
       ...newFields,
-      video_id: 'YOUTUBE_ID_HERE',
-      sale_terms: [
-        {
-          id: 'WARRANTY_TYPE',
-          value_name: 'Garantía del vendedor',
-        },
-        {
-          id: 'WARRANTY_TIME',
-          value_name: '1 día',
-        },
-      ],
-      pictures: [
-        {
-          source: 'http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg',
-        },
-      ],
-      attributes: [
-        {
-          id: 'BRAND',
-          value_name: 'Marca del producto',
-        },
-        {
-          id: 'EAN',
-          value_name: '7898095297749',
-        },
-      ],
+      // video_id: 'YOUTUBE_ID_HERE',
+      // sale_terms: [
+      //   {
+      //     id: 'WARRANTY_TYPE',
+      //     value_name: 'Garantía del vendedor',
+      //   },
+      //   {
+      //     id: 'WARRANTY_TIME',
+      //     value_name: '1 día',
+      //   },
+      // ],
+      pictures,
+      // attributes: [
+      //   {
+      //     id: 'BRAND',
+      //     value_name: 'Marca del producto',
+      //   },
+      //   {
+      //     id: 'EAN',
+      //     value_name: '7898095297749',
+      //   },
+      // ],
     };
 
     const method = !id
       ? postMercadoLibre<MercadoLibreArticle>(user, `items`, body)
       : putMercadoLibre<MercadoLibreArticle>(user, `items/${id}`, body);
     const response = await method;
+    this.logger.log(JSON.stringify(response, null, '   '));
     return response;
   }
 

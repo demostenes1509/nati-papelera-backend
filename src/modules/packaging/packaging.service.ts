@@ -46,6 +46,7 @@ export class PackagingService {
     const packaging = await this.packagingRepository
       .createQueryBuilder('pck')
       .innerJoinAndSelect('pck.product', 'prod')
+      .innerJoinAndSelect('prod.pictures', 'pic')
       .innerJoinAndSelect('prod.category', 'cat')
       .innerJoinAndSelect('pck.provider', 'prov')
       .whereInIds(dto.id)
