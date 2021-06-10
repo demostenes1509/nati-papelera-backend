@@ -120,3 +120,9 @@ CREATE TABLE mercado_libre_categories (
 ALTER TABLE mercado_libre_categories ADD CONSTRAINT mercado_libre_categories_pkey PRIMARY KEY (id);
 CREATE INDEX mercado_libre_categories_name_index ON mercado_libre_categories(name) WHERE deleted_at IS NULL;
 ALTER TABLE mercado_libre_categories ADD CONSTRAINT mercado_libre_parent_categories_id FOREIGN KEY (parent_id) REFERENCES mercado_libre_categories(id) ;
+
+CREATE TABLE configuration (
+    id uuid NOT NULL,
+    ml_commission_percentage numeric(5,2),
+    ml_gain_percentage numeric(5,2)
+);

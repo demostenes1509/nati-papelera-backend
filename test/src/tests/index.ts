@@ -7,3 +7,4 @@ export { ProductsPicturesTest } from './products-pictures.test';
 export { ProductsTest } from './products.test';
 export { ProvidersTest } from './providers.test';
 export { SideBarTest } from './sidebar.test';
+export { ConfigurationTest } from './configuration.test';
