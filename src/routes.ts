@@ -1,6 +1,5 @@
 import { Type } from '@nestjs/common';
 import { Route, Routes } from 'nest-router';
-import { NATI_BACKEND_PATH } from './helpers/constants.helper';
 import { AppModule } from './modules/app/app.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { HealthcheckModule } from './modules/healthcheck/healthcheck.module';
@@ -14,7 +13,7 @@ import { SideBarModule } from './modules/sidebar/sidebar.module';
 
 export const routes: Routes = [
   {
-    path: NATI_BACKEND_PATH,
+    path: '/',
     children: [
       { module: AppModule, path: '/auth' },
       { module: CategoriesModule, path: '/categories' },

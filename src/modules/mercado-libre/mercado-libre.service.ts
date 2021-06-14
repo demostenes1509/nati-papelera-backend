@@ -134,23 +134,18 @@ export class MercadoLibreService {
     const fileToProcess = await JSON.parse(zlib.unzipSync(file.buffer).toString());
     let procesados = 0;
     for (const value of Object.values<MercadoLibreRecord>(fileToProcess)) {
-      console.log('MEC>1');
       const { id, name, children_categories, attributes } = value;
       const recordsToInsert = [];
-      console.log('MEC>2');
 
       const childrens = children_categories.map((cc) => ({ id: cc.id, name: cc.name, parentId: id, childs: 0 }));
 
-      console.log('MEC>3');
       const productTypes = attributes
         ? attributes.find((a) => a.id === 'PRODUCT_TYPE')
         : // .values.map((v) => ({ id: v.id, name: v.name, parentId: id, childs: 0 }))
           null;
-      console.log('MEC>4');
       const attrs = productTypes
         ? productTypes.values.map((v) => ({ id: v.id, name: v.name, parentId: id, childs: 0 }))
         : [];
-      console.log('MEC>5');
 
       recordsToInsert.push({ id, name, childs: childrens.length + attrs.length });
       recordsToInsert.push(...childrens);
