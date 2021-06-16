@@ -21,16 +21,16 @@ export abstract class AbstractTestSuite {
     return request(this.app.getHttpServer()).put(`${path}`);
   }
 
+  public httpPost(path: string) {
+    return request(this.app.getHttpServer()).post(`${path}`);
+  }
+
   public httpAdminPut(path: string) {
     return this.httpPut(path).set('Authorization', `Bearer ${this.testTokens.adminToken}`);
   }
 
   public httpAdminGet(path: string) {
     return this.httpGet(path).set('Authorization', `Bearer ${this.testTokens.adminToken}`);
-  }
-
-  public httpPost(path: string) {
-    return request(this.app.getHttpServer()).post(`${path}`);
   }
 
   public httpAdminPost(path: string) {
