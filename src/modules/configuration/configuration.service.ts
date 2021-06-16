@@ -2,7 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Logger } from '../../helpers/logger.helper';
-import { ConfigurationGetAllDto } from './dto/configuration-get-all-response.dto';
+import { ConfigurationDto } from './dto/configuration-get-response.dto';
+import { ConfigurationRequestDto } from './dto/configuration-update-request.dto';
 import { Configuration } from '../../models';
 
 @Injectable()
@@ -12,11 +13,15 @@ export class ConfigurationService {
   @InjectRepository(Configuration)
   private readonly configurationRepository: Repository<Configuration>;
 
-  async getAll(): Promise<ConfigurationGetAllDto> {
-    this.logger.debug('Getting Configuration');
-    const configuration = await this.configurationRepository.find({ order: { id: 'ASC' } });
-    return new ConfigurationGetAllDto(configuration);
+  async get(): Promise<ConfigurationDto> {
+    this.logger.debug('Getting ML Configuration Service');
+    const configuration = await this.configurationRepository.findOne();
+    return new ConfigurationDto(configuration);
   }
 
-
+  async update(dto: ConfigurationRequestDto): Promise<void> {
+    this.logger.debug('Update ML Configuration Service');
+    const { affected } = await this.configurationRepository.update(dto.id, { ...dto });
+    if (affected === 0) throw new NotFoundException();
+  }
 }

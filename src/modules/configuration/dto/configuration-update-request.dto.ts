@@ -3,18 +3,18 @@ import { IsNumber, IsUUID, Min, Max } from 'class-validator';
 
 export class ConfigurationRequestDto {
     @ApiProperty()
-    @IsNumber()
+    @IsUUID()
     id: string;
 
     @ApiProperty()
     @IsNumber()
     @Min(0)
     @Max(200)
-    ml_commission_percentage: number;
+    mlCommissionPercentage: number;
 
     @ApiProperty()
     @IsNumber()
     @Min(0)
     @Max(200)
-    ml_gain_percentage: number;
+    mlGainPercentage: number;
 }

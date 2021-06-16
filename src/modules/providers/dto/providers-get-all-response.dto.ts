@@ -27,7 +27,6 @@ export class ProviderDto {
     this.percentage = provider.percentage;
   }
 }
-
 export class ProvidersGetAllDto {
   @ApiProperty()
   @ValidateNested()

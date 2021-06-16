@@ -124,5 +124,18 @@ ALTER TABLE mercado_libre_categories ADD CONSTRAINT mercado_libre_parent_categor
 CREATE TABLE configuration (
     id uuid NOT NULL,
     ml_commission_percentage numeric(5,2),
-    ml_gain_percentage numeric(5,2)
+    ml_gain_percentage numeric(5,2),
+    deleted_at timestamptz
+);
+
+ALTER TABLE configuration ADD CONSTRAINT configuration_pkey PRIMARY KEY (id);
+ALTER TABLE configuration ADD CONSTRAINT ml_commission_percentage 
+CHECK (
+    ml_commission_percentage >= 0
+    AND ml_commission_percentage <= 200
+);
+ALTER TABLE configuration ADD CONSTRAINT ml_gain_percentage 
+CHECK (
+    ml_gain_percentage >= 0
+    AND ml_gain_percentage <= 200
 );

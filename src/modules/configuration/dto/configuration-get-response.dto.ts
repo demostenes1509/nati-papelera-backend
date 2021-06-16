@@ -10,28 +10,29 @@ export class ConfigurationDto {
 
     @ApiProperty()
     @IsNumber()
-    ml_commission_percentage: number;
+    mlCommissionPercentage: number;
 
     @ApiProperty()
     @IsNumber()
-    ml_gain_percentage: number;
+    mlGainPercentage: number;
 
     constructor (configuration: Configuration ) {
         this.id = configuration.id;
-        this.ml_commission_percentage = configuration.ml_commission_percentage;
-        this.ml_gain_percentage = configuration.ml_gain_percentage;
+        this.mlCommissionPercentage = configuration.mlCommissionPercentage;
+        this.mlGainPercentage = configuration.mlGainPercentage;
     }
 
 }
-
-export class ConfigurationGetAllDto {
+/*
+export class ConfigurationGetDto {
     @ApiProperty()
     @ValidateNested()
     @Type(() => ConfigurationDto)
-    @IsArray()
-    configuration: Array<ConfigurationDto>
+    configuration: ConfigurationDto
 
-    constructor(configuration: Array<Configuration>) {
-        this.configuration = configuration.map((configuration) => new ConfigurationDto(configuration));
+    constructor(configuration: ConfigurationDto) {
+        //this.configuration = configuration.map((configuration) => new ConfigurationDto(configuration));
+        this.configuration = new Configuration();
       }   
- }
+
+ }*/
