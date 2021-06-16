@@ -45,13 +45,15 @@ export class PackagingService {
     const packaging = await this.packagingRepository
       .createQueryBuilder('pck')
       .innerJoinAndSelect('pck.product', 'prod')
+      .innerJoinAndSelect('prod.pictures', 'pic')
       .innerJoinAndSelect('prod.category', 'cat')
       .innerJoinAndSelect('pck.provider', 'prov')
       .whereInIds(dto.id)
       .getOne();
     if (!packaging) throw new NotFoundException();
 
-    await this.mercadoLibreService.postProduct(user, packaging);
+    const product = await this.mercadoLibreService.publishProduct(user, packaging);
+    await this.packagingRepository.update(packaging.id, { mlProductId: product.id });
 
     return new PackagingPublishResponse();
   }
