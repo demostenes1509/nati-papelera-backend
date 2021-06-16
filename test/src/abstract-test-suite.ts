@@ -1,6 +1,5 @@
 import { INestApplication, Inject, Injectable } from '@nestjs/common';
 import * as request from 'supertest';
-import { NATI_BACKEND_PATH } from '../../src/helpers/constants.helper';
 import { TestTokens } from './providers/test-tokens.service';
 
 @Injectable()
@@ -15,11 +14,11 @@ export abstract class AbstractTestSuite {
   }
 
   public httpGet(path: string) {
-    return request(this.app.getHttpServer()).get(`${NATI_BACKEND_PATH}${path}`);
+    return request(this.app.getHttpServer()).get(`${path}`);
   }
 
   public httpPut(path: string) {
-    return request(this.app.getHttpServer()).put(`${NATI_BACKEND_PATH}${path}`);
+    return request(this.app.getHttpServer()).put(`${path}`);
   }
 
   public httpAdminPut(path: string) {
@@ -31,7 +30,7 @@ export abstract class AbstractTestSuite {
   }
 
   public httpPost(path: string) {
-    return request(this.app.getHttpServer()).post(`${NATI_BACKEND_PATH}${path}`);
+    return request(this.app.getHttpServer()).post(`${path}`);
   }
 
   public httpAdminPost(path: string) {

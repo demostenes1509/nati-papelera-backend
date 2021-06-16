@@ -90,10 +90,6 @@ export class MercadoLibreService {
     const pictures = packaging.product.pictures.map((picture) => ({
       source: `${API_URL}/products-pictures/${picture.id}`,
     }));
-    pictures.push({
-      source:
-        'https://media-exp1.licdn.com/dms/image/C4D03AQFI0QUe-Vh58Q/profile-displayphoto-shrink_100_100/0/1555444289536?e=1628726400&v=beta&t=qfPmLh78XHDYip6RpvTxqBg4midyXzUGbAFmqLHeySo',
-    });
 
     const newFields = id
       ? {}

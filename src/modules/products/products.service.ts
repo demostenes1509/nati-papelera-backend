@@ -11,7 +11,6 @@ import { GetProductResponse } from './dto/get-product-response.dto';
 import { ProductCreateRequestDto } from './dto/product-create-request.dto';
 import { ProductFindOrCreateRequest } from './dto/product-find-by-name-request.dto';
 import { ProductUpdateRequest } from './dto/product-update-request.dto';
-import { ProductUpdateResponse } from './dto/product-update-response.dto';
 
 @Injectable()
 export class ProductsService {
