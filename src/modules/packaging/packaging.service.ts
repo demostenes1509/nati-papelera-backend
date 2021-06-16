@@ -11,7 +11,6 @@ import { PackagingFindByProviderRequest } from './dto/packaging-find-by-provider
 import { PackagingPublishRequest } from './dto/packaging-publish-request.dto';
 import { PackagingPublishResponse } from './dto/packaging-publish-response.dto';
 import { PackagingUpdateRequest } from './dto/packaging-update-request.dto';
-import { PackagingUpdateResponse } from './dto/packaging-update-response.dto';
 @Injectable()
 export class PackagingService {
   private readonly logger = new Logger(PackagingService.name);
