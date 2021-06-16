@@ -44,4 +44,7 @@ export class Packaging extends AbstractEntity {
     name: 'import_order',
   })
   importOrder: number;
+
+  @Column({ name: 'ml_product_id', nullable: true })
+  mlProductId: string;
 }

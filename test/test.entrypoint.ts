@@ -12,6 +12,7 @@ import { Logger } from '../src/helpers/logger.helper';
 import { setupPipes } from '../src/helpers/pipes.helper';
 import { configureTypeORMTransactions } from '../src/helpers/transactions.helper';
 import { setupFilters } from '../src/helpers/filters.helper';
+import * as testsToRun from './src/tests';
 
 const TESTTORUN = getEnv('TESTTORUN', null);
 const SUITETORUN = getEnv('SUITETORUN', null);
@@ -32,6 +33,12 @@ describe('Nati Backend Test Suite', function () {
     setupFilters(app);
 
     await app.init();
+
+    // Assign app to every test suite
+    for (const testSuite of Object.values(testsToRun)) {
+      const c: AbstractTestSuite = app.get(testSuite.name);
+      c.setApp(app);
+    }
   });
 
   const isSelectedToRun = (actualName, selectedName) => {
@@ -48,7 +55,6 @@ describe('Nati Backend Test Suite', function () {
           if (isSelectedToRun(testMethod.description, TESTTORUN)) {
             it(testMethod.description, async () => {
               const c: AbstractTestSuite = app.get(testSuite.target);
-              c.setApp(app);
               await testMethod.method.apply(c);
             });
           }

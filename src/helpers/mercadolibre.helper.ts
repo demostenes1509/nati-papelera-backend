@@ -22,7 +22,7 @@ export interface Profile {
   email: string;
 }
 
-export const postMercadoLibre = (userTokenInfo: UserTokenInfo, path, body, params = null) => {
+export const postMercadoLibre = <MercadoLibreType>(userTokenInfo: UserTokenInfo, path, body, params = null) => {
   const meliInstance = new meli.Meli(
     MERCADOLIBRE_APP_ID,
     MERCADOLIBRE_CLIENT_SECRET,
@@ -30,8 +30,26 @@ export const postMercadoLibre = (userTokenInfo: UserTokenInfo, path, body, param
     userTokenInfo.oauthRefreshToken,
   );
 
-  return new Promise((resolve, reject) => {
+  return new Promise<MercadoLibreType>((resolve, reject) => {
     meliInstance.post(path, body, params, (err, res) => {
+      if (err) reject(err);
+      const { error } = res;
+      if (error) reject(res);
+      resolve(res);
+    });
+  });
+};
+
+export const putMercadoLibre = <MercadoLibreType>(userTokenInfo: UserTokenInfo, path, body, params = null) => {
+  const meliInstance = new meli.Meli(
+    MERCADOLIBRE_APP_ID,
+    MERCADOLIBRE_CLIENT_SECRET,
+    userTokenInfo.oauthAccessToken,
+    userTokenInfo.oauthRefreshToken,
+  );
+
+  return new Promise<MercadoLibreType>((resolve, reject) => {
+    meliInstance.put(path, body, params, (err, res) => {
       if (err) reject(err);
       const { error } = res;
       if (error) reject(res);

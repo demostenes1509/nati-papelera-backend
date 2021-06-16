@@ -5,10 +5,16 @@ import { Logger } from './logger.helper';
 interface Response {
   message: Array<string>;
 }
+
+interface MercadoLibreCause {
+  type: string;
+  message: string;
+}
 interface FilterException {
   message: string;
   status?: number;
   response?: Response;
+  cause?: Array<MercadoLibreCause>;
   getStatus?: () => number;
 }
 
@@ -25,7 +31,14 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
       this.logger.crit('Exception not correctly handled');
       status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
-    const message = (exception.response && exception.response.message) || exception.message;
+
+    let message = exception.message || [];
+    if (exception.cause) {
+      message = exception.cause.filter((cause) => cause.type === 'error').map((cause) => cause.message);
+    }
+    if (exception.response) {
+      message = exception.response.message;
+    }
 
     response.status(status).json(message);
   }
