@@ -10,6 +10,7 @@ import { ProductsPicturesModule } from './modules/products-pictures/products-pic
 import { ProductsModule } from './modules/products/products.module';
 import { ProvidersModule } from './modules/providers/providers.module';
 import { SideBarModule } from './modules/sidebar/sidebar.module';
+import { ConfigurationModule } from './modules/configuration/configuration.module';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,7 @@ export const routes: Routes = [
       { module: ProductsModule, path: '/products' },
       { module: ProductsPicturesModule, path: '/products-pictures' },
       { module: ProvidersModule, path: '/providers' },
+      { module: ConfigurationModule, path: '/configuration'},
     ],
   },
 ];

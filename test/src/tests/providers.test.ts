@@ -113,8 +113,8 @@ export class ProvidersTest extends AbstractTestSuite {
     await this.httpAdminPut('/providers/provider-update/').send(dto).expect(HttpStatus.OK);
   }
 
-  @Test('Provider id')
-  public async testProviderIncorrectId() {
+  @Test('Provider Invalid id')
+  public async testProviderInvalidId() {
     const myRandomId = uuidv4();
     const dtoToUpdate = {
       id: myRandomId,
