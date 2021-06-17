@@ -11,7 +11,6 @@ import { PackagingFindByProviderRequest } from './dto/packaging-find-by-provider
 import { PackagingPublishRequest } from './dto/packaging-publish-request.dto';
 import { PackagingPublishResponse } from './dto/packaging-publish-response.dto';
 import { PackagingUpdateRequest } from './dto/packaging-update-request.dto';
-import { PackagingUpdateResponse } from './dto/packaging-update-response.dto';
 @Injectable()
 export class PackagingService {
   private readonly logger = new Logger(PackagingService.name);
@@ -46,13 +45,15 @@ export class PackagingService {
     const packaging = await this.packagingRepository
       .createQueryBuilder('pck')
       .innerJoinAndSelect('pck.product', 'prod')
+      .innerJoinAndSelect('prod.pictures', 'pic')
       .innerJoinAndSelect('prod.category', 'cat')
       .innerJoinAndSelect('pck.provider', 'prov')
       .whereInIds(dto.id)
       .getOne();
     if (!packaging) throw new NotFoundException();
 
-    await this.mercadoLibreService.postProduct(user, packaging);
+    const product = await this.mercadoLibreService.publishProduct(user, packaging);
+    await this.packagingRepository.update(packaging.id, { mlProductId: product.id });
 
     return new PackagingPublishResponse();
   }

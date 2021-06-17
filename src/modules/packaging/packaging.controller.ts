@@ -8,7 +8,6 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PackagingPublishRequest } from './dto/packaging-publish-request.dto';
 import { PackagingPublishResponse } from './dto/packaging-publish-response.dto';
 import { PackagingUpdateRequest } from './dto/packaging-update-request.dto';
-import { PackagingUpdateResponse } from './dto/packaging-update-response.dto';
 import { PackagingService } from './packaging.service';
 
 @Controller()

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 import { MercadoLibreCategory, Packaging, Product, ProductPicture } from '../../../models';
 
 class PackagingDto {
@@ -15,10 +15,15 @@ class PackagingDto {
   @IsString()
   price: number;
 
+  @ApiProperty()
+  @IsBoolean()
+  mlPublished: boolean;
+
   constructor(packaging: Packaging) {
     this.id = packaging.id;
     this.name = packaging.name;
     this.price = packaging.price;
+    this.mlPublished = packaging.mlProductId !== null;
   }
 }
 
