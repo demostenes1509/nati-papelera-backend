@@ -23,16 +23,3 @@ export class ConfigurationDto {
     }
 
 }
-/*
-export class ConfigurationGetDto {
-    @ApiProperty()
-    @ValidateNested()
-    @Type(() => ConfigurationDto)
-    configuration: ConfigurationDto
-
-    constructor(configuration: ConfigurationDto) {
-        //this.configuration = configuration.map((configuration) => new ConfigurationDto(configuration));
-        this.configuration = new Configuration();
-      }   
-
- }*/
