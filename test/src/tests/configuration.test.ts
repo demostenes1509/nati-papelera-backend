@@ -4,23 +4,28 @@ import { Configuration } from 'src/models';
 import { Test, TestSuite } from '../../helpers/decorators';
 import { AbstractTestSuite } from '../abstract-test-suite';
 import { v4 as uuidv4 } from 'uuid';
-import { ConfigurationDto } from '../../../src/modules/configuration/dto/configuration-get-response.dto';
+import { GetConfigurationResponseDto } from '../../../src/modules/configuration/dto/configuration-get-response.dto';
+import { ConfigurationRequestDto } from 'src/modules/configuration/dto/configuration-update-request.dto';
 
 @TestSuite('Configuration Test')
 export class ConfigurationTest extends AbstractTestSuite {
     @Test('Configuration get')
     public async testConfigurationGet() {
-        const { body: messages } = await this.httpAdminGet('/configuration/get').expect(HttpStatus.OK);
-        expect(messages.mlCommissionPercentage.length).toBeGreaterThan(0);
+        const { body: configDto } = await this.httpAdminGet('/configuration/get').expect(HttpStatus.OK);
+        expect(configDto.configuration.id.length).toBeGreaterThan(0);
     }
 
     @Test('Configuration update')
     public async testConfigurationUpdate() {
-        const { body: dtoToUpdate } = await this.httpAdminGet('/configuration/get')
+        const { body: dtoGet } = await this.httpAdminGet('/configuration/get')
         .expect(HttpStatus.OK);
+        expect(dtoGet.configuration.id.length).toBeGreaterThan(0);
 
-        dtoToUpdate.mlCommissionPercentage = Math.random() * (200 - 1) + 1,
-        dtoToUpdate.mlGainPercentage = Math.random() * (200 - 1) + 1;
+        const dtoToUpdate = {id: dtoGet.configuration.id,
+            mlCommissionPercentage: Math.random() * (200 - 1) + 1,
+            mlGainPercentage: Math.random() * (200 - 1) + 1
+        };
+
         await this.httpAdminPut('/configuration/update').send(dtoToUpdate).expect(HttpStatus.OK);
     }
 
