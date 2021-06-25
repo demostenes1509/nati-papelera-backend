@@ -21,9 +21,9 @@ export class ConfigurationTest extends AbstractTestSuite {
         .expect(HttpStatus.OK);
         expect(dtoGet.configuration.id.length).toBeGreaterThan(0);
 
-        const dtoToUpdate = {id: dtoGet.configuration.id,
-            mlCommissionPercentage: Math.random() * (200 - 1) + 1,
-            mlGainPercentage: Math.random() * (200 - 1) + 1
+        const dtoToUpdate = { id: dtoGet.configuration.id,
+                              mlCommissionPercentage: Math.random() * (200 - 1) + 1,
+                              mlGainPercentage: Math.random() * (200 - 1) + 1
         };
 
         await this.httpAdminPut('/configuration/update').send(dtoToUpdate).expect(HttpStatus.OK);
@@ -46,7 +46,7 @@ export class ConfigurationTest extends AbstractTestSuite {
         expect(messages.length).toBe(1);
         expect(messages[0]).toBe('mlCommissionPercentage must not be greater than 200');
     }
-    
+
     @Test('Configuration invalid gain percentage')
     public async testInvalidGainPercentage(){
         const dto = {id: uuidv4(), mlCommissionPercentage: 100, mlGainPercentage: 300};
