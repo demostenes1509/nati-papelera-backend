@@ -104,6 +104,7 @@ CREATE TABLE products_pictures (
     id uuid NOT NULL,
     product_id uuid NOT NULL,
     mime_type varchar(255) NOT NULL,
+    with_logo boolean NOT NULL,
     deleted_at timestamptz
 );
 

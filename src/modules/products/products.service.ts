@@ -70,7 +70,7 @@ export class ProductsService {
     const product = await this.productRepository
       .createQueryBuilder('pr')
       .innerJoinAndSelect('pr.packaging', 'pck')
-      .leftJoinAndSelect('pr.pictures', 'pic')
+      .leftJoinAndSelect('pr.pictures', 'pic', 'pic.withLogo is TRUE')
       .innerJoin('pr.category', 'c')
       .where('pr.url = :productUrl', { productUrl })
       .andWhere('c.url = :categoryUrl', { categoryUrl })
