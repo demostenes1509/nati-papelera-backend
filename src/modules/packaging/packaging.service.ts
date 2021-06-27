@@ -49,6 +49,7 @@ export class PackagingService {
       .innerJoinAndSelect('prod.category', 'cat')
       .innerJoinAndSelect('pck.provider', 'prov')
       .whereInIds(dto.id)
+      .andWhere('pic.withLogo is FALSE')
       .getOne();
     if (!packaging) throw new NotFoundException();
 

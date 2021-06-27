@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -9,10 +10,11 @@ import {
   Query,
   Response,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { ApiResponse } from '@nestjs/swagger';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { Roles } from '../../decorators/roles.decorator';
@@ -22,6 +24,10 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreatePictureRequestDto } from './dto/create-picture-request.dto';
 import { CreatePictureResponseDto } from './dto/create-picture-response.dto';
 import { ProductsPicturesService } from './products-pictures.service';
+
+interface UploadContent {
+  files: Array<UploadedFileProps>;
+}
 
 @Controller()
 export class ProductsPicturesController {
@@ -34,12 +40,12 @@ export class ProductsPicturesController {
   @HttpCode(HttpStatus.CREATED)
   @Post('/')
   @Transactional()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'files', maxCount: 2 }]))
   async create(
-    @Query() dto: CreatePictureRequestDto,
-    @UploadedFile() file: UploadedFileProps,
+    @Body() dto: CreatePictureRequestDto,
+    @UploadedFiles() { files }: UploadContent,
   ): Promise<CreatePictureResponseDto> {
-    return this.productPictureService.create(dto, file);
+    return this.productPictureService.create(dto, files);
   }
 
   @ApiResponse({ status: HttpStatus.OK })
