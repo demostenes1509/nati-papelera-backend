@@ -5,7 +5,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Role } from '../../enums/role.enum';
 import { Roles } from '../../decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { ConfigurationDto } from './dto/configuration-get-response.dto';
+import { GetConfigurationResponseDto } from './dto/configuration-get-response.dto';
 import { ConfigurationRequestDto } from './dto/configuration-update-request.dto';
 import { allColors } from 'winston/lib/winston/config';
 import { ConfigurationService } from './configuration.service';
@@ -21,7 +21,7 @@ export class ConfigurationController {
   @ApiResponse({ status: HttpStatus.OK })
   @Get('/get')
   @HttpCode(HttpStatus.OK)
-  get(): Promise<ConfigurationDto> {
+  get(): Promise<GetConfigurationResponseDto> {
     return this.configurationService.get();
   }
 
