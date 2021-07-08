@@ -3,6 +3,6 @@ export class ColumnsNumericTransformer {
     return data;
   }
   from(data: string): number {
-    return parseFloat(data)
+    return parseFloat(data);
   }
 }
