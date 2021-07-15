@@ -14,15 +14,31 @@ export class ProductsPicturesService {
   @InjectRepository(ProductPicture)
   private readonly productPictureRepository: Repository<ProductPicture>;
 
-  async create(dto: CreatePictureRequestDto, file: UploadedFileProps): Promise<CreatePictureResponseDto> {
-    this.logger.log('Uploading picture');
-    const key = await uploadProductPicture(file);
-    const picture = await this.productPictureRepository.save({
-      id: key,
-      productId: dto.productId,
-      mimeType: file.mimetype,
-    });
-    return new CreatePictureResponseDto(picture);
+  async create(dto: CreatePictureRequestDto, files: Array<UploadedFileProps>): Promise<CreatePictureResponseDto> {
+    const withLogo = files.find((f) => f.originalname === 'logo');
+    const withoutLogo = files.find((f) => f.originalname !== 'logo');
+
+    const [withLogoKey, withoutLogoKey] = await Promise.all([
+      uploadProductPicture(withLogo),
+      uploadProductPicture(withoutLogo),
+    ]);
+
+    const [pictureLogo, pictureWithoutLogo] = await Promise.all([
+      this.productPictureRepository.save({
+        id: withLogoKey,
+        productId: dto.productId,
+        mimeType: withLogo.mimetype,
+        withLogo: true,
+      }),
+      this.productPictureRepository.save({
+        id: withoutLogoKey,
+        productId: dto.productId,
+        mimeType: withoutLogo.mimetype,
+        withLogo: false,
+      }),
+    ]);
+
+    return new CreatePictureResponseDto(pictureLogo);
   }
   async get(response, id: string): Promise<void> {
     const picture = await this.productPictureRepository.findByIds([id]);

@@ -11,8 +11,10 @@ export class ProductsPicturesTest extends AbstractTestSuite {
     } = await this.httpGet('/products/get/bolsas/bolsas-papel').expect(HttpStatus.OK);
 
     await this.httpAdminPost('/products-pictures/')
-      .query({ productId })
-      .attach('file', './test/src/tests/resources/product.png')
+      .type('form')
+      .attach('files', './test/src/tests/resources/product.png', { filename: 'logo' })
+      .attach('files', './test/src/tests/resources/product.png', { filename: 'nologo' })
+      .field({ productId })
       .expect(HttpStatus.CREATED);
   }
 }

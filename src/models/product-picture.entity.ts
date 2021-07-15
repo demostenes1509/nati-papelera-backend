@@ -15,4 +15,7 @@ export class ProductPicture extends AbstractEntity {
 
   @Column({ name: 'product_id', nullable: false })
   productId: string;
+
+  @Column({ name: 'with_logo', nullable: false })
+  withLogo: boolean;
 }
