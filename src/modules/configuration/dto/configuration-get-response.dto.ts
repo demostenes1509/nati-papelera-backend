@@ -30,12 +30,3 @@ export class GetConfigurationResponseDto {
     this.configuration = new ConfigurationDto(configuration);
   }
 }
-
-export class GetConfigurationResponseDto {
-    @ApiProperty()
-    configuration: ConfigurationDto
-
-    constructor (configuration: Configuration) {
-        this.configuration = new ConfigurationDto(configuration);
-    }
-}
