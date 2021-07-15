@@ -26,7 +26,7 @@ export const routes: Routes = [
       { module: ProductsModule, path: '/products' },
       { module: ProductsPicturesModule, path: '/products-pictures' },
       { module: ProvidersModule, path: '/providers' },
-      { module: ConfigurationModule, path: '/configuration'},
+      { module: ConfigurationModule, path: '/configuration' },
     ],
   },
 ];

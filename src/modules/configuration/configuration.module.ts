@@ -6,9 +6,8 @@ import { ConfigurationController } from './configuration.controller';
 import { ConfigurationService } from './configuration.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Configuration]), AuthModule ],
-    controllers: [ConfigurationController],
-    providers: [ConfigurationService],
-  })
-  export class ConfigurationModule {}
-  
+  imports: [TypeOrmModule.forFeature([Configuration]), AuthModule],
+  controllers: [ConfigurationController],
+  providers: [ConfigurationService],
+})
+export class ConfigurationModule {}

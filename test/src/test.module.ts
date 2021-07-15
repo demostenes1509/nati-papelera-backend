@@ -4,7 +4,7 @@ import { SessionModule } from '../../src/modules/session/session.module';
 import { jwtParams } from '../../src/helpers/jwt.helper';
 import { TestTokens } from './providers/test-tokens.service';
 import * as providers from './tests';
-import * as configuration from './tests';
+//import * as configuration from './tests';
 
 @Module({
   imports: [JwtModule.register(jwtParams()), SessionModule],

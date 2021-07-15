@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Logger } from '../../helpers/logger.helper';
-import { ConfigurationDto } from './dto/configuration-get-response.dto';
+import { GetConfigurationResponseDto } from './dto/configuration-get-response.dto';
 import { ConfigurationRequestDto } from './dto/configuration-update-request.dto';
 import { Configuration } from '../../models';
 
@@ -13,10 +13,10 @@ export class ConfigurationService {
   @InjectRepository(Configuration)
   private readonly configurationRepository: Repository<Configuration>;
 
-  async get(): Promise<ConfigurationDto> {
+  async get(): Promise<GetConfigurationResponseDto> {
     this.logger.debug('Getting ML Configuration Service');
     const configuration = await this.configurationRepository.findOne();
-    return new ConfigurationDto(configuration);
+    return new GetConfigurationResponseDto(configuration);
   }
 
   async update(dto: ConfigurationRequestDto): Promise<void> {
